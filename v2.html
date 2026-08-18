@@ -62,7 +62,10 @@ body{
 img{max-width:100%;display:block}
 
 /* ---- ステージ ---- */
-.stage{width:var(--page);margin:0 auto;background:var(--paper);position:relative;overflow:hidden}
+/* overflow は clip にする。hidden だとスクロールコンテナが生まれ、
+   子孫の position:sticky（拠点パネル・職種名）が全て効かなくなる。
+   clip は横のはみ出しを切りつつ sticky を殺さない。 */
+.stage{width:var(--page);margin:0 auto;background:var(--paper);position:relative;overflow:clip}
 
 /* ============================================================
    MOTION PRIMITIVES（参照：base.css）
@@ -234,20 +237,15 @@ img{max-width:100%;display:block}
 /* ============================================================
    01 HERO — 720px。左にコピー、右に平行四辺形の写真帯 2枚
    ============================================================ */
-.hero{position:relative;height:720px;overflow:hidden;background:var(--paper)}
-.hero .copy{position:absolute;left:136px;top:207px;width:520px;display:flex;flex-direction:column;gap:16px;z-index:2}
+/* FV：面を割らず1枚のグレー。ここに後日メイン写真（グラデーション背景）が
+   全面で入る想定なので、帯やトリミングの枠は置かない */
+.hero{position:relative;height:720px;overflow:hidden;background:var(--fill)}
+.hero .copy{position:absolute;left:136px;top:207px;width:520px;z-index:2}
 .hero h1{font-weight:700;font-size:64px;letter-spacing:.02em;line-height:1.5;margin:0}
-.hero .lead{font-size:20px;letter-spacing:.05em;line-height:2;margin:0;color:#3a3a40}
-.hero-art{position:absolute;inset:0;z-index:1;pointer-events:none}
-/* 平行四辺形の帯を2枚。帯幅 420 ＋ 傾き 260 なので要素幅は 680。
-   2枚目は「傾きに沿って」ずらす（dx=+25 / dy=-60）。そうしないと
-   上下でアキが変わり、下端で帯どうしが重なる。アキは全高で 18px 一定。 */
-.hero-slice{
-  position:absolute;width:680px;height:620px;
-  clip-path:polygon(260px 0, 100% 0, calc(100% - 260px) 100%, 0 100%);
+.hero-note{
+  position:absolute;right:136px;bottom:40px;z-index:2;
+  font-size:11px;letter-spacing:.1em;line-height:1.8;color:var(--caption);text-align:right;
 }
-.hero-slice.a{left:620px;top:50px}
-.hero-slice.b{left:1083px;top:-10px}
 .hero-slice .ph{border:none;background:var(--fill)}
 
 /* ============================================================
@@ -521,9 +519,12 @@ img{max-width:100%;display:block}
    09 OFFICE — 黒地。縦スクロールに連動して横へ送る（sticky + travel）
    ============================================================ */
 .office{position:relative;background:var(--ink);color:var(--paper)}
-.office-sticky{position:sticky;top:clamp(0px,calc(50vh - 330px),200px);height:660px;overflow:hidden}
-.office-head{position:absolute;left:135px;top:96px;z-index:5;display:flex;flex-direction:column;gap:8px}
-.office-track{position:absolute;left:135px;top:200px;display:flex;align-items:flex-start;gap:32px;will-change:transform}
+/* 貼り付く箱は中身にぴったり合わせる（見出し0 → 列104 → 進捗493）。
+   箱の下に余りを持たせると、黒地のまま何も無い帯が居座って見える。
+   余白は箱の外（上下の黒地）で均等に取る＝ clamp で縦中央に置く。 */
+.office-sticky{position:sticky;top:clamp(0px,calc(50vh - 247px),220px);height:494px;overflow:hidden}
+.office-head{position:absolute;left:135px;top:0;z-index:5;display:flex;flex-direction:column;gap:8px}
+.office-track{position:absolute;left:135px;top:104px;display:flex;align-items:flex-start;gap:32px;will-change:transform}
 .office-panel{width:600px;flex:none;display:flex;flex-direction:column;gap:16px}
 .office-photo{height:253px}
 .office-cap{display:flex;align-items:flex-start;gap:16px}
@@ -533,7 +534,7 @@ img{max-width:100%;display:block}
 .office-addr{font-size:13px;letter-spacing:.08em;line-height:1.8;color:var(--w72)}
 .office-arrow{width:14px;height:12px;flex:none;margin-top:6px;color:var(--paper)}
 .office-arrow svg{width:100%;height:100%}
-.office-progress{position:absolute;left:135px;top:588px;width:1170px;height:1px;background:var(--w16)}
+.office-progress{position:absolute;left:135px;top:493px;width:1170px;height:1px;background:var(--w16)}
 .office-progress .bar{display:block;width:340px;height:1px;background:var(--paper);transform:translateX(0);will-change:transform}
 .office .ph{background:#2a2a2e;border-color:rgba(255,255,255,.14);color:var(--w72)}
 @media (prefers-reduced-motion:reduce){
@@ -695,15 +696,8 @@ table.spec .note{font-size:13px;color:var(--caption)}
         <span class="line"><span>魅せろ個性</span></span>
         <span class="line"><span>変化を恐れるな</span></span>
       </h1>
-      <p class="lead" data-reveal data-delay="0.5">
-        食・宿泊×HR×ITで、日本の価値を上げる。<br>
-        その最前線に、あなたの個性を。
-      </p>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      <div class="hero-slice a"><div class="ph"><i>FVメイン写真</i></div></div>
-      <div class="hero-slice b"><div class="ph"><i>FVサブ写真</i></div></div>
-    </div>
+    <p class="hero-note">メイン写真（グラデーション背景）を全面に配置</p>
   </section>
 
   <!-- ============ 02 VISION ============ -->

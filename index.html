@@ -32,13 +32,14 @@ a{color:inherit;text-decoration:none}
 
 .wrap{max-width:1080px;margin:0 auto;padding:128px 32px 160px}
 
-h1{font-family:var(--font-en);font-size:30px;font-weight:600;letter-spacing:.03em;line-height:1.2;margin:0 0 12px}
+h1{font-family:var(--font-en);font-size:30px;font-weight:600;letter-spacing:.03em;line-height:1.2;margin:0 0 96px}
 h1 .thin{color:var(--muted);font-weight:500}
-.sub{font-size:13.5px;letter-spacing:.03em;color:var(--muted);margin:0 0 96px}
+/* Internal バッジ：Figma 587:12505（A/N-900 #42423F / 角丸2px / 115×22） */
 .badge{
-  display:inline-block;vertical-align:middle;margin-left:12px;
-  font-family:var(--font-en);font-size:10px;font-weight:600;letter-spacing:.18em;
-  color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+  display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;
+  margin-left:16px;width:115px;height:22px;border-radius:2px;background:#42423f;
+  font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.18em;
+  color:#fff;
 }
 
 .stage + .stage{margin-top:96px}
@@ -61,47 +62,18 @@ a.card:hover{background:var(--card-hover);transform:translateY(-2px)}
 }
 .card .policy{font-size:13.5px;letter-spacing:.03em;line-height:1.6;margin:0;font-weight:500}
 .card .meta{font-size:12px;letter-spacing:.03em;line-height:1.8;color:var(--muted);margin:6px 0 0}
-.card .links{display:flex;gap:10px;margin-top:auto;padding-top:32px}
+.card .links{display:flex;gap:20px;margin-top:auto;padding-top:32px}
 .card .links a,.card .go{
   display:inline-flex;align-items:center;gap:8px;padding:2px 0;
   font-family:var(--font-en);font-size:15px;font-weight:600;letter-spacing:.08em;
 }
+.card .links .go.is-off{color:var(--muted)}
 .arrow{display:inline-flex;transition:transform .5s var(--ease)}
 a.card:hover .arrow,.card .links a:hover .arrow{transform:translateX(4px)}
-
-/* 主役のカードだけ黒地にして序列をつける */
-.card.is-lead{background:var(--ink);color:var(--paper)}
-.card.is-lead .name{color:rgba(255,255,255,.55)}
-.card.is-lead .meta{color:rgba(255,255,255,.6)}
-a.card.is-lead:hover{background:#000}
-
-/* ---- 一覧（確認待ち・次スコープ） ---- */
-.list{border-top:1px solid var(--line)}
-.row{
-  display:grid;grid-template-columns:44px 1fr 300px;gap:0 24px;align-items:baseline;
-  padding:22px 8px 22px 0;border-bottom:1px solid var(--line);
-}
-.row .no{font-family:var(--font-en);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--muted)}
-.row .t{font-size:14px;letter-spacing:.03em;line-height:1.7;font-weight:500}
-.row .d{font-size:12px;letter-spacing:.03em;line-height:1.8;color:var(--muted)}
-.row .d.warn{color:var(--ink)}
-
-/* ---- 脚注 ---- */
-.note{
-  margin-top:28px;padding:20px 24px;border:1px dashed var(--line);border-radius:8px;
-  font-size:12px;letter-spacing:.03em;line-height:1.9;color:var(--muted);
-}
-.note b{color:var(--ink);font-weight:600}
-
-.foot{margin-top:120px;padding-top:24px;border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:baseline;
-  font-size:11px;letter-spacing:.06em;color:var(--muted)}
 
 @media (max-width:860px){
   .wrap{padding:72px 20px 96px}
   .grid{grid-template-columns:1fr}
-  .row{grid-template-columns:32px 1fr;gap:4px 16px}
-  .row .d{grid-column:2}
 }
 </style>
 </head>
@@ -110,41 +82,40 @@ a.card.is-lead:hover{background:#000}
 
   <header class="stage">
     <h1>Cuolega - Recruitment Site <span class="thin">/ Internal Dashboard</span><span class="badge">Internal</span></h1>
-    <p class="sub">新卒採用サイト｜ワイヤーフレームと進行状況の索引。社外共有不可。</p>
   </header>
 
   <!-- ================= WIREFRAME ================= -->
+  <!-- 採用まわりは3ページ立て。1が親、2・3がその下にぶら下がる特設 -->
   <section class="stage">
     <h2>Wireframe</h2>
     <div class="grid">
 
-      <a class="card is-lead" href="v2.html">
-        <p class="name">Wireframe V2</p>
-        <p class="policy">採用サイト｜新卒</p>
-        <p class="meta">13 sections / PC 1440px<br>C案の設計値に準拠（余白134・字送り0.1em）</p>
-        <div class="links">
-          <span class="go">Wireframe
-            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </span>
-        </div>
-      </a>
-
-      <a class="card" href="v1.html">
-        <p class="name">Wireframe V1</p>
-        <p class="policy">採用サイト｜新卒</p>
-        <p class="meta">13 sections / PC 1180px<br>原版。比較用にそのまま保存</p>
-        <div class="links">
-          <span class="go">Wireframe
-            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </span>
-        </div>
-      </a>
+      <div class="card">
+        <p class="name">Wireframe 01</p>
+        <p class="policy">採用サイト</p>
+        <p class="meta">コーポレートサイトから紐付く親の採用サイト<br>未着手</p>
+        <div class="links"><span class="go is-off">Not ready</span></div>
+      </div>
 
       <div class="card">
-        <p class="name">Design Comp</p>
-        <p class="policy">デザインカンプ</p>
-        <p class="meta">未着手 / 着手 8月24日〜<br>トンマナ確定（8月21日）後に反映</p>
-        <div class="links"><span class="go" style="color:var(--muted)">Not ready</span></div>
+        <p class="name">Wireframe 02</p>
+        <p class="policy">営業特設ページ</p>
+        <p class="meta">営業職向けの特設ページ<br>未着手</p>
+        <div class="links"><span class="go is-off">Not ready</span></div>
+      </div>
+
+      <div class="card">
+        <p class="name">Wireframe 03</p>
+        <p class="policy">新卒特設ページ</p>
+        <p class="meta">13 sections / PC 1440px<br>C案の設計値に準拠（余白134・字送り0.1em）</p>
+        <div class="links">
+          <a href="v2.html">V2
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a href="v1.html">V1
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
       </div>
 
     </div>
@@ -164,133 +135,13 @@ a.card.is-lead:hover{background:#000}
         <p class="policy">デザインカンプ作成・レビュー</p>
         <p class="meta">8月24日 – 9月25日<br>トンマナとFVを適用</p>
       </div>
-      <div class="card is-lead">
+      <div class="card">
         <p class="name">Step 03</p>
         <p class="policy">実装 → ver1 公開</p>
         <p class="meta">9月7日 – 9月30日<br>★ ver1 公開：9月30日</p>
       </div>
     </div>
-    <p class="note">
-      トンマナ確定は <b>8月21日</b> 予定（英字ロゴ QOREGA・黒白＋差し色のグリーン・「洗練×親しみやすさ」）。
-      ワイヤーフレームはグレースケールのまま進め、確定後に配色とロゴを一括で当てる。
-      採用系クリエイティブの決定権は <b>田口さん</b>（原案：田上・晒谷さん → 田口さん決定）。
-    </p>
   </section>
-
-  <!-- ================= OPEN ITEMS ================= -->
-  <section class="stage">
-    <h2>Open Items</h2>
-    <div class="list">
-      <div class="row">
-        <span class="no">01</span>
-        <span class="t">数値4指標が未確認</span>
-        <span class="d">プロダクトユーザー数／2025年度 新卒採用人数／平均勤続年数／昇格までの平均年数。確認先：田口さん</span>
-      </div>
-      <div class="row">
-        <span class="no">02</span>
-        <span class="t">28卒の初任給・固定残業代</span>
-        <span class="d">27卒は最大37万円まで引き上げと発表済み（PR TIMES）。28卒の確定値は未取得</span>
-      </div>
-      <div class="row">
-        <span class="no">03</span>
-        <span class="t">インタビュー11本が実在社員か</span>
-        <span class="d">氏名はイニシャル、入社年は2023〜2026卒。実在なら人数と職種の実態に合わせて構成し直せる</span>
-      </div>
-      <div class="row">
-        <span class="no">04</span>
-        <span class="t">写真素材の有無（社員11・拠点5）</span>
-        <span class="d warn">⚠ タレント変更がオフレコで進行中（年明け2月頃に交代予定）。現タレントの素材は使わない</span>
-      </div>
-      <div class="row">
-        <span class="no">05</span>
-        <span class="t">キャリアパス6段階の役割記述</span>
-        <span class="d">V2に入っている6つの説明文は叩き台。人事の実態に合わせて差し替えが必要</span>
-      </div>
-      <div class="row">
-        <span class="no">06</span>
-        <span class="t">V2に含まれる仮コピー</span>
-        <span class="d">FVリード文、各セクションの和文見出しは確定文言ではない。Vision のパーパスのみ確定文言を使用</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= NEXT SCOPE ================= -->
-  <section class="stage">
-    <h2>Next Scope</h2>
-    <div class="list">
-      <div class="row">
-        <span class="no">01</span>
-        <span class="t">キャリアアドバイザー特設</span>
-        <span class="d">「これはもう確実にやるべき」。PLEX・クロスマイルにあり「多分負けちゃう」＝優先度最上位</span>
-      </div>
-      <div class="row">
-        <span class="no">02</span>
-        <span class="t">職種別LP × 4</span>
-        <span class="d">エンジニア／PdM／デザイナー系／RA・キャリアアドバイザー。主な狙いは中途向け</span>
-      </div>
-      <div class="row">
-        <span class="no">03</span>
-        <span class="t">ハープ接続・カジュアル面談動線</span>
-        <span class="d">現行ATSはKanLi。ハープは導入予定。専用フォームかWantedly寄せかは未決</span>
-      </div>
-      <div class="row">
-        <span class="no">04</span>
-        <span class="t">説明会動画の置き方</span>
-        <span class="d">埋め込みで見放題か、ダイジェスト＋登録でリスト取りか。未決の設計ポイント</span>
-      </div>
-      <div class="row">
-        <span class="no">05</span>
-        <span class="t">SP（レスポンシブ）設計</span>
-        <span class="d">V1・V2ともPC固定。新卒採用は実流入の大半がスマホのため、いずれ必須</span>
-      </div>
-    </div>
-    <p class="note">
-      全体像は「五、六ページ／階層は多くて二〜三階層」（2026年7月17日 壁打ち）。
-      新卒トップは<b>そのうちの1枚</b>という位置づけ。
-    </p>
-  </section>
-
-  <!-- ================= REFERENCE ================= -->
-  <section class="stage">
-    <h2>Reference</h2>
-    <div class="grid">
-      <a class="card" href="https://proto-review-vict0a.pages.dev/c-top?c=d" target="_blank" rel="noopener">
-        <p class="name">Design Reference</p>
-        <p class="policy">コーポレート C案 TOP</p>
-        <p class="meta">V2の設計値の出典<br>余白・型・モーションの基準</p>
-        <div class="links">
-          <span class="go">Open
-            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </span>
-        </div>
-      </a>
-      <a class="card" href="https://proto-review-vict0a.pages.dev/" target="_blank" rel="noopener">
-        <p class="name">Prototype Index</p>
-        <p class="policy">Branding Design 索引</p>
-        <p class="meta">コーポレート・ロゴ・適性検査・10周年<br>このダッシュボードの様式の出典</p>
-        <div class="links">
-          <span class="go">Open
-            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </span>
-        </div>
-      </a>
-      <a class="card" href="https://github.com/aikatanouep-web/recruit-wf-2026" target="_blank" rel="noopener">
-        <p class="name">Repository</p>
-        <p class="policy">recruit-wf-2026</p>
-        <p class="meta">main へ push で即反映<br>GitHub Pages（root 配信）</p>
-        <div class="links">
-          <span class="go">Open
-            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <div class="foot">
-    <span>Cuolega Recruitment Site — Internal</span>
-    <span>新卒採用（28卒）</span>
-  </div>
 
 </div>
 </body>
