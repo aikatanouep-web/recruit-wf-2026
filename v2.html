@@ -363,13 +363,38 @@ img{max-width:100%;display:block}
    05 CULTURE — バリュー7枚を横に送る（進捗バー付き）
    ============================================================ */
 .culture{padding:96px var(--pad);background:var(--tone)}
-.culture .h-stat{margin-top:40px}
+/* 見出しの右に「今どこ／全部で何枚」と送りボタンを置く。
+   横送りは黙っていると存在に気づかれないので、枚数と操作子を必ず添える */
+.vals-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:40px}
+.vals-head .h-stat{margin:0}
+.track-nav{display:flex;align-items:center;gap:16px;flex:none}
+.track-count{
+  font-family:"Lato",-apple-system,sans-serif;font-weight:700;
+  font-size:13px;letter-spacing:.2em;color:var(--caption);margin-right:8px;
+}
+.track-count b{color:var(--ink)}
+.tarrow{
+  position:relative;width:40px;height:40px;border-radius:50%;flex:none;
+  background:var(--paper);border:1px solid var(--line2);cursor:pointer;
+  transition:background-color .45s var(--ease-out-expo),opacity .45s var(--ease-out-expo);
+}
+.tarrow:hover{background:var(--fill2)}
+.tarrow.is-off{opacity:.28;pointer-events:none}
+/* 山形は回転後に重心が片側へ寄るので、その分を px で戻して光学中央に置く */
+.tarrow::before{
+  content:"";position:absolute;top:50%;left:50%;width:7px;height:7px;
+  border-top:1.2px solid #555;border-right:1.2px solid #555;
+  transform:translate(-5.97px,-3.5px) rotate(45deg);
+}
+.tarrow.prev::before{transform:translate(-1.12px,-3.5px) rotate(-135deg)}
+
 .vals{margin-top:56px}
-.vals-track{display:flex;gap:56px;overflow-x:auto;scrollbar-width:none;padding-bottom:32px;scroll-snap-type:x proximity;cursor:grab}
+.vals-track{display:flex;gap:56px;overflow-x:auto;scrollbar-width:none;padding-bottom:32px;scroll-snap-type:x mandatory;scroll-behavior:smooth;cursor:grab}
 .vals-track:active{cursor:grabbing}
 .vals-track::-webkit-scrollbar{display:none}
 .vcard{flex:0 0 340px;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
-.vcard .ven{font-family:"Lato",-apple-system,sans-serif;font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.1}
+.vcard .vno{font-family:"Lato",-apple-system,sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;color:var(--caption);margin-bottom:8px}
+.vcard .ven{font-family:"Lato",-apple-system,sans-serif;font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.3}
 .vcard .vja{font-weight:700;font-size:15px;letter-spacing:.1em;line-height:1.5;color:#3a3a40}
 .vcard .vtx{font-size:13px;letter-spacing:.08em;line-height:2;color:var(--caption);margin:8px 0 0}
 
@@ -455,7 +480,15 @@ img{max-width:100%;display:block}
 .bene-group:first-of-type{border-top:0}
 .bene-cat{
   list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
-  padding:32px 0;font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.5;
+  padding:36px 0;font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.5;
+  transition:padding-left .7s var(--ease-out-expo);
+}
+@media (hover:hover){.bene-cat:hover{padding-left:12px}}
+/* 畳まれている中に何件あるかを出す。件数が見えないと開く動機が生まれない */
+.bene-catname{display:flex;align-items:baseline;gap:16px}
+.bene-count{
+  font-family:"Lato",-apple-system,sans-serif;font-weight:700;
+  font-size:12px;letter-spacing:.2em;color:var(--caption);
 }
 .bene-cat::-webkit-details-marker{display:none}
 .bene-cat::after{
@@ -795,17 +828,24 @@ table.spec .note{font-size:13px;color:var(--caption)}
       <p class="eyebrow">Culture</p>
       <h2 class="h2">カルチャー</h2>
     </div>
-    <h3 class="h-stat" data-reveal data-delay="0.1">成長と挑戦を楽しもう</h3>
+    <div class="vals-head" data-reveal data-delay="0.1">
+      <h3 class="h-stat">成長と挑戦を楽しもう</h3>
+      <div class="track-nav" data-nav-for="valstrack">
+        <span class="track-count"><b class="now">01–03</b> / <span class="total">07</span></span>
+        <span class="tarrow prev" data-dir="-1" role="button" aria-label="前へ"></span>
+        <span class="tarrow next" data-dir="1" role="button" aria-label="次へ"></span>
+      </div>
+    </div>
 
     <div class="vals">
       <div class="vals-track" id="valstrack">
-        <div class="vcard"><div class="ven">Market Leader</div><div class="vja">業界の常識を変える</div><p class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決策、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求、負を解決し、業界の未来を切り開く。</p></div>
-        <div class="vcard"><div class="ven">Team Focus</div><div class="vja">最高のチームで勝つ</div><p class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</p></div>
-        <div class="vcard"><div class="ven">Professional Commitment</div><div class="vja">成果こそがプロの証明</div><p class="vtx">業界のプロとして、圧倒的な当事者意識を持ち成果にこだわる。他責を排し、徹底的な自責で「どうしたらできるか」を建設的に考え、評論家に決してならない。プロセスに満足せず、泥臭く成果にコミットし、本質的な課題解決を通じて、顧客と業界に真の価値を提供し続ける。</p></div>
-        <div class="vcard"><div class="ven">Always Beta</div><div class="vja">高速アップデート</div><p class="vtx">完成はない、常にベータ版であれ。完璧を求め停滞するより、高速で改善を繰り返す。過去のやり方に固執せず、仮説を持ち即実行する。自らをアップデートし続け、必要であれば大胆にピボットする柔軟さを持つ。昨日の自分を軽々と超えるスピード感が、業界を最速で塗り替える原動力となる。</p></div>
-        <div class="vcard"><div class="ven">Issue Driven</div><div class="vja">自ら課題設定</div><p class="vtx">指示を待つのではなく、「自ら主体的に課題を設定し解決する」ことにこだわる。本質的な課題は何かを問い続け、「何を解くか」に意思を込める。鋭い課題設定こそが、最小の力で最大の変革を起こし、業界全体を正しい未来へと最速で導く。解く課題を決めたら周囲を巻き込み、圧倒的なインパクトを出し切る。</p></div>
-        <div class="vcard"><div class="ven">FactBase, Lead DX</div><div class="vja">ファクトで語り仕組みを創る</div><p class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。DXを単なるツール導入と誤解せず、ビジネスオペレーションを作り切り、成果を最大化するため磨き続ける。</p></div>
-        <div class="vcard"><div class="ven">Build Trust</div><div class="vja">ユーザーファーストで信頼を築く</div><p class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。その嘘のない歩みこそが期待を超え、業界で選ばれる理由という最強のブランドになる。</p></div>
+        <div class="vcard"><div class="vno">01</div><div class="ven">Market Leader</div><div class="vja">業界の常識を変える</div><p class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決策、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求、負を解決し、業界の未来を切り開く。</p></div>
+        <div class="vcard"><div class="vno">02</div><div class="ven">Team Focus</div><div class="vja">最高のチームで勝つ</div><p class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</p></div>
+        <div class="vcard"><div class="vno">03</div><div class="ven">Professional Commitment</div><div class="vja">成果こそがプロの証明</div><p class="vtx">業界のプロとして、圧倒的な当事者意識を持ち成果にこだわる。他責を排し、徹底的な自責で「どうしたらできるか」を建設的に考え、評論家に決してならない。プロセスに満足せず、泥臭く成果にコミットし、本質的な課題解決を通じて、顧客と業界に真の価値を提供し続ける。</p></div>
+        <div class="vcard"><div class="vno">04</div><div class="ven">Always Beta</div><div class="vja">高速アップデート</div><p class="vtx">完成はない、常にベータ版であれ。完璧を求め停滞するより、高速で改善を繰り返す。過去のやり方に固執せず、仮説を持ち即実行する。自らをアップデートし続け、必要であれば大胆にピボットする柔軟さを持つ。昨日の自分を軽々と超えるスピード感が、業界を最速で塗り替える原動力となる。</p></div>
+        <div class="vcard"><div class="vno">05</div><div class="ven">Issue Driven</div><div class="vja">自ら課題設定</div><p class="vtx">指示を待つのではなく、「自ら主体的に課題を設定し解決する」ことにこだわる。本質的な課題は何かを問い続け、「何を解くか」に意思を込める。鋭い課題設定こそが、最小の力で最大の変革を起こし、業界全体を正しい未来へと最速で導く。解く課題を決めたら周囲を巻き込み、圧倒的なインパクトを出し切る。</p></div>
+        <div class="vcard"><div class="vno">06</div><div class="ven">FactBase, Lead DX</div><div class="vja">ファクトで語り仕組みを創る</div><p class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。DXを単なるツール導入と誤解せず、ビジネスオペレーションを作り切り、成果を最大化するため磨き続ける。</p></div>
+        <div class="vcard"><div class="vno">07</div><div class="ven">Build Trust</div><div class="vja">ユーザーファーストで信頼を築く</div><p class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。その嘘のない歩みこそが期待を超え、業界で選ばれる理由という最強のブランドになる。</p></div>
       </div>
       <div class="progress"><div class="bar" id="valsbar"></div></div>
     </div>
@@ -936,7 +976,7 @@ table.spec .note{font-size:13px;color:var(--caption)}
 
     <div class="bene-wrap">
       <details class="bene-group" open>
-        <summary class="bene-cat">働きやすい環境づくり</summary>
+        <summary class="bene-cat"><span class="bene-catname">働きやすい環境づくり<span class="bene-count">6 ITEMS</span></span></summary>
         <div class="bene-grid">
           <div class="bene-item"><h4>機材支給</h4><p>職種に応じて、業務で使用するPCやスマートフォンを支給します。モニターの支給もあり、デュアルモニターで作業可能です。</p></div>
           <div class="bene-item"><h4>社内ドリンク制度</h4><p>社内に常備してある自動販売機・ドリンクの中から好きなものを無料で利用することが可能です。</p></div>
@@ -947,7 +987,7 @@ table.spec .note{font-size:13px;color:var(--caption)}
         </div>
       </details>
       <details class="bene-group">
-        <summary class="bene-cat">集中のための健康づくり</summary>
+        <summary class="bene-cat"><span class="bene-catname">集中のための健康づくり<span class="bene-count">3 ITEMS</span></span></summary>
         <div class="bene-grid">
           <div class="bene-item"><h4>健康診断</h4><p>年に1回、社員全員が健康診断を受けることができます。受診費用は全額会社が負担します。</p></div>
           <div class="bene-item"><h4>インフルエンザ予防接種</h4><p>年に一度、インフルエンザの予防接種を社内で実施しています。社員の健康と安全を守るため、感染症の予防に努めています。</p></div>
@@ -955,7 +995,7 @@ table.spec .note{font-size:13px;color:var(--caption)}
         </div>
       </details>
       <details class="bene-group">
-        <summary class="bene-cat">ファミリー向けサポート</summary>
+        <summary class="bene-cat"><span class="bene-catname">ファミリー向けサポート<span class="bene-count">5 ITEMS</span></span></summary>
         <div class="bene-grid">
           <div class="bene-item"><h4>育児/産前・産後休暇</h4><p>出産や育児の際に安心して取得できる育児休暇制度を提供しています。社内では、男女問わず取得しており復帰率は66.6%となっています。</p></div>
           <div class="bene-item"><h4>ファミリー制度</h4><p>安心して育児と仕事を両立できるよう、社員の子供が小学校を卒業するまでの間、年に1回、特別休暇を付与しています。</p></div>
@@ -965,7 +1005,7 @@ table.spec .note{font-size:13px;color:var(--caption)}
         </div>
       </details>
       <details class="bene-group">
-        <summary class="bene-cat">コミュニケーションサポート</summary>
+        <summary class="bene-cat"><span class="bene-catname">コミュニケーションサポート<span class="bene-count">4 ITEMS</span></span></summary>
         <div class="bene-grid">
           <div class="bene-item"><h4>バースデーイベント</h4><p>毎月、誕生日を迎えた社員を祝うイベントを開催しています。社員にバースデープレゼントも支給しています。</p></div>
           <div class="bene-item"><h4>社員・幹部旅行</h4><p>社員同士のコミュニケーションを深めてより良い関係を築き、社員が集中して学べる機会を提供しています。</p></div>
@@ -1299,18 +1339,48 @@ table.spec .note{font-size:13px;color:var(--caption)}
     /* 進捗バーは同じ親の中の .progress > .bar */
     var wrap=tr.parentElement;
     var bar=wrap ? wrap.querySelector('.progress .bar') : null;
+    /* 送りボタン＋枚数表示（あるものだけ） */
+    var nav=tr.id ? document.querySelector('[data-nav-for="'+tr.id+'"]') : null;
+    var now=nav&&nav.querySelector('.now'), total=nav&&nav.querySelector('.total');
+    var prev=nav&&nav.querySelector('.tarrow.prev'), next=nav&&nav.querySelector('.tarrow.next');
+    var cards=[].slice.call(tr.children);
+    if(total) total.textContent=('0'+cards.length).slice(-2);
 
-    function draw(){
-      if(!bar) return;
-      var max=tr.scrollWidth-tr.clientWidth;
-      /* 送る余地が無い列（例：インタビュー3本）にバーを出すと
-         「押しても動かない操作子」に見えるので、そのときは丸ごと隠す */
-      if(bar.parentElement) bar.parentElement.style.visibility = max>1 ? 'visible' : 'hidden';
-      if(max<=1) return;
-      var ratio=Math.min(1, tr.clientWidth/tr.scrollWidth);
-      bar.style.width=(ratio*100)+'%';
-      bar.style.left=((tr.scrollLeft/max)*(100-ratio*100))+'%';
+    function step(){
+      if(cards.length<2) return tr.clientWidth;
+      return cards[1].offsetLeft-cards[0].offsetLeft;   /* カード幅＋アキ */
     }
+    function draw(){
+      var max=tr.scrollWidth-tr.clientWidth;
+      if(bar){
+        /* 送る余地が無い列（例：インタビュー3本）にバーを出すと
+           「押しても動かない操作子」に見えるので、そのときは丸ごと隠す */
+        if(bar.parentElement) bar.parentElement.style.visibility = max>1 ? 'visible' : 'hidden';
+        if(max>1){
+          var ratio=Math.min(1, tr.clientWidth/tr.scrollWidth);
+          bar.style.width=(ratio*100)+'%';
+          bar.style.left=((tr.scrollLeft/max)*(100-ratio*100))+'%';
+        }
+      }
+      if(nav){
+        /* 「今どの1枚か」だと、末端まで送っても 05 で止まって見え
+           （右に3枚並んでいるため）7枚目に届かない誤解を生む。
+           見えている範囲を 05–07 のように出す。 */
+        var st=step();
+        var gap=parseFloat(getComputedStyle(tr).columnGap)||0;
+        var per=Math.max(1, Math.floor((tr.clientWidth+gap)/st));
+        var first=Math.min(cards.length-per, Math.max(0, Math.round(tr.scrollLeft/st)));
+        first=Math.max(0, first);
+        var last=Math.min(cards.length, first+per);
+        var pad=function(n){ return ('0'+n).slice(-2); };
+        if(now) now.textContent = per>=cards.length ? pad(1)+'–'+pad(cards.length)
+                                                    : pad(first+1)+'–'+pad(last);
+        if(prev) prev.classList.toggle('is-off', tr.scrollLeft<=1);
+        if(next) next.classList.toggle('is-off', tr.scrollLeft>=max-1);
+      }
+    }
+    if(prev) prev.addEventListener('click',function(){ tr.scrollLeft-=step(); });
+    if(next) next.addEventListener('click',function(){ tr.scrollLeft+=step(); });
     tr.addEventListener('scroll',draw,{passive:true});
     addEventListener('resize',draw);
     if(window.ResizeObserver) new ResizeObserver(draw).observe(tr);
