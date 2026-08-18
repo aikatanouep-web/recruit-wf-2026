@@ -2,1035 +2,296 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>クオレガ 新卒採用サイト ワイヤーフレーム v1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cuolega - Recruitment Site / Internal Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@500;600&display=swap">
 <style>
+/* ============================================================
+   参照：proto-review-vict0a.pages.dev の索引ページ実測値
+   wrap 1080 / padding 128-32-160 ／ 3列 325.33 + gap 20
+   h1 Inter 30/600/0.03em ／ h2 Inter 12/600/0.22em uppercase
+   card #fafafa r12 padding 44-32-40 ／ name Inter 11/600/0.24em
+   ============================================================ */
 :root{
-  --ink:#222; --mid:#777; --line:#c9c9c9; --line2:#9a9a9a;
-  --fill:#e6e6e6; --fill2:#efefef; --bg:#e9e9e9; --paper:#fff;
-  --accent:#3b6ea5;
-  --page:1180px;
+  --ink:#111112;
+  --muted:#6b6b70;
+  --line:rgba(17,17,18,.12);
+  --paper:#ffffff;
+  --card:#fafafa;
+  --card-hover:#f2f2f2;
+  --font-ja:"Noto Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+  --font-en:"Inter",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
 }
 *{box-sizing:border-box}
-body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
-  font-size:13px; line-height:1.7;
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja);font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:1080px;margin:0 auto;padding:128px 32px 160px}
+
+h1{font-family:var(--font-en);font-size:30px;font-weight:600;letter-spacing:.03em;line-height:1.2;margin:0 0 12px}
+h1 .thin{color:var(--muted);font-weight:500}
+.sub{font-size:13.5px;letter-spacing:.03em;color:var(--muted);margin:0 0 96px}
+.badge{
+  display:inline-block;vertical-align:middle;margin-left:12px;
+  font-family:var(--font-en);font-size:10px;font-weight:600;letter-spacing:.18em;
+  color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px;
 }
 
-/* ---- 連続した1枚のページ ---- */
-.stage{width:var(--page);margin:22px auto 70px;position:relative}
-.page{background:var(--paper);border:1px solid var(--line);box-shadow:0 2px 14px rgba(0,0,0,.08)}
-.page > section{position:relative}
-.page > section.hdr{position:sticky;top:0;z-index:30}
-
-
-/* ---- wireframe primitives ---- */
-.inner{padding:56px 64px 104px}
-.ph{
-  background:var(--fill2); border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--mid);font-size:11px;
-}
-.ph i{font-style:normal;letter-spacing:.04em}
-.bar{background:var(--fill);height:10px;border-radius:1px;margin:7px 0}
-.bar.s{width:45%} .bar.m{width:72%} .bar.l{width:92%} .bar.xs{width:28%}
-.h-lg{font-size:34px;font-weight:800;line-height:1.35;letter-spacing:.02em;margin:0 0 14px}
-.h-md{font-size:22px;font-weight:700;margin:0 0 10px}
-.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--mid);margin:0 0 6px}
-/* セクション区切り：英字はサブタイトルではなく、区切りの標識として大きく置く */
-.sechead{
-  display:flex;align-items:baseline;gap:18px;
-  margin:0 0 40px;
-}
-.sechead .en{font-size:38px;font-weight:800;letter-spacing:.03em;line-height:1}
-.sechead .ja{font-size:12px;color:#666;letter-spacing:.12em}
-.sechead.tight{margin-top:34px;margin-bottom:16px}
-.aboutjob .sechead{margin-bottom:44px}
-.body{font-size:12px;color:#444;max-width:62ch}
-/* ボタンは枠を持たず、テキスト＋右の黒丸に矢印 */
-.btn{
-  display:inline-flex;align-items:center;gap:9px;
-  border:none;padding:0;background:none;
-  font-size:12px;font-weight:400;letter-spacing:.03em;color:var(--ink);white-space:nowrap;
-}
-.btn::after{
-  content:"";flex:0 0 auto;width:20px;height:20px;border-radius:50%;
-  background:#1e1e1e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.6 7.4 7.4 2.6M4 2.6h3.4V6' fill='none' stroke='%23fff' stroke-width='1.15' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 10px 10px no-repeat;
-}
-/* 応募まわりは矢印付きリンクではなく、面のあるボタン（外部遷移の矢印と区別する） */
-.cta{
-  display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--ink);border-radius:999px;
-  padding:7px 20px;font-size:11px;letter-spacing:.06em;
-  color:var(--ink);background:#fff;white-space:nowrap;cursor:pointer;
-}
-.cta.primary{background:var(--ink);color:#fff}
-.cta.lg{padding:11px 34px;font-size:12px}
-.row{display:flex;gap:14px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.grid4{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-/* 縦スクロールで横に展開する枠 */
-.hstage{position:relative}
-
-/* Culture：見出し・一文・カードを均一な間隔で置く */
-.culture .sechead{margin-bottom:40px}
-.culture .h-md{margin:0}
-
-/* Culture：バリューを横スクロールで送る */
-.vals{margin-top:40px}
-.vals-track{display:flex;gap:80px;overflow-x:auto;scrollbar-width:none;padding-bottom:24px}
-.vals-track::-webkit-scrollbar{display:none}
-.vals-track .vcard{flex:0 0 300px;scroll-snap-align:start}
-.vcard{padding:0}
-.vcard .ven{font-size:17px;font-weight:700;letter-spacing:.01em}
-.vcard .vja{margin-top:6px}
-.vcard .vja{font-size:11px;font-weight:700;color:#555;margin-bottom:14px}
-.vcard .vtx{font-size:11px;color:#555;line-height:2;clear:both}
-.card{border:1px solid var(--line);padding:14px;background:var(--paper)}
-/* 事業内容：区切りの下にコピー、その下にプロダクト名とモックを中央配置 */
-.biz-copy{font-size:20px;font-weight:700;line-height:1.6;margin:0 0 52px}
-
-/* テキスト＋モックをひと組にして、その組をセクション中央に置く */
-.biz-layout{display:flex;justify-content:center;align-items:center;gap:44px}
-.biz-textwrap{position:relative;flex:0 0 360px;height:250px}
-.biz-text{
-  position:absolute;inset:0;opacity:0;visibility:hidden;
-  transform:translateY(10px);
-  /* 消える側：不透明度を最後まで落としてから visibility を切る */
-  transition:opacity .34s ease,
-             transform .5s cubic-bezier(.22,.7,.2,1),
-             visibility 0s linear .34s;
-}
-.biz-text.on{
-  opacity:1;visibility:visible;transform:none;
-  /* 現れる側：消える側と重ならないよう少し遅らせる */
-  transition:opacity .42s ease .14s,
-             transform .6s cubic-bezier(.22,.7,.2,1) .08s,
-             visibility 0s;
-}
-.biz-name{font-size:19px;font-weight:700;letter-spacing:.01em}
-.biz-sub{font-size:15px;font-weight:700;color:var(--ink);line-height:1.6;margin-top:5px}
-.biz-desc{font-size:12px;color:#555;line-height:1.9;margin:14px 0 20px}
-
-/* モックのカルーセル：中央は実機フレーム、左右は白い板が奥へ並ぶ */
-.cf{position:relative;flex:0 0 560px;height:440px;overflow:hidden;cursor:grab}
-.cf:active{cursor:grabbing}
-.cf-item{
-  position:absolute;left:50%;top:50%;width:196px;height:400px;margin:-200px 0 0 -98px;
-  border-radius:30px;background:#2b2b2b;border:1px solid #2b2b2b;padding:4px;
-  will-change:transform,opacity;
-}
-.cf-item .scr{position:absolute;inset:4px;border-radius:26px;background:#fff}
-/* ノッチは中央の1台だけ */
-.cf-item.is-main .scr::before{
-  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:62px;height:14px;background:#2b2b2b;border-radius:0 0 10px 10px;
+.stage + .stage{margin-top:96px}
+.stage h2{
+  font-family:var(--font-en);font-size:12px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;margin:0 0 28px;
 }
 
-/* 送り操作：モックの中央下 */
-.cf-col{flex:0 0 560px}
-.cf-col .cf{flex:none;width:100%}
-/* 送りボタンは中央モックの左右の端に重ねる */
-.cf > .arrow{
-  position:absolute;top:50%;z-index:20;
-  width:30px;height:30px;cursor:pointer;
-  left:auto;right:auto;
-  transform:translate(-50%,-50%);
+/* ---- カード ---- */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{
+  background:var(--card);border-radius:12px;padding:44px 32px 40px;
+  min-height:272px;display:flex;flex-direction:column;
+  transition:background-color .5s var(--ease),transform .5s var(--ease);
 }
-.cf > .arrow.prev{left:calc(50% - 131px)}
-.cf > .arrow:not(.prev){left:calc(50% + 131px)}
-.cf > .arrow::before{width:5px;height:5px;border-width:1.1px;transform:translate(-4.27px,-2.5px) rotate(45deg)}
-.cf > .arrow.prev::before{transform:translate(-0.73px,-2.5px) rotate(-135deg)}
-.divider{height:0;margin:44px 0}
-hr.thin{border:0;margin:20px 0}
-/* 募集要項：外枠をやめ、行の区切り線だけで見せる */
-table.spec{width:100%;border-collapse:collapse;font-size:12px}
-table.spec th,table.spec td{
-  border:none;border-bottom:1px solid rgba(0,0,0,.12);
-  padding:20px 0;vertical-align:top;
+a.card:hover{background:var(--card-hover);transform:translateY(-2px)}
+.card .name{
+  font-family:var(--font-en);font-size:11px;font-weight:600;letter-spacing:.24em;
+  color:var(--muted);margin:0 0 14px;
 }
-table.spec tr:first-child th,table.spec tr:first-child td{border-top:1px solid rgba(0,0,0,.12)}
-table.spec th{width:210px;background:none;text-align:left;font-weight:400;font-size:11px;letter-spacing:.06em;color:#8a8a8a}
-table.spec td{color:#333;line-height:1.9}
-table.spec .note{font-size:11px;color:#777}
-.kpi{padding:0;text-align:center}
-.kpi .num{font-size:26px;font-weight:800;letter-spacing:-.01em}
-.kpi .lbl{font-size:10px;color:var(--mid);margin-top:6px}
-/* Career：キャリアパスと役職 */
+.card .policy{font-size:13.5px;letter-spacing:.03em;line-height:1.6;margin:0;font-weight:500}
+.card .meta{font-size:12px;letter-spacing:.03em;line-height:1.8;color:var(--muted);margin:6px 0 0}
+.card .links{display:flex;gap:10px;margin-top:auto;padding-top:32px}
+.card .links a,.card .go{
+  display:inline-flex;align-items:center;gap:8px;padding:2px 0;
+  font-family:var(--font-en);font-size:15px;font-weight:600;letter-spacing:.08em;
+}
+.arrow{display:inline-flex;transition:transform .5s var(--ease)}
+a.card:hover .arrow,.card .links a:hover .arrow{transform:translateX(4px)}
 
-/* Career：研修 */
-.lead{font-size:12px;color:#555;line-height:1.95;margin:0 0 40px;max-width:760px}
-.tr-card{}
-.tr{margin-top:38px}
-.tr-row{display:grid;grid-template-columns:104px 1fr;gap:0 48px;align-items:center}
-.tr-row + .tr-row{border-top:1px solid rgba(0,0,0,.12);margin-top:26px;padding-top:26px}
-.tr-when{font-size:11px;letter-spacing:.14em;color:#8a8a8a;text-align:center}
-.tr-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0 48px}
-.tr-card .ph{aspect-ratio:16/10}
-.tr-card h4{font-size:14px;font-weight:700;margin:0 0 12px}
-.tr-card p{font-size:11px;color:#555;line-height:1.9;margin:0}
+/* 主役のカードだけ黒地にして序列をつける */
+.card.is-lead{background:var(--ink);color:var(--paper)}
+.card.is-lead .name{color:rgba(255,255,255,.55)}
+.card.is-lead .meta{color:rgba(255,255,255,.6)}
+a.card.is-lead:hover{background:#000}
 
-/* 福利厚生 */
-/* 福利厚生：左にカテゴリ名、右に項目。グループ間は1本の線で区切る */
-.bene-wrap{margin:0 0 56px}
-.bene-group{display:block;border-top:1px solid rgba(0,0,0,.12)}
-.bene-group:first-of-type{border-top:0}
-.bene-cat{
-  list-style:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:26px 2px 26px 0;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.02em;
+/* ---- 一覧（確認待ち・次スコープ） ---- */
+.list{border-top:1px solid var(--line)}
+.row{
+  display:grid;grid-template-columns:44px 1fr 300px;gap:0 24px;align-items:baseline;
+  padding:22px 8px 22px 0;border-bottom:1px solid var(--line);
 }
-.bene-cat::-webkit-details-marker{display:none}
-.bene-cat::after{
-  content:"";width:11px;height:11px;position:relative;flex:0 0 11px;
-  background:
-    linear-gradient(currentColor,currentColor) center/11px 1px no-repeat,
-    linear-gradient(currentColor,currentColor) center/1px 11px no-repeat;
-  transition:background-size .25s ease;
-}
-.bene-group[open] > .bene-cat::after{background-size:11px 1px, 1px 0}
-.bene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 90px;padding:4px 2px 34px 0}
-.bene-item h4{font-size:13px;font-weight:700;margin:0 0 6px}
-.bene-item p{font-size:11px;color:#555;line-height:1.8;margin:0}
+.row .no{font-family:var(--font-en);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--muted)}
+.row .t{font-size:14px;letter-spacing:.03em;line-height:1.7;font-weight:500}
+.row .d{font-size:12px;letter-spacing:.03em;line-height:1.8;color:var(--muted)}
+.row .d.warn{color:var(--ink)}
 
-/* 選考の流れ：円をつないだフロー */
-.flow{position:relative;display:flex;justify-content:space-between;align-items:center;max-width:960px;margin-left:auto;margin-right:auto}
-.flow::before{
-  content:"";position:absolute;top:50%;left:38px;right:38px;height:1px;
-  background:var(--line2);
+/* ---- 脚注 ---- */
+.note{
+  margin-top:28px;padding:20px 24px;border:1px dashed var(--line);border-radius:8px;
+  font-size:12px;letter-spacing:.03em;line-height:1.9;color:var(--muted);
 }
-.fnode{
-  position:relative;z-index:1;
-  width:86px;height:86px;border-radius:50%;
-  border:1px solid transparent;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;font-size:12px;font-weight:400;line-height:1.4;
-}
-.flow-note{font-size:12px;color:#555;line-height:1.95;margin:52px 0 0}
-.small{font-size:10px;color:var(--mid)}
-/* 職種紹介：3分類をセクション内で縦スクロール */
-.job-scroll{
-  overflow-y:auto;                 /* 高さは1職種ぶんをJSで設定 */
-  scroll-snap-type:y proximity;    /* 分類の頭で自然に止まる */
-  scroll-behavior:smooth;
-  overscroll-behavior-y:auto;      /* 末端まで来たらページ側へそのまま渡す */
-}
-.job-inner .job-item{scroll-snap-align:start}
+.note b{color:var(--ink);font-weight:600}
 
-.sbar-thumb{transition:top .28s cubic-bezier(.22,.7,.2,1)}
-/* OS標準のバーは太いので隠し、2pxの線を自前で置く */
-.job-scroll{scrollbar-width:none}
-.job-scroll::-webkit-scrollbar{display:none}
-.job-scrollwrap{position:relative}
-.sbar{position:absolute;top:0;right:-40px;bottom:0;width:2px;background:rgba(0,0,0,.07)}
-.sbar-thumb{position:absolute;left:0;width:2px;background:rgba(0,0,0,.42);border-radius:1px}
-.job-item + .job-item{margin-top:112px}
-.itv-head{font-size:11px;font-weight:500;letter-spacing:.16em;color:#999;margin-top:76px}
-.job-itv{display:flex;gap:36px;margin-top:24px;padding-bottom:16px}
-.itv{flex:1 1 0;min-width:0}
-.itv-cmt{font-size:13px;font-weight:700;line-height:1.75;color:#222;margin:16px 0 14px}
-.itv-meta{font-size:10px;line-height:1.9;color:#8a8a8a}
-/* 数が多い箇所は黒丸をやめ、山形（>）だけの弱いリンクにする */
-.btn.sm{font-size:11px;gap:5px;font-weight:400;color:#666;align-items:center}
-.btn.sm::after{
-  content:"";width:4.5px;height:4.5px;border-radius:0;background:none;
-  border-top:1px solid #666;border-right:1px solid #666;
-  transform:translateX(-1.6px) rotate(45deg);   /* 山形の重心が右に寄るぶんを戻す */
-}
-.job-item{padding:0}
-.job-name{font-size:23px;font-weight:700;letter-spacing:.01em;line-height:1.3}
-.job-catch{font-size:18px;font-weight:400;line-height:1.75;color:#222;margin:22px 0 0;max-width:720px}
-.job-body{font-size:12px;color:#555;line-height:1.95;margin:18px 0 0;max-width:720px}
-.job-more{display:flex;justify-content:flex-start;margin-top:28px}
-.job-more .btn{font-weight:400}
-.pill{display:inline-block;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;font-size:10px;color:var(--mid);margin:0 4px 4px 0}
-.pp-cmt{font-size:12px;line-height:1.7;color:#333;font-weight:700;margin:0 0 6px}
-.pp-name{font-size:11px;font-weight:400;color:#666;margin-top:1px}
-.pp-year{margin-left:1px}
-.avatar{width:44px;height:44px;border-radius:50%;background:var(--fill2);border:1px solid var(--line2)}
-.tone{background:#f7f7f7}
+.foot{margin-top:120px;padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:11px;letter-spacing:.06em;color:var(--muted)}
 
-/* Office：横スクロールのカード列＋下に進捗の線 */
-.office-track{
-  display:flex;gap:24px;overflow-x:auto;
-  scrollbar-width:none;padding-bottom:22px;
+@media (max-width:860px){
+  .wrap{padding:72px 20px 96px}
+  .grid{grid-template-columns:1fr}
+  .row{grid-template-columns:32px 1fr;gap:4px 16px}
+  .row .d{grid-column:2}
 }
-.office-track::-webkit-scrollbar{display:none}
-.office-card{flex:0 0 340px;scroll-snap-align:start}
-.office-cap{margin-top:14px}
-.office-en{font-size:14px;font-weight:700;letter-spacing:.14em}
-.office-name{display:flex;align-items:baseline;gap:12px}
-.office-ja{font-size:10px;color:var(--mid)}
-.office-addr{font-size:10px;line-height:1.7;color:var(--mid);margin-top:4px}
-.office-bar{height:1px;background:rgba(0,0,0,.14);position:relative}
-.office-bar-in{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:30%}
-
-/* 横スクロールカルーセル（矢印はサイト側のUI要素） */
-.carousel{position:relative}
-.track{display:flex;gap:14px;overflow:hidden}
-.track > *{flex:0 0 210px}
-/* 矢印は文字だと字形の重心で中央に見えないため、CSSで描いて光学的に中央へ置く */
-.arrow{
-  position:absolute;top:105px;right:-14px;width:34px;height:34px;border-radius:50%;
-  background:#fff;border:1px solid var(--line2);
-  font-size:0;line-height:0;color:transparent;
-}
-/* 山形の「ink」は回転後の外接矩形の片側に寄るため、その分を px で戻して光学中央に置く */
-.arrow::before{
-  content:"";position:absolute;top:50%;left:50%;
-  width:6px;height:6px;border-top:1.2px solid #555;border-right:1.2px solid #555;
-  transform:translate(-5.12px,-3.0px) rotate(45deg);
-}
-.arrow.prev::before{transform:translate(-0.96px,-3.0px) rotate(-135deg)}
-.arrow.prev{left:-14px;right:auto}
-
-/* ---- header / fv / footer ---- */
-.nav{
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(4px);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:15px 32px;border-bottom:1px solid var(--line);
-}
-.nav ul{display:flex;gap:16px;list-style:none;margin:0 0 0 auto;padding:0 28px 0 0;font-size:11px;color:#555}
-.logo{width:120px;height:22px;background:var(--fill);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mid)}
-.fv{height:680px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 64px}
-/* FVとVisionは同じ地色で1枚の面として繋げる */
-.fv-base{background:#f2f2f2}
-/* Join Us：黒地・白文字 */
-.joinus{background:#1e1e1e;color:#fff}
-.joinus .h-md{color:#fff}
-.joinus .cta{background:none;border-color:rgba(255,255,255,.55);color:#fff}
-.joinus .cta.primary{background:#fff;border-color:#fff;color:#1e1e1e;font-weight:700}
-
-/* フッター */
-.footer-wf{
-  background:none;border-top:1px solid rgba(0,0,0,.14);
-  padding:44px 64px 48px;
-  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;
-  font-size:11px;color:#555;
-}
-.f-addr{font-size:10px;line-height:1.9;color:var(--mid);margin-top:12px}
-.f-head{font-size:10px;letter-spacing:.14em;color:#9a9a9a;margin-bottom:12px}
-.f-col ul{list-style:none;margin:0;padding:0}
-.f-col li{font-size:11px;line-height:2.1;color:#444}
-.f-copy{font-size:10px;color:#9a9a9a;margin-top:22px}
-
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="stage">
-<div class="page">
+  <header class="stage">
+    <h1>Cuolega - Recruitment Site <span class="thin">/ Internal Dashboard</span><span class="badge">Internal</span></h1>
+    <p class="sub">新卒採用サイト｜ワイヤーフレームと進行状況の索引。社外共有不可。</p>
+  </header>
 
-  <!-- 01 ヘッダー -->
-  <section class="hdr">
-    <div class="nav">
-      <div class="logo">LOGO</div>
-      <ul>
-        <li>Our Business</li><li>About Job</li><li>Culture</li><li>Career</li><li>Number</li><li>Environment</li><li>Deck</li><li>Recruitment</li>
-      </ul>
-      <div class="row" style="gap:8px">
-        <span class="cta">説明会に申し込む</span>
-        <span class="cta primary">ENTRY</span>
+  <!-- ================= WIREFRAME ================= -->
+  <section class="stage">
+    <h2>Wireframe</h2>
+    <div class="grid">
+
+      <a class="card is-lead" href="v2.html">
+        <p class="name">Wireframe V2</p>
+        <p class="policy">採用サイト｜新卒</p>
+        <p class="meta">13 sections / PC 1440px<br>C案の設計値に準拠（余白134・字送り0.1em）</p>
+        <div class="links">
+          <span class="go">Wireframe
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
+        </div>
+      </a>
+
+      <a class="card" href="v1.html">
+        <p class="name">Wireframe V1</p>
+        <p class="policy">採用サイト｜新卒</p>
+        <p class="meta">13 sections / PC 1180px<br>原版。比較用にそのまま保存</p>
+        <div class="links">
+          <span class="go">Wireframe
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
+        </div>
+      </a>
+
+      <div class="card">
+        <p class="name">Design Comp</p>
+        <p class="policy">デザインカンプ</p>
+        <p class="meta">未着手 / 着手 8月24日〜<br>トンマナ確定（8月21日）後に反映</p>
+        <div class="links"><span class="go" style="color:var(--muted)">Not ready</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SCHEDULE ================= -->
+  <section class="stage">
+    <h2>Schedule</h2>
+    <div class="grid">
+      <div class="card">
+        <p class="name">Step 01</p>
+        <p class="policy">原稿作成 → 田口さん決定</p>
+        <p class="meta">8月17日 – 8月28日<br>担当：田上・晒谷さん → 田口さん</p>
+      </div>
+      <div class="card">
+        <p class="name">Step 02</p>
+        <p class="policy">デザインカンプ作成・レビュー</p>
+        <p class="meta">8月24日 – 9月25日<br>トンマナとFVを適用</p>
+      </div>
+      <div class="card is-lead">
+        <p class="name">Step 03</p>
+        <p class="policy">実装 → ver1 公開</p>
+        <p class="meta">9月7日 – 9月30日<br>★ ver1 公開：9月30日</p>
+      </div>
+    </div>
+    <p class="note">
+      トンマナ確定は <b>8月21日</b> 予定（英字ロゴ QOREGA・黒白＋差し色のグリーン・「洗練×親しみやすさ」）。
+      ワイヤーフレームはグレースケールのまま進め、確定後に配色とロゴを一括で当てる。
+      採用系クリエイティブの決定権は <b>田口さん</b>（原案：田上・晒谷さん → 田口さん決定）。
+    </p>
+  </section>
+
+  <!-- ================= OPEN ITEMS ================= -->
+  <section class="stage">
+    <h2>Open Items</h2>
+    <div class="list">
+      <div class="row">
+        <span class="no">01</span>
+        <span class="t">数値4指標が未確認</span>
+        <span class="d">プロダクトユーザー数／2025年度 新卒採用人数／平均勤続年数／昇格までの平均年数。確認先：田口さん</span>
+      </div>
+      <div class="row">
+        <span class="no">02</span>
+        <span class="t">28卒の初任給・固定残業代</span>
+        <span class="d">27卒は最大37万円まで引き上げと発表済み（PR TIMES）。28卒の確定値は未取得</span>
+      </div>
+      <div class="row">
+        <span class="no">03</span>
+        <span class="t">インタビュー11本が実在社員か</span>
+        <span class="d">氏名はイニシャル、入社年は2023〜2026卒。実在なら人数と職種の実態に合わせて構成し直せる</span>
+      </div>
+      <div class="row">
+        <span class="no">04</span>
+        <span class="t">写真素材の有無（社員11・拠点5）</span>
+        <span class="d warn">⚠ タレント変更がオフレコで進行中（年明け2月頃に交代予定）。現タレントの素材は使わない</span>
+      </div>
+      <div class="row">
+        <span class="no">05</span>
+        <span class="t">キャリアパス6段階の役割記述</span>
+        <span class="d">V2に入っている6つの説明文は叩き台。人事の実態に合わせて差し替えが必要</span>
+      </div>
+      <div class="row">
+        <span class="no">06</span>
+        <span class="t">V2に含まれる仮コピー</span>
+        <span class="d">FVリード文、各セクションの和文見出しは確定文言ではない。Vision のパーパスのみ確定文言を使用</span>
       </div>
     </div>
   </section>
 
-  <!-- 02 FV -->
-  <section>
-
-    <div class="fv fv-base">
-      <div>
-        <h2 class="h-lg" style="font-size:58px">魅せろ個性<br>変化を恐れるな</h2>
+  <!-- ================= NEXT SCOPE ================= -->
+  <section class="stage">
+    <h2>Next Scope</h2>
+    <div class="list">
+      <div class="row">
+        <span class="no">01</span>
+        <span class="t">キャリアアドバイザー特設</span>
+        <span class="d">「これはもう確実にやるべき」。PLEX・クロスマイルにあり「多分負けちゃう」＝優先度最上位</span>
+      </div>
+      <div class="row">
+        <span class="no">02</span>
+        <span class="t">職種別LP × 4</span>
+        <span class="d">エンジニア／PdM／デザイナー系／RA・キャリアアドバイザー。主な狙いは中途向け</span>
+      </div>
+      <div class="row">
+        <span class="no">03</span>
+        <span class="t">ハープ接続・カジュアル面談動線</span>
+        <span class="d">現行ATSはKanLi。ハープは導入予定。専用フォームかWantedly寄せかは未決</span>
+      </div>
+      <div class="row">
+        <span class="no">04</span>
+        <span class="t">説明会動画の置き方</span>
+        <span class="d">埋め込みで見放題か、ダイジェスト＋登録でリスト取りか。未決の設計ポイント</span>
+      </div>
+      <div class="row">
+        <span class="no">05</span>
+        <span class="t">SP（レスポンシブ）設計</span>
+        <span class="d">V1・V2ともPC固定。新卒採用は実流入の大半がスマホのため、いずれ必須</span>
       </div>
     </div>
-
+    <p class="note">
+      全体像は「五、六ページ／階層は多くて二〜三階層」（2026年7月17日 壁打ち）。
+      新卒トップは<b>そのうちの1枚</b>という位置づけ。
+    </p>
   </section>
 
-  <!-- 03 Vision -->
-  <section class="fv-base">
-    <div class="inner" style="padding-top:80px;padding-bottom:110px">
-      <div style="width:520px;margin-left:auto">
-        <p style="font-size:14px;line-height:1.9;font-weight:400;color:#333;margin:0">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。<br>だから私たちは、食・宿泊産業を支える「人」の採用・就業を支援することで、日本の価値の向上に貢献します。一緒に日本の価値を上げていける仲間を歓迎します。</p>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- 04 Work -->
-  <section>
-    <div class="inner" style="padding-bottom:20px">
-      <div class="sechead tight"><span class="en">Our Business</span></div>
-      <p class="biz-copy">業界を熱狂させるUI・UXのプロダクトを</p>
-      <div id="biz">
-        <div class="biz-layout">
-        <div class="biz-textwrap">
-          <div class="biz-text on" data-t="0">
-            <div class="biz-name">FoodsLabo</div>
-            <div class="biz-sub">飲食業界特化 採用DXプラットフォーム</div>
-            <p class="biz-desc">飲食業界の転職・採用ならフーズラボ。<br>求人掲載・ダイレクトリクルーティング・エージェントサポートを全て完全成果報酬型で提供しています。</p>
-            <span class="btn">サービスサイトへ</span>
-          </div>
-          <div class="biz-text" data-t="1">
-            <div class="biz-name">HotelsLabo</div>
-            <div class="biz-sub">ホテル・旅館業界特化 採用DXプラットフォーム</div>
-            <p class="biz-desc">ホテル・旅館業界の転職・採用ならホテルズラボ。<br>求人掲載・ダイレクトリクルーティング・エージェントサポートを全て完全成果報酬型で提供しています。</p>
-            <span class="btn">サービスサイトへ</span>
-          </div>
-          <div class="biz-text" data-t="2">
-            <div class="biz-name">Cuoport Japan</div>
-            <div class="biz-sub">飲食・宿泊業界特化 グローバル採用</div>
-            <p class="biz-desc">飲食・宿泊に特化した、国内外で働きたい外国人の方の転職・採用をサポートします。</p>
-            <span class="btn">サービスサイトへ</span>
-          </div>
+  <!-- ================= REFERENCE ================= -->
+  <section class="stage">
+    <h2>Reference</h2>
+    <div class="grid">
+      <a class="card" href="https://proto-review-vict0a.pages.dev/c-top?c=d" target="_blank" rel="noopener">
+        <p class="name">Design Reference</p>
+        <p class="policy">コーポレート C案 TOP</p>
+        <p class="meta">V2の設計値の出典<br>余白・型・モーションの基準</p>
+        <div class="links">
+          <span class="go">Open
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
         </div>
-        <div class="cf-col">
-          <div class="cf" id="cf">
-            <div class="cf-item" data-c="0"><span class="scr"></span></div>
-            <div class="cf-item" data-c="1"><span class="scr"></span></div>
-            <div class="cf-item" data-c="2"><span class="scr"></span></div>
-            <span class="arrow prev" data-nav="-1"></span>
-            <span class="arrow" data-nav="1"></span>
-          </div>
+      </a>
+      <a class="card" href="https://proto-review-vict0a.pages.dev/" target="_blank" rel="noopener">
+        <p class="name">Prototype Index</p>
+        <p class="policy">Branding Design 索引</p>
+        <p class="meta">コーポレート・ロゴ・適性検査・10周年<br>このダッシュボードの様式の出典</p>
+        <div class="links">
+          <span class="go">Open
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
         </div>
+      </a>
+      <a class="card" href="https://github.com/aikatanouep-web/recruit-wf-2026" target="_blank" rel="noopener">
+        <p class="name">Repository</p>
+        <p class="policy">recruit-wf-2026</p>
+        <p class="meta">main へ push で即反映<br>GitHub Pages（root 配信）</p>
+        <div class="links">
+          <span class="go">Open
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 14 12" width="11" height="9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.8 6h11.2M8 1.4l4.6 4.6-4.6 4.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 About Job -->
-  <section class="aboutjob">
-    <div class="inner" style="padding-bottom:0">
-      <div class="sechead"><span class="en">About Job</span></div>
-      <div class="job-scrollwrap">
-      <div class="job-scroll" id="jobscroll">
-      <div class="job-inner" id="jobinner">
-        <div class="job-item">
-          <div class="job-name">ビジネス職</div>
-          <p class="job-catch">お客様と求職者の架け橋となり、採用の成功へ導く</p>
-          <p class="job-body">飲食・宿泊業界のお客様と最初に向き合い、採用が成功するまで伴走する推進役です。アカウントプランナー、インサイドセールス、フィールドセールスがそれぞれの持ち場で連携し、新規のお客様の開拓から求人の設計、候補者のご紹介、入社後の定着まで、採用の全ての過程に責任を持ちます。現場で拾った課題をプロダクトチームに渡し、サービスの改善につなげることも大事な役割の1つ。自分が担当した店舗に人が集まり、お客様の事業が前に進む瞬間が、ビジネス職の1番のやりがいです。</p>
-          <div class="job-more"><span class="btn">ビジネス職を詳しく見る</span></div>
-          <div class="itv-head">Members Interview</div>
-          <div class="job-itv">
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">新卒抜擢！ホテル×新規事業に挑む新卒3年目責任者</p>
-              <div class="itv-meta">インサイドセールス</div>
-              <div class="itv-meta">Y.M（2024年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">数字を追うだけで終わらせない。お客様の採用に向き合う日々</p>
-              <div class="itv-meta">フィールドセールス</div>
-              <div class="itv-meta">T.A（2023年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">お客様の採用を設計する側へ。企画から入り込む提案の面白さ</p>
-              <div class="itv-meta">アカウントプランナー</div>
-              <div class="itv-meta">K.T（2025年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-          </div>
-        </div>
-        <div class="job-item">
-          <div class="job-name">プロダクト職</div>
-          <p class="job-catch">業界の当たり前を、プロダクトの力で塗り替える</p>
-          <p class="job-body">FoodsLabo・HotelsLaboをはじめとする自社プロダクトを、企画から設計・開発・改善まで一貫して手がけます。エンジニア、マーケター、デザイナー、プロダクトマネージャー、カスタマーサクセスが同じチームに並び、ユーザーの声を起点に「何を作るか」から決めていきます。曖昧な定性情報を構造化し、AIで精度の高いマッチングを生み出す仕組みづくりも大事な役割の1つ。自分が形にした機能が業界の採用のやり方そのものを変えていく瞬間が、プロダクト職の1番のやりがいです。</p>
-          <div class="job-more"><span class="btn">プロダクト職を詳しく見る</span></div>
-          <div class="itv-head">Members Interview</div>
-          <div class="job-itv">
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">マーケティング×DXで全体最適の事業UXを創る</p>
-              <div class="itv-meta">マーケティング</div>
-              <div class="itv-meta">R.B（2025年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">入社1年目からプロダクトの中核機能を任される</p>
-              <div class="itv-meta">エンジニア</div>
-              <div class="itv-meta">K.S（2026年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">エンジニアと同数のデザイン組織で、業界の当たり前を設計する</p>
-              <div class="itv-meta">デザイナー</div>
-              <div class="itv-meta">M.Y（2024年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">何を作るかから決める。ユーザーの声を機能に翻訳する役割</p>
-              <div class="itv-meta">プロダクトマネージャー</div>
-              <div class="itv-meta">N.I（2023年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-          </div>
-        </div>
-        <div class="job-item">
-          <div class="job-name">コーポレート職</div>
-          <p class="job-catch">事業が伸び続ける土台を、内側からつくる</p>
-          <p class="job-body">会社の成長を支える基盤をつくる役割です。バックオフィス、人事部、総務部・経理部、経営企画が、採用・育成から労務、経理、経営管理までを担い、事業が最速で進むための仕組みを整えます。決められた運用をこなすだけでなく、現場で起きている課題を先回りして自ら制度を設計し直すことも大事な役割の1つ。自分が整えた仕組みによって全社の生産性が上がり、事業の成長スピードそのものが変わる瞬間が、コーポレート職の1番のやりがいです。</p>
-          <div class="job-more"><span class="btn">コーポレート職を詳しく見る</span></div>
-          <div class="itv-head">Members Interview</div>
-          <div class="job-itv">
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">採用担当として、自分と同じ景色を見る仲間を増やす</p>
-              <div class="itv-meta">人事部</div>
-              <div class="itv-meta">R.N（2025年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">数字から事業の打ち手を導く、経営に一番近い場所</p>
-              <div class="itv-meta">経営企画</div>
-              <div class="itv-meta">H.K（2023年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">全社の生産性を上げる仕組みを、入社1年目から設計する</p>
-              <div class="itv-meta">バックオフィス</div>
-              <div class="itv-meta">A.T（2026年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-            <div class="itv">
-              <div class="ph" style="aspect-ratio:1/1"><i>社員写真</i></div>
-              <p class="itv-cmt">数字の裏側から会社を支える。バックオフィスの当事者意識</p>
-              <div class="itv-meta">総務部・経理部</div>
-              <div class="itv-meta">Y.S（2024年新卒入社）</div>
-              <span class="btn sm" style="margin-top:16px">記事を読む</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      <div class="sbar"><div class="sbar-thumb" id="jobthumb"></div></div>
-      </div>
+      </a>
     </div>
   </section>
 
-  <!-- 06 Culture -->
-  <section class="tone">
-    <div class="inner culture" style="padding-top:168px;padding-bottom:152px">
-      <div class="hstage" data-h>
-      <div class="sechead"><span class="en">Culture</span></div>
-      <h3 class="h-md">成長と挑戦を楽しもう</h3>
-      <div class="vals">
-        <div class="vals-track" id="valstrack">
-        <div class="vcard">
-          <div class="ven">Market Leader</div>
-          <div class="vja">業界の常識を変える</div>
-          <div class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決策、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求、負を解決し、業界の未来を切り開く。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">Team Focus</div>
-          <div class="vja">最高のチームで勝つ</div>
-          <div class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">Professional Commitment</div>
-          <div class="vja">成果こそがプロの証明</div>
-          <div class="vtx">業界のプロとして、圧倒的な当事者意識を持ち成果にこだわる。他責を排し、徹底的な自責で「どうしたらできるか」を建設的に考え、評論家に決してならない。プロセスに満足せず、泥臭く成果にコミットし、本質的な課題解決を通じて、顧客と業界に真の価値を提供し続ける。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">Always Beta</div>
-          <div class="vja">高速アップデート</div>
-          <div class="vtx">完成はない、常にベータ版であれ。完璧を求め停滞するより、高速で改善を繰り返す。過去のやり方に固執せず、仮説を持ち即実行する。自らをアップデートし続け、必要であれば大胆にピボットする柔軟さを持つ。昨日の自分を軽々と超えるスピード感が、業界を最速で塗り替える原動力となる。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">Issue Driven</div>
-          <div class="vja">自ら課題設定</div>
-          <div class="vtx">指示を待つのではなく、「自ら主体的に課題を設定し解決する」ことにこだわる。本質的な課題は何かを問い続け、「何を解くか」に意思を込める。鋭い課題設定こそが、最小の力で最大の変革を起こし、業界全体を正しい未来へと最速で導く。解く課題を決めたら周囲を巻き込み、圧倒的なインパクトを出し切る。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">FactBase, Lead DX</div>
-          <div class="vja">ファクトで語り仕組みを創る</div>
-          <div class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。DXを単なるツール導入と誤解せず、ビジネスオペレーションを作り切り、成果を最大化するため磨き続ける。</div>
-        </div>
-        <div class="vcard">
-          <div class="ven">Build Trust</div>
-          <div class="vja">ユーザーファーストで信頼を築く</div>
-          <div class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。その嘘のない歩みこそが期待を超え、業界で選ばれる理由という最強のブランドになる。</div>
-        </div>
-        </div>
-        <div class="office-bar"><div class="office-bar-in" id="valsbar"></div></div>
-      </div>
-      </div>
-    </div>
-  </section>
+  <div class="foot">
+    <span>Cuolega Recruitment Site — Internal</span>
+    <span>新卒採用（28卒）</span>
+  </div>
 
-
-
-  <!-- 07 Career -->
-  <section>
-    <div class="inner">
-      <div class="sechead"><span class="en">Career</span></div>
-
-      <h3 class="h-md">キャリアパス</h3>
-      <div class="ph" style="height:420px;margin-top:26px"><i>役職の図解（メンバー / リーダー / チーフリーダー / マネージャー / 部長 / 執行役員）</i></div>
-
-      <h3 class="h-md" style="margin-top:72px">成長支援</h3>
-      <div class="tr">
-        <div class="tr-row">
-          <div class="tr-when">入社後</div>
-          <div class="tr-cards">
-            <div class="tr-card"><h4>社内研修</h4><p>入社後の独り立ち研修や、社員が自ら開催する職種ごとの研修など様々な研修を行っています。</p></div>
-            <div class="tr-card"><h4>社外研修</h4><p>社外で他社を含めて実施する研修です。外部講師の元、基本的な社会人としての知識について学ぶことができます。</p></div>
-            <div class="tr-card"><h4>1on1制度</h4><p>上司と気軽に話せる制度です。仕事の進捗や悩みなど、入社後困っていることを相談できます。</p></div>
-          </div>
-        </div>
-        <div class="tr-row">
-          <div class="tr-when">2〜3年後</div>
-          <div class="tr-cards">
-            <div class="tr-card"><h4>職種別研修</h4><p>配属後の実務に合わせて、職種ごとに実践的な知識やスキルを学ぶ研修です。技術力やプロダクト理解を深める勉強会も開催しています。</p></div>
-            <div class="tr-card"><h4>社長塾</h4><p>代表が直接講師を務める少人数の勉強会です。経営の視点や事業の考え方を、現場の課題と結びつけながら学ぶことができます。</p></div>
-            <div class="tr-card"><h4>役職研修</h4><p>外部の講師を招いて行っている研修です。主に役職についた後、メンバーのマネジメントについて学ぶことができます。</p></div>
-          </div>
-        </div>
-        <div class="tr-row">
-          <div class="tr-when">Challenge</div>
-          <div class="tr-cards">
-            <div class="tr-card"><h4>新規事業</h4><p>新規事業担当や、新しい支社の立ち上げなどにチャレンジが可能です。</p></div>
-            <div class="tr-card"><h4>ジョブローテーション</h4><p>異動して新たな業務経験を積み、更なるキャリアアップが可能です。</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 08 Number -->
-  <section class="tone">
-    <div class="inner">
-      <div class="sechead"><span class="en">Number</span></div>
-      <div class="grid4" style="gap:72px 24px;margin-top:34px">
-        <div class="kpi"><div class="num">2017</div><div class="lbl">創業</div></div>
-        <div class="kpi"><div class="num">00,000</div><div class="lbl">プロダクトユーザー</div></div>
-        <div class="kpi"><div class="num">00<span style="font-size:14px">名</span></div><div class="lbl">2025年度 新卒採用人数</div></div>
-        <div class="kpi"><div class="num">000<span style="font-size:14px">名</span></div><div class="lbl">従業員数</div></div>
-        <div class="kpi"><div class="num">00.0<span style="font-size:14px">歳</span></div><div class="lbl">社員平均年齢</div></div>
-        <div class="kpi"><div class="num">0.0<span style="font-size:14px">年</span></div><div class="lbl">平均勤続年数</div></div>
-        <div class="kpi"><div class="num">67<span style="font-size:14px">%</span></div><div class="lbl">有給取得率</div></div>
-        <div class="kpi"><div class="num">0.0<span style="font-size:14px">年</span></div><div class="lbl">昇格までの平均年数</div></div>
-        <div class="kpi"><div class="num">57:43</div><div class="lbl">従業員男女比</div></div>
-        <div class="kpi"><div class="num">62.5<span style="font-size:14px">%</span></div><div class="lbl">女性管理職比率</div></div>
-        <div class="kpi"><div class="num">00<span style="font-size:14px">%</span></div><div class="lbl">育休取得率</div></div>
-        <div class="kpi"><div class="num">66.6<span style="font-size:14px">%</span></div><div class="lbl">育休復帰率</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 09 Environment -->
-  <section>
-    <div class="inner">
-      <div class="sechead"><span class="en">Environment</span></div>
-      <h3 class="h-md">福利厚生</h3>
-      <div class="bene-wrap">
-      <details class="bene-group" open>
-        <summary class="bene-cat">働きやすい環境づくり</summary>
-        <div class="bene-grid">
-          <div class="bene-item"><h4>機材支給</h4><p>職種に応じて、業務で使用するPCやスマートフォンを支給します。モニターの支給もあり、デュアルモニターで作業可能です。</p></div>
-          <div class="bene-item"><h4>社内ドリンク制度</h4><p>社内に常備してある自動販売機・ドリンクの中から好きなものを無料で利用することが可能です。</p></div>
-          <div class="bene-item"><h4>住宅手当</h4><p>業務集中のための環境構築サポートとして配属先の近くにお住まいの方に上限5.5万円を支給しています。</p></div>
-          <div class="bene-item"><h4>交通費全額支給</h4><p>会社から自宅までかかる交通機関の運賃を全額支給しています。（公共交通機関利用の場合）</p></div>
-          <div class="bene-item"><h4>納会（会社負担）</h4><p>メンバーとの交流を深めることを目的に、全社イベントや部署・チームごとに年に複数回実施しています。</p></div>
-          <div class="bene-item"><h4>書籍購入</h4><p>開発に関わる書籍の購入支援を行なっており、技術書や専門書を会社負担で購入できる制度を設けています。（社内規定あり）</p></div>
-        </div>
-      </details>
-      <details class="bene-group">
-        <summary class="bene-cat">集中のための健康づくり</summary>
-        <div class="bene-grid">
-          <div class="bene-item"><h4>健康診断</h4><p>年に1回、社員全員が健康診断を受けることができます。受診費用は全額会社が負担します。</p></div>
-          <div class="bene-item"><h4>インフルエンザ予防接種</h4><p>年に一度、インフルエンザの予防接種を社内で実施しています。社員の健康と安全を守るため、感染症の予防に努めています。</p></div>
-          <div class="bene-item"><h4>がん検診</h4><p>がん検診を補助します。女性は子宮頸がんなど、男性は前立腺の検査を実施します。（年齢条件あり）</p></div>
-        </div>
-      </details>
-      <details class="bene-group">
-        <summary class="bene-cat">ファミリー向けサポート</summary>
-        <div class="bene-grid">
-          <div class="bene-item"><h4>育児/産前・産後休暇</h4><p>出産や育児の際に安心して取得できる育児休暇制度を提供しています。社内では、男女問わず取得しており復帰率は66.6%となっています。</p></div>
-          <div class="bene-item"><h4>ファミリー制度</h4><p>安心して育児と仕事を両立できるよう、社員の子供が小学校を卒業するまでの間、年に1回、特別休暇を付与しています。</p></div>
-          <div class="bene-item"><h4>時短社員制度</h4><p>育児や介護などのライフステージに応じたニーズに応えるために設けられたもので、社員が働く時間を調整できるようになっています。</p></div>
-          <div class="bene-item"><h4>慶弔見舞金</h4><p>従業員やそのご家族に慶事や不幸があった際に支給される慶弔見舞金を設けています。ライフイベントに応じた金額を支給します。</p></div>
-          <div class="bene-item"><h4>退職金制度</h4><p>確定積立年金制度により、自分で設定した金額で退職金を積み立てることができます。退職時には、その積立金を受け取ることができます。</p></div>
-        </div>
-      </details>
-      <details class="bene-group">
-        <summary class="bene-cat">コミュニケーションサポート</summary>
-        <div class="bene-grid">
-          <div class="bene-item"><h4>バースデーイベント</h4><p>毎月、誕生日を迎えた社員を祝うイベントを開催しています。社員にバースデープレゼントも支給しています。</p></div>
-          <div class="bene-item"><h4>社員・幹部旅行</h4><p>社員同士のコミュニケーションを深めてより良い関係を築き、社員が集中して学べる機会を提供しています。</p></div>
-          <div class="bene-item"><h4>会員制リゾート施設</h4><p>業績が認められた社員に、会員制リゾート施設が利用できる制度があります。リフレッシュの機会を提供することを目的としています。</p></div>
-          <div class="bene-item"><h4>スポンサー特典</h4><p>スポーツブランドや飲食店とのスポンサーシップを行なっており、社員にさまざまな特典を提供しています。</p></div>
-        </div>
-      </details>
-      </div>
-      <div class="hstage" data-h>
-      <h3 class="h-md">拠点</h3>
-      <div class="office">
-        <div class="office-track" id="officetrack">
-          <div class="office-card">
-            <div class="ph" style="aspect-ratio:16/9"><i>拠点写真</i></div>
-            <div class="office-cap">
-              <div class="office-name">
-                <span class="office-en">TOKYO</span>
-                <span class="office-ja">東京本社</span>
-              </div>
-              <div class="office-addr">〒105-0004<br>東京都港区新橋1-10-6 新橋M-SQUARE 11階</div>
-            </div>
-          </div>
-          <div class="office-card">
-            <div class="ph" style="aspect-ratio:16/9"><i>拠点写真</i></div>
-            <div class="office-cap">
-              <div class="office-name">
-                <span class="office-en">OSAKA</span>
-                <span class="office-ja">関西支社</span>
-              </div>
-              <div class="office-addr">〒530-0001<br>大阪府大阪市北区梅田2-4-9 ブリーゼタワー 17階</div>
-            </div>
-          </div>
-          <div class="office-card">
-            <div class="ph" style="aspect-ratio:16/9"><i>拠点写真</i></div>
-            <div class="office-cap">
-              <div class="office-name">
-                <span class="office-en">NAGOYA</span>
-                <span class="office-ja">名古屋支社</span>
-              </div>
-              <div class="office-addr">〒450-6490<br>愛知県名古屋市中村区名駅3-28-12 大名古屋ビルヂング 11階</div>
-            </div>
-          </div>
-          <div class="office-card">
-            <div class="ph" style="aspect-ratio:16/9"><i>拠点写真</i></div>
-            <div class="office-cap">
-              <div class="office-name">
-                <span class="office-en">FUKUOKA</span>
-                <span class="office-ja">福岡支社</span>
-              </div>
-              <div class="office-addr">〒810-0001<br>福岡県福岡市中央区天神1-13-17 福岡天神1丁目ビル 7階</div>
-            </div>
-          </div>
-          <div class="office-card">
-            <div class="ph" style="aspect-ratio:16/9"><i>拠点写真</i></div>
-            <div class="office-cap">
-              <div class="office-name">
-                <span class="office-en">SAPPORO</span>
-                <span class="office-ja">札幌支社</span>
-              </div>
-              <div class="office-addr">〒060-0061<br>北海道札幌市中央区南1条西5-20 郵政福祉札幌第1ビル 4階</div>
-            </div>
-          </div>
-        </div>
-        <div class="office-bar"><div class="office-bar-in" id="officebar"></div></div>
-      </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10 Deck -->
-  <section class="tone">
-    <div class="inner">
-      <div class="sechead"><span class="en">Deck</span></div>
-      <div class="row" style="gap:22px;margin-top:6px">
-        <div style="flex:1">
-          <h3 class="h-md" style="font-size:16px">Company Deck</h3>
-          <div class="ph" style="height:290px"><i>スライド表紙サムネイル</i></div>
-        </div>
-        <div style="flex:1">
-          <h3 class="h-md" style="font-size:16px">28卒 1日密着動画</h3>
-          <div class="ph" style="height:290px"><i>▶ 密着動画</i></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 11 Recruitment -->
-  <section>
-    <div class="inner">
-      <div class="sechead"><span class="en">Recruitment</span></div>
-      <h3 class="h-md">募集要項</h3>
-      <table class="spec">
-        <tr><th>雇用形態</th><td>正社員<br><span class="note">※試用期間3ヶ月（期間中の待遇に変更はありません）</span></td></tr>
-        <tr><th>応募資格</th><td>2028年3月までに四年制大学・大学院・短期大学・専門学校を卒業／修了見込みの方<br><span class="note">※学部・学科不問／既卒の方もご相談ください</span></td></tr>
-        <tr><th>配属</th><td>配属は適性と本人の希望を踏まえて決定します<br><span class="note">※入社後の研修期間を経て配属先を決定します</span></td></tr>
-        <tr><th>初任給</th><td>月給 ◯◯◯,◯◯◯円<br><span class="note">※固定残業代◯◯時間分（◯◯,◯◯◯円）を含む。超過分は別途支給</span></td></tr>
-        <tr><th>勤務時間</th><td>9:00〜18:00<br><span class="note">※早番、遅番シフトが発生する月もあります</span></td></tr>
-        <tr><th>休日・休暇</th><td>年間休日120日<br>週休2日制（土日）、祝日<br><span class="note">休暇制度：有給休暇・GW休暇・夏季休暇・年末年始休暇・慶弔休暇・産前・産後休暇・育児休暇・永年勤続表彰休暇・ファミリー制度休暇</span></td></tr>
-        <tr><th>各種保険</th><td>社会保険完備（雇用・労災・健康・厚生年金）</td></tr>
-        <tr><th>各種待遇</th><td>昇給年4回（3ヶ月ごとの査定）<br>業績賞与年2回（夏・冬）</td></tr>
-      </table>
-      <h3 class="h-md" style="margin-top:60px">選考の流れ</h3>
-      <div class="flow" style="margin-top:40px">
-        <div class="fnode" style="background:#ffffff;color:#222;border-color:#1e1e1e">エントリー</div>
-        <div class="fnode" style="background:#d9d9d9;color:#222;border-color:#d9d9d9">説明会</div>
-        <div class="fnode" style="background:#a8a8a8;color:#fff;border-color:#a8a8a8">書類選考</div>
-        <div class="fnode" style="background:#5e5e5e;color:#fff;border-color:#5e5e5e">面接</div>
-        <div class="fnode" style="background:#1e1e1e;color:#fff;border-color:#1e1e1e">内定</div>
-      </div>
-      <p class="flow-note">書類選考では、履歴書と職務経歴書をご提出いただきます。面接はオンラインまたは対面で、1〜3回実施します。<br>各ステップの日程はご都合に合わせて調整しますので、選考の途中でも気になることがあれば人事までお気軽にご相談ください。</p>
-    </div>
-  </section>
-
-  <!-- 12 Join Us -->
-  <section class="joinus">
-    <div class="inner" style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:440px">
-      <h3 class="h-md" style="font-size:38px;line-height:1.5">一緒に日本の価値を上げよう</h3>
-      <div class="row" style="justify-content:center;gap:14px;margin-top:26px">
-        <span class="cta lg">説明会に申し込む</span>
-        <span class="cta primary lg">ENTRY</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 13 フッター -->
-  <section>
-    <div class="footer-wf">
-      <div class="f-brand">
-        <div class="logo">LOGO</div>
-        <div class="f-addr">
-          株式会社クオレガ<br>
-          〒105-0004 東京都港区新橋1-10-6<br>
-          新橋M-SQUARE 11階
-        </div>
-        <div class="f-copy">© Cuolega, Inc.</div>
-      </div>
-      <div class="f-col">
-        <div class="f-head">Contents</div>
-        <ul>
-          <li>Our Business</li><li>About Job</li><li>Culture</li><li>Career</li>
-          <li>Number</li><li>Environment</li><li>Deck</li><li>Recruitment</li>
-        </ul>
-      </div>
-      <div class="f-col">
-        <div class="f-head">Service</div>
-        <ul>
-          <li>FoodsLabo</li><li>HotelsLabo</li><li>Cuoport Japan</li>
-        </ul>
-      </div>
-      <div class="f-col">
-        <div class="f-head">Link</div>
-        <ul>
-          <li>コーポレートサイト</li><li>note</li><li>Wantedly</li><li>Instagram</li><li>プライバシーポリシー</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-</div><!-- /page -->
-</div><!-- /stage -->
-
-
-<script>
-(function(){
-  var root=document.getElementById('biz'); if(!root) return;
-  var cf=document.getElementById('cf');
-  var items=[].slice.call(root.querySelectorAll('.cf-item'));
-  var texts=[].slice.call(root.querySelectorAll('.biz-text'));
-  var n=items.length;
-
-  var GAP=152;              // モック1枚ぶんの移動量
-  var pos=0, target=0;      // 連続値。整数のときにその番号が中央
-  var raf=null, dragging=false, lastIdx=-1;
-
-  function wrap(d){ while(d> n/2) d-=n; while(d<-n/2) d+=n; return d; }
-  function opacityFor(a){
-    if(a<=1) return 1-0.45*a;
-    if(a<=2) return 0.55-0.30*(a-1);
-    return Math.max(0, 0.25-0.25*(a-2));
-  }
-
-  function render(){
-    items.forEach(function(el,j){
-      var d=wrap(j-pos), a=Math.abs(d);
-      el.style.transform='translateX('+(d*GAP).toFixed(2)+'px) scale('+(1-0.12*Math.min(a,3)).toFixed(4)+')';
-      el.style.opacity=opacityFor(a).toFixed(3);
-      el.style.zIndex=String(10-Math.round(a));
-      el.classList.toggle('is-main', a<0.5);
-    });
-    var idx=((Math.round(pos)%n)+n)%n;
-    if(idx!==lastIdx){
-      lastIdx=idx;
-      texts.forEach(function(el,j){ el.classList.toggle('on', j===idx); });
-    }
-  }
-
-  function tick(){
-    pos += (target-pos)*0.16;             // 指数補間でぬるっと寄せる
-    if(Math.abs(target-pos)<0.0008){ pos=target; render(); raf=null; return; }
-    render();
-    raf=requestAnimationFrame(tick);
-  }
-  function animate(){ if(!raf) raf=requestAnimationFrame(tick); }
-  function go(dir){ target=Math.round(target)+dir; animate(); }
-
-  root.querySelectorAll('[data-nav]').forEach(function(b){
-    b.addEventListener('click',function(){ go(+b.dataset.nav); bump(); });
-  });
-
-  // ホイール：入力に追従させ、止まったら一番近い位置へ収める
-  var wheelTimer=null;
-  cf.addEventListener('wheel',function(e){
-    var dx=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:0;
-    if(!dx) return;
-    e.preventDefault();
-    target += dx/260; animate(); bump();
-    clearTimeout(wheelTimer);
-    wheelTimer=setTimeout(function(){ target=Math.round(target); animate(); },130);
-  },{passive:false});
-
-  // ドラッグ：指の動きにそのまま追従。離したら一番近い位置へ
-  var sx=0, sp=0;
-  cf.addEventListener('pointerdown',function(e){
-    // 矢印の上から始まった操作はドラッグ扱いにしない
-    // （setPointerCapture すると click が矢印に届かなくなるため）
-    if(e.target.closest && e.target.closest('.arrow')) return;
-    dragging=true; sx=e.clientX; sp=pos;
-    if(raf){ cancelAnimationFrame(raf); raf=null; }
-    cf.setPointerCapture(e.pointerId);
-  });
-  cf.addEventListener('pointermove',function(e){
-    if(!dragging) return;
-    pos = sp - (e.clientX-sx)/GAP; target=pos; render();
-  });
-  function release(){
-    if(!dragging) return;
-    dragging=false; target=Math.round(pos); animate(); bump();
-  }
-  cf.addEventListener('pointerup',release);
-  cf.addEventListener('pointercancel',release);
-
-  // 放置していると5秒ごとに自動で回る
-  var timer=null, visible=false;
-  function start(){ stop(); if(visible) timer=setInterval(function(){ go(1); },5000); }
-  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
-  function bump(){ start(); }
-
-  cf.addEventListener('pointerenter',stop);
-  cf.addEventListener('pointerleave',start);
-  document.addEventListener('visibilitychange',function(){ document.hidden?stop():start(); });
-
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){
-      visible=es[0].isIntersecting; visible?start():stop();
-    },{threshold:.35}).observe(root);
-  } else { visible=true; start(); }
-
-  render();
-})();
-</script>
-<script>
-/* About Job：枠の高さ＝1職種ぶん。その中で3職種を縦スクロールさせる */
-(function(){
-  var box=document.getElementById('jobscroll');
-  var inner=document.getElementById('jobinner');
-  var th=document.getElementById('jobthumb');
-  if(!box||!inner) return;
-
-  function layout(){
-    var items=inner.querySelectorAll('.job-item');
-    if(!items.length) return;
-    // 枠の高さ＝先頭ブロック1つぶん
-    box.style.height=Math.round(items[0].getBoundingClientRect().height)+'px';
-    // 最後まで送ったとき、末尾ブロックの上端が枠の上端に来るよう下に余白を足す
-    var last=items[items.length-1];
-    inner.style.paddingBottom=Math.max(0, box.clientHeight-last.offsetHeight)+'px';
-    draw();
-  }
-  function draw(){
-    if(!th) return;
-    var ratio=box.clientHeight/inner.scrollHeight;
-    if(ratio>=1){ th.style.display='none'; return; }
-    th.style.display='block';
-    var h=Math.max(28, box.clientHeight*ratio);
-    th.style.height=h+'px';
-    th.style.top=(box.scrollTop/(inner.scrollHeight-box.clientHeight))*(box.clientHeight-h)+'px';
-  }
-  box.addEventListener('scroll',draw,{passive:true});
-  addEventListener('resize',layout);
-  addEventListener('load',layout);
-  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout);
-  if(window.ResizeObserver) new ResizeObserver(layout).observe(inner);
-  layout();
-})();
-</script>
-<script>
-(function(){
-  var tr=document.getElementById('officetrack'), bar=document.getElementById('officebar');
-  if(!tr||!bar) return;
-  function draw(){
-    var max=tr.scrollWidth-tr.clientWidth;
-    var ratio=tr.clientWidth/tr.scrollWidth;
-    bar.style.width=(ratio*100)+'%';
-    bar.style.left=(max>0 ? (tr.scrollLeft/max)*(100-ratio*100) : 0)+'%';
-  }
-  tr.addEventListener('scroll',draw,{passive:true});
-  addEventListener('resize',draw);
-  draw();
-})();
-(function(){
-  var tr=document.getElementById('valstrack'), bar=document.getElementById('valsbar');
-  if(!tr||!bar) return;
-  function draw(){
-    var max=tr.scrollWidth-tr.clientWidth;
-    var ratio=tr.clientWidth/tr.scrollWidth;
-    bar.style.width=(ratio*100)+'%';
-    bar.style.left=(max>0 ? (tr.scrollLeft/max)*(100-ratio*100) : 0)+'%';
-  }
-  tr.addEventListener('scroll',draw,{passive:true});
-  addEventListener('resize',draw);
-  draw();
-})();
-</script>
-<script>
-/* Culture / Office：縦スクロールがそのまま横スクロールに切り替わる。
-   ページの高さは一切増やさない。
-   トラックが画面内に見えている間、ホイールの縦入力を横送りに転用し、
-   端まで送り切ったら介入をやめて通常の縦スクロールに戻す。 */
-(function(){
-  var tracks=[].slice.call(document.querySelectorAll('.hstage .vals-track, .hstage .office-track'));
-  if(!tracks.length) return;
-
-  function engaged(tr){
-    var r=tr.getBoundingClientRect();
-    return r.top>=60 && r.bottom<=innerHeight;   // トラック全体が画面に入っている間だけ
-  }
-  addEventListener('wheel',function(e){
-    if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;   // 横ジェスチャはそのまま
-    for(var i=0;i<tracks.length;i++){
-      var tr=tracks[i];
-      if(!engaged(tr)) continue;
-      var max=tr.scrollWidth-tr.clientWidth;
-      if(max<=0) continue;
-      var atEnd  = tr.scrollLeft>=max-1;
-      var atHead = tr.scrollLeft<=1;
-      if((e.deltaY>0 && !atEnd) || (e.deltaY<0 && !atHead)){
-        e.preventDefault();
-        tr.scrollLeft+=e.deltaY;
-      }
-      return;   // 端に達していたら何もしない＝縦スクロールがそのまま続く
-    }
-  },{passive:false});
-
-  // 進捗バーはトラック自身のスクロールに追従
-  tracks.forEach(function(tr){
-    var bar=tr.parentElement.querySelector('.office-bar-in');
-    if(!bar) return;
-    function draw(){
-      var max=tr.scrollWidth-tr.clientWidth;
-      var ratio=tr.clientWidth/tr.scrollWidth;
-      bar.style.width=(ratio*100)+'%';
-      bar.style.left=(max>0?(tr.scrollLeft/max)*(100-ratio*100):0)+'%';
-    }
-    tr.addEventListener('scroll',draw,{passive:true});
-    addEventListener('resize',draw);
-    draw();
-  });
-})();
-</script>
+</div>
 </body>
 </html>
