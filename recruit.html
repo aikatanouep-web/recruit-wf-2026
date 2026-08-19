@@ -41,17 +41,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .line-reveal.is-inview .line:nth-child(1) > span{transition-delay:.05s}
 .line-reveal.is-inview .line:nth-child(2) > span{transition-delay:.16s}
 .line-reveal.is-inview .line > span{transform:translateY(0)}
-.mask-img{position:relative;overflow:hidden;clip-path:inset(100% 0 0 0);
-  transition:clip-path 1.25s var(--ease-in-out-circ);transition-delay:var(--reveal-delay,0s)}
-.mask-img > .ph{transform:scale(1.12);transition:transform 1.9s var(--ease-out-expo)}
-.mask-img.is-inview{clip-path:inset(0 0 0 0)}
-.mask-img.is-inview > .ph{transform:scale(1)}
-.hover-zoom{overflow:hidden}
-.hover-zoom .ph{transition:transform 1s var(--ease-out-expo)}
-.hover-zoom:hover .ph{transform:scale(1.045)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important}
-  [data-reveal],[data-stagger] > *,.mask-img,.line-reveal .line > span{opacity:1 !important;transform:none !important;clip-path:none !important}
+  [data-reveal],[data-stagger] > *,.line-reveal .line > span{opacity:1 !important;transform:none !important;clip-path:none !important}
 }
 
 /* WF部品 */
@@ -250,7 +242,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p>過去記録を塗り替える観光客数と伸び盛りのインバウンド業界ですが、その秘密は日本の「おもてなし」文化にあります。JapanBrand調査によると、日本は「再び観光に訪れたい国・地域」で1位を獲得しました。</p>
         <p>グルメ・日本の文化・自然景観を目的として来日する訪日客も多く、来日の目的1位が「庶民的な和食レストラン」と、日本食の魅力がさらに高まっています。</p>
       </div>
-      <div class="mv-media mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="mv-media" data-observe><div class="ph"><i>Image</i></div></div>
     </div>
     <div class="mv-row is-flip" style="margin-top:120px">
       <div class="mv-text" data-reveal>
@@ -258,7 +250,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p>インバウンド需要の急増により、日本の食・宿泊産業は盛り上がりを見せています。しかしながら、業界全体の「人手不足」という慢性的な課題は改善の兆しを見せません。私たちは採用DXプラットフォームを提供することで、業界の課題解決・地位向上を目指しています。</p>
         <p>インバウンド業界で働く人たちが元気になることで、日本全体もさらに活気に満ち溢れていきます。私たちは、業界の繁栄が、観光立国としての「日本の価値を上げる」鍵と信じ、プロダクトを進化させ続けます。</p>
       </div>
-      <div class="mv-media mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="mv-media" data-observe><div class="ph"><i>Image</i></div></div>
     </div>
   </section>
 
@@ -282,35 +274,35 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec" id="company" style="padding-top:0">
     <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
     <div class="deck-row" data-stagger data-observe>
-      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
-      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="deck-thumb" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="deck-thumb" data-observe><div class="ph"><i>Image</i></div></div>
     </div>
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
     <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | CA | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | RA | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Engineer | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Designer | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Sales | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
@@ -328,11 +320,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec" id="blog">
     <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="blog-row" data-stagger data-observe>
-      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
-      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>保険業界出身だからこそ、飲食ホテル×HRミドルベンチャーの営業で即戦力に</h3></article>
-      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3></article>
     </div>
   </section>

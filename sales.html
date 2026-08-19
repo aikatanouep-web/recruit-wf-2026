@@ -41,9 +41,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .line-reveal.is-inview .line:nth-child(1) > span{transition-delay:.05s}
 .line-reveal.is-inview .line:nth-child(2) > span{transition-delay:.16s}
 .line-reveal.is-inview .line > span{transform:translateY(0)}
-.hover-zoom{overflow:hidden}
-.hover-zoom .ph{transition:transform 1s var(--ease-out-expo)}
-.hover-zoom:hover .ph{transform:scale(1.045)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important}
   [data-reveal],[data-stagger] > *,.line-reveal .line > span{opacity:1 !important;transform:none !important}
@@ -413,17 +410,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3" data-reveal style="margin-top:64px">活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
-      <article class="member"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">［キャリアの変化を表す見出し］</p>
         <dl><dt>Name</dt><dd>［氏名／イニシャル］</dd><dt>Role</dt><dd>［役職・所属］</dd><dt>Before</dt><dd>［前職］</dd><dt>Joined</dt><dd>［入社年］</dd><dt>Now</dt><dd>［現在の役割］</dd></dl>
         <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">［キャリアの変化を表す見出し］</p>
         <dl><dt>Name</dt><dd>［氏名／イニシャル］</dd><dt>Role</dt><dd>［役職・所属］</dd><dt>Before</dt><dd>［前職］</dd><dt>Joined</dt><dd>［入社年］</dd><dt>Now</dt><dd>［現在の役割］</dd></dl>
         <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">［キャリアの変化を表す見出し］</p>
         <dl><dt>Name</dt><dd>［氏名／イニシャル］</dd><dt>Role</dt><dd>［役職・所属］</dd><dt>Before</dt><dd>［前職］</dd><dt>Joined</dt><dd>［入社年］</dd><dt>Now</dt><dd>［現在の役割］</dd></dl>
         <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
@@ -467,27 +464,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2 class="h2">Cuolegaを知る</h2>
     </div>
     <div class="cont-grid" id="contgrid" data-stagger data-observe>
-      <article class="cont"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Document</span><h3>Company Deck</h3><p>事業の全体像とこれから向かう先をまとめた資料。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="cont"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Document</span><h3>Culture Deck</h3><p>組織の考え方と働き方をまとめた資料。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="cont"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Interview</span><h3>社員インタビュー</h3><p>実際に働くメンバーの話。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Article</span><h3>note</h3><p>事業やカルチャーについての記事。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Movie</span><h3>動画コンテンツ</h3><p>仕事の様子や社内の雰囲気。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Message</span><h3>代表メッセージ</h3><p>これから目指す方向について。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div></div>
       </article>

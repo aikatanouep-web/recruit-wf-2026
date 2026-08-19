@@ -46,10 +46,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   line-height:1.6;text-align:center;width:100%;height:100%}
 .ph i{font-style:normal}
 
-.eyebrow{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.2em;line-height:1;color:var(--caption);margin:0}
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
-.head-block{display:flex;flex-direction:column;gap:8px}
+.head-block{display:block}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
 .ext{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;
@@ -87,7 +86,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
 .pagehead{padding:180px var(--gutter) 64px}
-.pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:12px 0 0}
+.pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
 
 /* タブ：新卒／中途 */
 .tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-top:40px}
@@ -192,7 +191,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 <div class="stage">
 
   <section class="pagehead">
-    <p class="eyebrow" data-reveal>Jobs</p>
     <h1 class="h1 line-reveal" data-observe><span class="line"><span>募集職種一覧</span></span></h1>
     <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:24px;max-width:720px">新卒採用と中途採用で、それぞれ募集中の職種を掲載しています。求人の詳細と応募は各職種のページからお進みください。</p>
   </section>
@@ -266,7 +264,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec sec--tone">
-    <div class="head-block" data-reveal><p class="eyebrow">Process</p><h2 class="h2">選考フロー</h2></div>
+    <div class="head-block" data-reveal><h2 class="h2">選考フロー</h2></div>
     <div class="flow-row" data-stagger data-observe>
       <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>Image</i></div></div><p class="flow-cap">新卒採用の選考フロー</p></div>
       <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>Image</i></div></div><p class="flow-cap">中途採用の選考フロー</p></div>
@@ -274,7 +272,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec">
-    <div class="head-block" data-reveal><p class="eyebrow">FAQ</p><h2 class="h2">よくある質問</h2></div>
+    <div class="head-block" data-reveal><h2 class="h2">よくある質問</h2></div>
     <div class="faq">
       <details class="faq-item"><summary class="faq-q">選考にはどれくらい時間がかかりますか？</summary>
         <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
@@ -289,7 +287,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec sec--tone">
-    <div class="head-block" data-reveal><p class="eyebrow">Bonus</p><h2 class="h2">ダイレクト入社ボーナス</h2></div>
+    <div class="head-block" data-reveal><h2 class="h2">ダイレクト入社ボーナス</h2></div>
     <div class="bonus" data-reveal data-delay="0.08"><div class="ph"><i>Image</i></div></div>
   </section>
 

@@ -46,10 +46,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   line-height:1.6;text-align:center;width:100%;height:100%}
 .ph i{font-style:normal}
 
-.eyebrow{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.2em;line-height:1;color:var(--caption);margin:0}
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
-.head-block{display:flex;flex-direction:column;gap:8px}
+.head-block{display:block}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
 .ext{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;
@@ -87,7 +86,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
 .pagehead{padding:180px var(--gutter) 64px}
-.pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:12px 0 0}
+.pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
 
 
 
@@ -200,7 +199,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 <div class="stage">
 
   <section class="pagehead">
-    <p class="eyebrow" data-reveal>Casual</p>
     <h1 class="h1 line-reveal" data-observe><span class="line"><span>カジュアル面談</span></span></h1>
   </section>
 
@@ -222,7 +220,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec">
-    <div class="head-block" data-reveal><p class="eyebrow">Member</p><h2 class="h2">担当メンバー</h2></div>
+    <div class="head-block" data-reveal><h2 class="h2">担当メンバー</h2></div>
     <div class="people" data-stagger data-observe>
       <article class="person"><div class="person-media"><div class="ph"><i>Image</i></div></div>
         <p class="person-name">メンバー A</p>
@@ -252,7 +250,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec sec--tone">
-    <div class="head-block" data-reveal><p class="eyebrow">Booking</p><h2 class="h2">申込・日程調整</h2></div>
+    <div class="head-block" data-reveal><h2 class="h2">申込・日程調整</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>Image</i></div></div>
     <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   </section>
