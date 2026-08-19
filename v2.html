@@ -118,12 +118,42 @@ img{max-width:100%;display:block}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 .footer .logo{width:131px;height:16.87px}
-.header-nav{display:flex;gap:20px;margin-left:auto;padding-right:40px}
-.header-nav a{position:relative;font-family:var(--font-disp);font-weight:500;font-size:13px;letter-spacing:.1em;
-  line-height:1;padding:4px 0;color:var(--ink);text-decoration:none;transition:color var(--dur-hover) var(--ease-out-expo)}
-.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
-  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
-@media (hover:hover){.header-nav a:hover{color:var(--caption)}.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+/* 8項目を並べると読み取れないので、常時見せるのは「今どこか」だけにして、
+   一覧はメニューに畳む。現在地はスクロールに追従して書き換える。 */
+.navtoggle{
+  display:flex;align-items:center;gap:14px;margin-left:auto;margin-right:24px;
+  background:none;border:1px solid var(--line2);border-radius:999px;padding:8px 8px 8px 18px;
+  cursor:pointer;color:var(--ink);
+  transition:background-color .45s var(--ease-out-expo),border-color .45s var(--ease-out-expo);
+}
+.navtoggle:hover{background:var(--tone)}
+.nt-index{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--caption)}
+.nt-label{font-family:var(--font-disp);font-weight:500;font-size:13px;letter-spacing:.1em;line-height:1;min-width:104px;text-align:left}
+.nt-bars{position:relative;width:22px;height:22px;border-radius:50%;background:var(--ink);flex:none}
+.nt-bars::before,.nt-bars::after{content:"";position:absolute;left:6px;right:6px;height:1px;background:var(--paper);
+  transition:transform .45s var(--ease-out-expo)}
+.nt-bars::before{top:9px}
+.nt-bars::after{top:12px}
+.is-navopen .nt-bars::before{transform:translateY(1.5px) rotate(45deg)}
+.is-navopen .nt-bars::after{transform:translateY(-1.5px) rotate(-45deg)}
+
+.navpanel{position:absolute;left:0;right:0;top:80px;background:rgba(251,251,251,.97);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease-out-expo)}
+.is-navopen .navpanel{grid-template-rows:1fr}
+.navpanel-in{overflow:hidden;min-height:0}
+.navpanel ul{list-style:none;margin:0;padding:24px var(--pad) 40px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0 24px}
+.navpanel li{border-top:1px solid var(--line)}
+.navpanel a{display:flex;align-items:baseline;gap:12px;padding:18px 4px;text-decoration:none;color:var(--ink);
+  transition:padding-left .55s var(--ease-out-expo)}
+@media (hover:hover){.navpanel a:hover{padding-left:12px}}
+.navpanel .n{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--caption)}
+.navpanel .ja{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6}
+.navpanel .en{font-family:var(--font-en);font-size:11px;letter-spacing:.14em;color:var(--caption);margin-left:auto}
+.navpanel a.is-current .n,.navpanel a.is-current .en{color:var(--ink)}
+.navpanel a.is-current .ja{text-decoration:underline;text-underline-offset:4px}
 .header-cta{display:flex;gap:12px}
 .header-cta .cta{padding:9px 20px;font-size:12px}
 
@@ -132,9 +162,7 @@ img{max-width:100%;display:block}
 /* ここにメインビジュアルが全面で入る。他の画像枠と同じ .ph の語彙で
    「画像が入る場所」だと分かるようにしておく */
 .hero-media{position:absolute;inset:0;z-index:1}
-.hero-media .ph{border:none;background:var(--fill);align-items:flex-end;justify-content:flex-end;
-  padding:32px clamp(20px,9.4vw,136px);font-size:12px;letter-spacing:.1em}
-.hero-media .ph::before{content:"";position:absolute;inset:24px;border:1px dashed var(--line2);pointer-events:none}
+.hero-media .ph{border:none;background:var(--fill);font-size:12px;letter-spacing:.12em}
 .hero .copy{position:absolute;left:clamp(20px,9.4vw,136px);top:207px;width:min(640px,72%);z-index:2}
 .hero h1{font-weight:700;font-size:64px;letter-spacing:.02em;line-height:1.5;margin:0}
 /* Vision を畳んだぶん、会社の立ち位置はここで一文だけ添える */
@@ -376,28 +404,37 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <nav class="header-nav">
-      <a href="#business">BUSINESS</a>
-      <a href="#job">JOB</a>
-      <a href="#culture">CULTURE</a>
-      <a href="#career">CAREER</a>
-      <a href="#number">NUMBER</a>
-      <a href="#env">ENVIRONMENT</a>
-      <a href="#deck">DECK</a>
-      <a href="#recruit">RECRUITMENT</a>
-    </nav>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="navpanel">
+      <span class="nt-index">01</span>
+      <span class="nt-label">Business</span>
+      <span class="nt-bars" aria-hidden="true"></span>
+    </button>
     <div class="header-cta">
       <span class="cta">説明会に申し込む</span>
       <span class="cta primary">ENTRY</span>
     </div>
   </div>
+  <nav class="navpanel" id="navpanel">
+    <div class="navpanel-in">
+      <ul>
+        <li><a href="#business" data-sec="business"><span class="n">01</span><span class="ja">事業とプロダクト</span><span class="en">Business</span></a></li>
+        <li><a href="#job" data-sec="job"><span class="n">02</span><span class="ja">職種紹介</span><span class="en">Job</span></a></li>
+        <li><a href="#culture" data-sec="culture"><span class="n">03</span><span class="ja">カルチャー</span><span class="en">Culture</span></a></li>
+        <li><a href="#career" data-sec="career"><span class="n">04</span><span class="ja">キャリア</span><span class="en">Career</span></a></li>
+        <li><a href="#number" data-sec="number"><span class="n">05</span><span class="ja">数字で見るクオレガ</span><span class="en">Number</span></a></li>
+        <li><a href="#env" data-sec="env"><span class="n">06</span><span class="ja">働く環境</span><span class="en">Environment</span></a></li>
+        <li><a href="#deck" data-sec="deck"><span class="n">07</span><span class="ja">資料・動画</span><span class="en">Deck</span></a></li>
+        <li><a href="#recruit" data-sec="recruit"><span class="n">08</span><span class="ja">募集要項</span><span class="en">Recruitment</span></a></li>
+      </ul>
+    </div>
+  </nav>
 </header>
 
 <div class="stage">
 
   <!-- ============ 01 FV — 採用サイト全体の中心メッセージをここに集約 ============ -->
   <section class="hero">
-    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Main visual — full-bleed image / gradient</i></div></div>
+    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Image</i></div></div>
     <div class="copy">
       <h1 class="line-reveal" data-observe>
         <span class="line"><span>魅せろ個性</span></span>
@@ -781,7 +818,39 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   },{passive:true});
 })();
 
-/* 3) 福利厚生のアコーディオン — 閉じ切ってから open を外して高さを補間する */
+/* 3) グロナビ — 一覧はメニューに畳み、現在地だけを常時出す */
+(function(){
+  var hd=document.getElementById('hdr'), tg=document.getElementById('navtoggle');
+  if(!hd||!tg) return;
+  var links=[].slice.call(document.querySelectorAll('.navpanel a[data-sec]'));
+  var idx=tg.querySelector('.nt-index'), lab=tg.querySelector('.nt-label');
+  function close(){ hd.classList.remove('is-navopen'); tg.setAttribute('aria-expanded','false'); }
+  tg.addEventListener('click',function(){
+    var open=hd.classList.toggle('is-navopen');
+    tg.setAttribute('aria-expanded', open?'true':'false');
+  });
+  links.forEach(function(a){ a.addEventListener('click',close); });
+  document.addEventListener('click',function(e){
+    if(!hd.contains(e.target)) close();
+  });
+  addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+
+  /* 現在地：セクションの上端が画面上部を越えた最後のものを採る */
+  var secs=links.map(function(a){ return document.getElementById(a.dataset.sec); }).filter(Boolean);
+  function spy(){
+    var y=scrollY+120, cur=0;
+    for(var i=0;i<secs.length;i++){ if(secs[i].offsetTop<=y) cur=i; }
+    var a=links[cur]; if(!a) return;
+    idx.textContent=a.querySelector('.n').textContent;
+    lab.textContent=a.querySelector('.en').textContent;
+    links.forEach(function(l){ l.classList.toggle('is-current', l===a); });
+  }
+  addEventListener('scroll',spy,{passive:true});
+  addEventListener('resize',spy);
+  spy();
+})();
+
+/* 4) 福利厚生のアコーディオン — 閉じ切ってから open を外して高さを補間する */
 (function(){
   document.querySelectorAll('.bene-group').forEach(function(d){
     var sum=d.querySelector('summary'), wrap=d.querySelector('.bene-wrap');
@@ -802,7 +871,7 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   });
 })();
 
-/* 4) 横送りトラック（バリュー／インタビュー／拠点 共通）
+/* 5) 横送りトラック（バリュー／インタビュー／拠点 共通）
       ページのスクロールは奪わない。進捗バーと、あるものだけ送りボタンを動かす */
 (function(){
   var tracks=[].slice.call(document.querySelectorAll('.vals-track, .job-itv, .office-track'));

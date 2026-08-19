@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<meta name="robots" content="noindex, nofollow">
+<title>クオレガ 採用サイト ワイヤーフレーム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Lato:wght@300;400;500;700&display=swap">
+<style>:root{
+  --ink:#0d0d0e; --paper:#fbfaf8; --stage:#e9e9e9; --tone:#f2f2f2; --card:#ffffff;
+  --caption:#6b6b70; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
+  --fill:#d6d6d6; --fill2:#e4e4e4;
+  --page:1440px; --pad:clamp(20px,9.4vw,136px);
+  --font-ja:YakuHanJP,"Noto Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+  --font-en:"Lato",sans-serif; --font-disp:"Chillax","Lato",sans-serif;
+  --ease-out-expo:cubic-bezier(.16,1,.3,1); --ease-in-out-circ:cubic-bezier(.85,0,.15,1);
+  --dur-reveal:.9s; --dur-hover:.7s;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja);font-size:14px;line-height:2;letter-spacing:.08em}
+.stage{width:min(var(--page),100%);margin:0 auto;background:var(--paper);position:relative;overflow:clip}
+
+/* モーション基盤 */
+[data-reveal]{opacity:0;transform:translateY(28px);
+  transition:opacity var(--dur-reveal) var(--ease-out-expo),transform var(--dur-reveal) var(--ease-out-expo);
+  transition-delay:var(--reveal-delay,0s)}
+[data-reveal].is-inview{opacity:1;transform:none}
+[data-stagger] > *{opacity:0;transform:translateY(26px);
+  transition:opacity var(--dur-reveal) var(--ease-out-expo),transform var(--dur-reveal) var(--ease-out-expo)}
+[data-stagger].is-inview > *{opacity:1;transform:none}
+.line-reveal .line{display:block;overflow:hidden}
+.line-reveal .line > span{display:inline-block;transform:translateY(112%);transition:transform 1.15s var(--ease-out-expo)}
+.line-reveal.is-inview .line:nth-child(1) > span{transition-delay:.05s}
+.line-reveal.is-inview .line:nth-child(2) > span{transition-delay:.16s}
+.line-reveal.is-inview .line > span{transform:translateY(0)}
+.mask-img{position:relative;overflow:hidden;clip-path:inset(100% 0 0 0);
+  transition:clip-path 1.25s var(--ease-in-out-circ);transition-delay:var(--reveal-delay,0s)}
+.mask-img > .ph{transform:scale(1.12);transition:transform 1.9s var(--ease-out-expo)}
+.mask-img.is-inview{clip-path:inset(0 0 0 0)}
+.mask-img.is-inview > .ph{transform:scale(1)}
+.hover-zoom{overflow:hidden}
+.hover-zoom .ph{transition:transform 1s var(--ease-out-expo)}
+.hover-zoom:hover .ph{transform:scale(1.045)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important}
+  [data-reveal],[data-stagger] > *,.mask-img,.line-reveal .line > span{opacity:1 !important;transform:none !important;clip-path:none !important}
+}
+
+/* WF部品 */
+.ph{background:var(--fill);border:none;display:flex;align-items:center;justify-content:center;
+  color:var(--caption);font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
+  line-height:1.6;text-align:center;width:100%;height:100%}
+.ph i{font-style:normal}
+.ph--dark{background:#2a2a2e;color:rgba(255,255,255,.6)}
+.tbd{display:inline-block;font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
+  line-height:1.6;color:var(--caption);border:1px dashed var(--line2);border-radius:2px;padding:5px 10px}
+
+/* 見出し階層 h1 56 / h2 40 / h3 24 */
+.eyebrow{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.2em;line-height:1;color:var(--caption);margin:0}
+.h2{font-weight:700;font-size:40px;letter-spacing:.08em;line-height:1.4;margin:12px 0 0}
+.h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.6;margin:0}
+.body-tx{font-size:14px;letter-spacing:.08em;line-height:2;color:#3a3a40;margin:0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
+
+/* More リンク */
+.more{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-en);font-weight:500;font-size:16px;
+  letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;cursor:pointer;flex:none}
+.more .circ{width:20px;height:20px;border-radius:50%;position:relative;flex:none;background:var(--ink);color:var(--paper);overflow:hidden}
+.more .circ svg{position:absolute;inset:0;margin:auto;width:6.51px;height:6px;transition:transform var(--dur-hover) var(--ease-out-expo)}
+.more .circ svg + svg{transform:translate(-16px,16px)}
+@media (hover:hover){
+  .more:hover .circ svg{transform:translate(16px,-16px);transition-duration:.45s}
+  .more:hover .circ svg + svg{transform:translate(0,0);transition-duration:.45s}
+}
+.more--ondark{color:var(--paper)}
+.more--ondark .circ{background:var(--paper);color:var(--ink)}
+.ext{font-family:var(--font-en);font-size:10px;font-weight:500;letter-spacing:.08em;line-height:1;color:var(--caption);
+  border:1px solid var(--line2);border-radius:2px;padding:3px 6px}
+
+/* 追従ヘッダー */
+.site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
+  transition:transform .45s var(--ease-out-expo),background-color .4s ease}
+.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s}
+.site-header.is-scrolled{background:rgba(251,250,248,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.header-inner{width:min(var(--page),100%);margin:0 auto;height:80px;padding:0 var(--pad);
+  display:flex;align-items:center;justify-content:space-between}
+.logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink)}
+.logo .lg{display:block;width:100%;height:100%}
+.logo .lg-mark{display:none}
+.header-nav{display:flex;gap:32px}
+.header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:4px 0;color:var(--ink);text-decoration:none}
+.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
+@media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+
+/* 01 FV（黒地） */
+.hero{background:var(--ink);color:var(--paper);padding:200px var(--pad) 176px}
+.hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.4;margin:0}
+.hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);margin:64px 0 0}
+
+/* 02 Mission,Value（テキストと画像を交互に） */
+.sec{padding:120px var(--pad)}
+.mv-row{display:grid;grid-template-columns:1fr 1fr;gap:0 84px;align-items:center}
+.mv-row + .mv-row{margin-top:120px}
+.mv-row.is-flip .mv-text{order:2}
+.mv-media{aspect-ratio:1/1}
+.mv-text h3{font-weight:700;font-size:24px;letter-spacing:.06em;line-height:1.6;margin:0 0 28px}
+.mv-text p{font-size:13px;letter-spacing:.04em;line-height:2.1;color:#3a3a40;margin:0}
+.mv-text p + p{margin-top:20px}
+
+/* 03 Our Value（大きな白カードを横に送る） */
+.val-track{display:flex;gap:40px;overflow-x:auto;scrollbar-width:none;padding:40px 0 32px;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;cursor:grab}
+.val-track:active{cursor:grabbing}
+.val-track::-webkit-scrollbar{display:none}
+.vcard{flex:0 0 min(756px,82vw);scroll-snap-align:start;background:var(--card);padding:72px 64px;
+  display:flex;flex-direction:column;gap:56px}
+.vcard-head{display:flex;align-items:center;gap:40px}
+.vno{font-family:var(--font-en);font-weight:300;font-size:88px;letter-spacing:.02em;line-height:1}
+.vrule{width:1px;align-self:stretch;background:var(--line2)}
+.vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
+.ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
+.vtx{font-size:14px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
+.track-nav{display:flex;align-items:center;gap:16px;flex:none}
+.track-count{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin-right:8px}
+.track-count b{color:var(--ink)}
+.tarrow{position:relative;width:40px;height:40px;border-radius:50%;flex:none;background:var(--card);
+  border:1px solid var(--line2);cursor:pointer;transition:background-color .45s var(--ease-out-expo)}
+.tarrow:hover{background:var(--tone)}
+.tarrow.is-off{pointer-events:none;background:transparent;border-color:var(--line)}
+.tarrow.is-off::before{border-color:#b9b9be}
+.tarrow::before{content:"";position:absolute;top:50%;left:50%;width:7px;height:7px;
+  border-top:1.2px solid #555;border-right:1.2px solid #555;transform:translate(-5.97px,-3.5px) rotate(45deg)}
+.tarrow.prev::before{transform:translate(-1.12px,-3.5px) rotate(-135deg)}
+.progress{height:1px;background:rgba(13,13,14,.14);position:relative;width:100%}
+.progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:30%}
+
+/* 04 Company（Deck 2枚） */
+.deck-row{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:40px}
+.deck-thumb{aspect-ratio:16/9}
+
+/* 05 Member */
+.mem-track{display:flex;gap:32px;overflow-x:auto;scrollbar-width:none;padding-bottom:24px;
+  scroll-snap-type:x proximity;cursor:grab;margin-top:40px}
+.mem-track:active{cursor:grabbing}
+.mem-track::-webkit-scrollbar{display:none}
+.mem{flex:0 0 268px;scroll-snap-align:start;display:flex;flex-direction:column;gap:14px}
+.mem .ph{aspect-ratio:2/1}
+.mem-name{font-weight:700;font-size:15px;letter-spacing:.06em;line-height:1.5;margin:0}
+.mem-meta{font-family:var(--font-en);font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin:0}
+.mem-tx{font-size:12px;letter-spacing:.04em;line-height:1.9;color:#3a3a40;margin:0}
+
+/* 06 カジュアル面談バナー */
+.casual{background:var(--fill2);padding:88px var(--pad);margin-top:96px}
+.casual h2{font-weight:700;font-size:36px;letter-spacing:.06em;line-height:1.4;margin:0}
+.casual p{font-size:14px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:16px 0 24px}
+
+/* 07 Blog */
+.blog-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.blog{display:flex;flex-direction:column;gap:16px}
+.blog .ph{aspect-ratio:16/10}
+.blog h3{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.9;margin:0}
+
+/* 08 Entry（グレー帯） */
+.entry-lead{background:var(--fill);padding:160px var(--pad)}
+.entry-lead .h2{font-size:44px;letter-spacing:.06em;margin-top:16px}
+
+/* 09 採用の入口（黒地） */
+.gates{background:var(--ink);color:var(--paper);padding:96px var(--pad)}
+.gates-in{display:grid;grid-template-columns:1fr 1px 2fr;gap:0 72px;align-items:start}
+.gate-rule{background:rgba(255,255,255,.3);align-self:stretch}
+.gate h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0;text-align:center}
+.gate-head{display:flex;align-items:center;justify-content:center;gap:24px}
+.gate-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.gate-col{display:flex;flex-direction:column;align-items:center;gap:20px}
+.gate-role{font-family:var(--font-en);font-size:14px;letter-spacing:.1em;color:rgba(255,255,255,.85)}
+.btn-entry{display:inline-flex;align-items:center;justify-content:center;min-width:156px;padding:14px 24px;
+  background:var(--paper);color:var(--ink);border-radius:2px;font-weight:700;font-size:14px;letter-spacing:.06em;
+  line-height:1;text-decoration:none;transition:transform .45s var(--ease-out-expo),background-color .45s var(--ease-out-expo)}
+.btn-entry:hover{transform:translateY(-2px);background:#fff}
+.gate-single{display:flex;flex-direction:column;align-items:center;gap:64px}
+
+/* 10 フッター */
+.footer{background:var(--tone);padding:96px var(--pad) 40px}
+.foot-top{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.biglink{display:inline-flex;align-items:center;gap:24px;font-family:var(--font-en);font-weight:400;
+  font-size:56px;letter-spacing:.02em;line-height:1.1;color:var(--ink);text-decoration:none;
+  border-bottom:1px solid var(--ink);padding-bottom:12px}
+.biglink svg{width:34px;height:22px;transition:transform .55s var(--ease-out-expo)}
+@media (hover:hover){.biglink:hover svg{transform:translateX(8px)}}
+.biglink--sm{font-size:40px;border-bottom:none;padding-bottom:0}
+.foot-nav{display:flex;flex-wrap:wrap;gap:20px 40px}
+.foot-nav a{font-family:var(--font-en);font-size:14px;letter-spacing:.12em;color:var(--ink);text-decoration:none}
+.foot-award{font-size:12px;letter-spacing:.04em;line-height:1.8;color:#3a3a40;margin:0}
+.foot-mid{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-top:72px}
+.foot-mid-l{display:flex;align-items:center;gap:48px}
+.foot-logo{width:256px;height:32.9px;color:var(--ink)}
+.foot-logo .lg{display:block;width:100%;height:100%}
+.foot-logo .lg-mark{display:none}
+.foot-legal{display:flex;align-items:baseline;justify-content:space-between;margin-top:56px}
+.foot-legal .links{display:flex;gap:28px}
+.foot-legal a,.f-copy{font-size:12px;letter-spacing:.06em;color:var(--caption);text-decoration:none}
+</style>
+</head>
+<body>
+
+<header class="site-header" id="hdr">
+  <div class="header-inner">
+    <a class="logo" href="#"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+      <g class="lg-mark">
+        <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
+        <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
+        <path d="M6.58129 2.66135L0 14.0195H4.20897L10.7097 2.66135H6.58129Z" fill="currentColor"/>
+      </g>
+      <g class="lg-word" transform="translate(24.331 0)">
+        <path d="M95.9128 13.7364L99.4773 2.15996C99.9383 0.69844 101.139 -0.00387387 102.402 -0.00387387C103.666 -0.00387387 104.886 0.696478 105.347 2.15996L108.911 13.7364H105.928L105.147 10.9722L99.6794 10.9918L98.8986 13.7364H95.9147H95.9128ZM101.981 3.02314L100.439 8.37092H104.384L102.861 3.02314C102.781 2.7426 102.661 2.62294 102.42 2.62294C102.2 2.62294 102.059 2.7426 101.979 3.02314H101.981Z" fill="currentColor"/>
+        <path d="M75.1397 13.7408H67.889C66.0273 13.7408 65.3053 12.7795 65.3053 11.2376V2.78626C65.3053 1.24431 66.0273 0.263423 67.889 0.263423H75.0181V2.88631H68.2284V5.68968H74.5963V8.31257H68.2284V11.1159H75.1377V13.7388L75.1397 13.7408Z" fill="currentColor"/>
+        <path d="M54.5807 0.263423V11.0375H60.8702V13.7408H54.2414C52.3796 13.7408 51.6577 12.7795 51.6577 11.2376V0.263423H54.5807Z" fill="currentColor"/>
+        <path d="M40.0687 13.9989C36.0824 13.9989 33.0593 10.9955 33.0593 7.00916C33.0593 3.02284 36.0843 0.0193693 40.0687 0.0193693C44.053 0.0193693 47.0977 3.04442 47.0977 7.00916C47.0977 10.9739 44.053 13.9989 40.0687 13.9989ZM40.0687 11.2348C42.311 11.2348 44.0746 9.39271 44.0746 7.00916C44.0746 4.62561 42.3326 2.7835 40.0687 2.7835C37.8048 2.7835 36.0628 4.62561 36.0628 7.00916C36.0628 9.39271 37.8244 11.2348 40.0687 11.2348Z" fill="currentColor"/>
+        <path d="M22.8117 13.9625C18.7861 13.9625 16.944 11.6397 16.944 7.75346V0.263423H19.869V7.69461C19.869 10.037 20.8303 11.1787 22.8136 11.1787C24.797 11.1787 25.7582 10.037 25.7582 7.69461V0.263423H28.6813V7.75346C28.6813 11.6397 26.8196 13.9625 22.8136 13.9625H22.8117Z" fill="currentColor"/>
+        <path d="M7.12509 14.0188C3.19959 14.0188 0.135303 10.9153 0.135303 7.00941C0.135303 3.10352 3.19959 0 7.12509 0C9.46744 0 11.7117 1.2418 12.7122 3.34482L10.3287 4.68667C9.66754 3.5253 8.62584 2.78375 7.00346 2.78375C4.76116 2.78375 3.13877 4.567 3.13877 7.00941C3.13877 9.45181 4.74154 11.2351 7.00346 11.2351C8.62584 11.2351 9.70678 10.4935 10.3287 9.33214L12.7122 10.674C11.7117 12.777 9.46744 14.0188 7.12509 14.0188Z" fill="currentColor"/>
+        <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
+      </g>
+    </svg></a>
+    <nav class="header-nav">
+      <a href="#value">カルチャー</a>
+      <a href="#entry">募集職種一覧</a>
+      <a href="#">カジュアル面談</a>
+      <a href="#entry">エントリー</a>
+    </nav>
+  </div>
+</header>
+
+<div class="stage">
+
+  <!-- ============ 01 FV（黒地） ============ -->
+  <section class="hero">
+    <h1 class="line-reveal" data-observe><span class="line"><span>日本の価値を上げる</span></span></h1>
+    <p class="lead" data-reveal data-delay="0.35">IT・製造業で海外企業が台頭し、<br>人口減少による経済衰退も懸念される日本。<br>一方で、「食・宿泊文化」は今なお世界に誇れる強みです。<br>私たちは、この産業を支える人材の採用・就業を支援し、<br>日本の価値向上に貢献します。</p>
+  </section>
+
+  <!-- ============ 02 Mission, Value ============ テキストと画像を交互に組む -->
+  <section class="sec" id="mission">
+    <p class="eyebrow" data-reveal>Mission,Value</p>
+    <div class="mv-row" style="margin-top:64px">
+      <div class="mv-text" data-reveal>
+        <h3>日本の食・宿泊に価値を感じて、<br>海外から日本に。</h3>
+        <p>過去記録を塗り替える観光客数と伸び盛りのインバウンド業界ですが、その秘密は日本の「おもてなし」文化にあります。JapanBrand調査によると、日本は「再び観光に訪れたい国・地域」で1位を獲得しました。</p>
+        <p>グルメ・日本の文化・自然景観を目的として来日する訪日客も多く、来日の目的1位が「庶民的な和食レストラン」と、日本食の魅力がさらに高まっています。</p>
+      </div>
+      <div class="mv-media mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+    </div>
+    <div class="mv-row is-flip" style="margin-top:120px">
+      <div class="mv-text" data-reveal>
+        <h3>食・宿泊業界の人手不足を支える、<br>なくてはならないプロダクトに</h3>
+        <p>インバウンド需要の急増により、日本の食・宿泊産業は盛り上がりを見せています。しかしながら、業界全体の「人手不足」という慢性的な課題は改善の兆しを見せません。私たちは採用DXプラットフォームを提供することで、業界の課題解決・地位向上を目指しています。</p>
+        <p>インバウンド業界で働く人たちが元気になることで、日本全体もさらに活気に満ち溢れていきます。私たちは、業界の繁栄が、観光立国としての「日本の価値を上げる」鍵と信じ、プロダクトを進化させ続けます。</p>
+      </div>
+      <div class="mv-media mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 Our Value ============ 大きな白カードを横に送る -->
+  <section class="sec" id="value" style="padding-top:0">
+    <div class="sec-head">
+      <div data-reveal><p class="eyebrow">Our Value</p><h2 class="h2">私たちが大事にしているもの</h2></div>
+      <div class="track-nav" data-nav-for="valtrack" data-reveal>
+        <span class="track-count"><b class="now">01</b> / <span class="total">07</span></span>
+        <span class="tarrow prev" data-dir="-1" role="button" aria-label="前へ"></span>
+        <span class="tarrow next" data-dir="1" role="button" aria-label="次へ"></span>
+      </div>
+    </div>
+    <div class="val-track" id="valtrack">
+      <article class="vcard"><div class="vcard-head"><span class="vno">01</span><span class="vrule"></span><div><h3>業界の常識を変える</h3><p class="ven">Market Leader</p></div></div><p class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求し、負を解決し、業界の未来を切り開く。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">02</span><span class="vrule"></span><div><h3>最高のチームで勝つ</h3><p class="ven">Team Focus</p></div></div><p class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">03</span><span class="vrule"></span><div><h3>成果こそがプロの証明</h3><p class="ven">Professional Commitment</p></div></div><p class="vtx">業界のプロとして、圧倒的な当事者意識を持ち成果にこだわる。他責を排し、徹底的な自責で「どうしたらできるか」を建設的に考え、評論家に決してならない。プロセスに満足せず、泥臭く成果にコミットし、本質的な課題解決を通じて、顧客と業界に真の価値を提供し続ける。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">04</span><span class="vrule"></span><div><h3>高速アップデート</h3><p class="ven">Always Beta</p></div></div><p class="vtx">完成はない、常にベータ版であれ。完璧を求め停滞するより、高速で改善を繰り返す。過去のやり方に固執せず、仮説を持ち即実行する。自らをアップデートし続け、必要であれば大胆にピボットする柔軟さを持つ。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">05</span><span class="vrule"></span><div><h3>自ら課題設定</h3><p class="ven">Issue Driven</p></div></div><p class="vtx">指示を待つのではなく、「自ら主体的に課題を設定し解決する」ことにこだわる。本質的な課題は何かを問い続け、「何を解くか」に意思を込める。鋭い課題設定こそが、最小の力で最大の変革を起こす。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">06</span><span class="vrule"></span><div><h3>ファクトで語り仕組みを創る</h3><p class="ven">FactBase, Lead DX</p></div></div><p class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。</p></article>
+      <article class="vcard"><div class="vcard-head"><span class="vno">07</span><span class="vrule"></span><div><h3>ユーザーファーストで信頼を築く</h3><p class="ven">Build Trust</p></div></div><p class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。</p></article>
+    </div>
+    <div class="progress"><div class="bar"></div></div>
+  </section>
+
+  <section class="sec" id="company" style="padding-top:0">
+    <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
+    <div class="deck-row" data-stagger data-observe>
+      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Company Deck</i></div></div>
+      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Company Deck</i></div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="member" style="padding-top:0">
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext">別タブ</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="mem-track" id="memtrack">
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+        <p class="mem-name">［氏名］</p>
+        <p class="mem-meta">［入社年］ | CA | ［役職］</p>
+        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+      </article>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+        <p class="mem-name">［氏名］</p>
+        <p class="mem-meta">［入社年］ | RA | ［役職］</p>
+        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+      </article>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+        <p class="mem-name">［氏名］</p>
+        <p class="mem-meta">［入社年］ | Engineer | ［役職］</p>
+        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+      </article>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+        <p class="mem-name">［氏名］</p>
+        <p class="mem-meta">［入社年］ | Designer | ［役職］</p>
+        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+      </article>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+        <p class="mem-name">［氏名］</p>
+        <p class="mem-meta">［入社年］ | Sales | ［役職］</p>
+        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+      </article>
+    </div>
+    <div class="progress"><div class="bar"></div></div>
+    <p style="margin-top:24px"><span class="tbd">TBD — 実在するメンバーの氏名・入社年・職種・役職・紹介文・記事URLを確認</span></p>
+  </section>
+
+  <div class="casual" data-reveal>
+    <h2>カジュアル面談</h2>
+    <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
+    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext">別タブ</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+  </div>
+
+  <section class="sec" id="blog">
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext">別タブ</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="blog-row" data-stagger data-observe>
+      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+        <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
+      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+        <h3>保険業界出身だからこそ、飲食ホテル×HRミドルベンチャーの営業で即戦力に</h3></article>
+      <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+        <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3></article>
+    </div>
+  </section>
+
+  <section class="entry-lead" data-reveal>
+    <p class="eyebrow">Entry</p>
+    <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
+  </section>
+
+  <!-- ============ 09 採用の入口 ============ 新卒／中途をここで分岐させる -->
+  <section class="gates" id="entry">
+    <div class="gates-in">
+      <div class="gate gate-single" data-reveal>
+        <h2>新卒採用</h2>
+        <a class="btn-entry" href="v2.html">Entry</a>
+      </div>
+      <span class="gate-rule" aria-hidden="true"></span>
+      <div class="gate" data-reveal data-delay="0.1">
+        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext">別タブ</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+        <div class="gate-cols">
+          <div class="gate-col"><span class="gate-role">Sales</span><a class="btn-entry" href="sales.html">Entry</a></div>
+          <div class="gate-col"><span class="gate-role">Engineer</span><a class="btn-entry" href="#">Entry</a></div>
+          <div class="gate-col"><span class="gate-role">Designer</span><a class="btn-entry" href="#">Entry</a></div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:56px"><span class="tbd">TBD — 中途（Engineer / Designer）の遷移先URLを確認</span></p>
+  </section>
+
+  <footer class="footer">
+    <div class="foot-top">
+      <div data-reveal><a class="biglink" href="#">CONTACT US <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      <div class="foot-nav" data-reveal data-delay="0.08"><a href="#">ABOUT</a><a href="#">PRODUCTS</a><a href="#">COMPANY</a><a href="#">NEWS</a><a href="#">CAREERS</a></div>
+    </div>
+    <div class="foot-mid">
+      <div class="foot-mid-l">
+        <p class="foot-award">働きがいのある会社ランキング<br>中規模部門 上位ランクイン</p>
+        <a class="biglink biglink--sm" href="#">RECRUIT <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <span class="foot-logo"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+      <g class="lg-mark">
+        <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
+        <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
+        <path d="M6.58129 2.66135L0 14.0195H4.20897L10.7097 2.66135H6.58129Z" fill="currentColor"/>
+      </g>
+      <g class="lg-word" transform="translate(24.331 0)">
+        <path d="M95.9128 13.7364L99.4773 2.15996C99.9383 0.69844 101.139 -0.00387387 102.402 -0.00387387C103.666 -0.00387387 104.886 0.696478 105.347 2.15996L108.911 13.7364H105.928L105.147 10.9722L99.6794 10.9918L98.8986 13.7364H95.9147H95.9128ZM101.981 3.02314L100.439 8.37092H104.384L102.861 3.02314C102.781 2.7426 102.661 2.62294 102.42 2.62294C102.2 2.62294 102.059 2.7426 101.979 3.02314H101.981Z" fill="currentColor"/>
+        <path d="M75.1397 13.7408H67.889C66.0273 13.7408 65.3053 12.7795 65.3053 11.2376V2.78626C65.3053 1.24431 66.0273 0.263423 67.889 0.263423H75.0181V2.88631H68.2284V5.68968H74.5963V8.31257H68.2284V11.1159H75.1377V13.7388L75.1397 13.7408Z" fill="currentColor"/>
+        <path d="M54.5807 0.263423V11.0375H60.8702V13.7408H54.2414C52.3796 13.7408 51.6577 12.7795 51.6577 11.2376V0.263423H54.5807Z" fill="currentColor"/>
+        <path d="M40.0687 13.9989C36.0824 13.9989 33.0593 10.9955 33.0593 7.00916C33.0593 3.02284 36.0843 0.0193693 40.0687 0.0193693C44.053 0.0193693 47.0977 3.04442 47.0977 7.00916C47.0977 10.9739 44.053 13.9989 40.0687 13.9989ZM40.0687 11.2348C42.311 11.2348 44.0746 9.39271 44.0746 7.00916C44.0746 4.62561 42.3326 2.7835 40.0687 2.7835C37.8048 2.7835 36.0628 4.62561 36.0628 7.00916C36.0628 9.39271 37.8244 11.2348 40.0687 11.2348Z" fill="currentColor"/>
+        <path d="M22.8117 13.9625C18.7861 13.9625 16.944 11.6397 16.944 7.75346V0.263423H19.869V7.69461C19.869 10.037 20.8303 11.1787 22.8136 11.1787C24.797 11.1787 25.7582 10.037 25.7582 7.69461V0.263423H28.6813V7.75346C28.6813 11.6397 26.8196 13.9625 22.8136 13.9625H22.8117Z" fill="currentColor"/>
+        <path d="M7.12509 14.0188C3.19959 14.0188 0.135303 10.9153 0.135303 7.00941C0.135303 3.10352 3.19959 0 7.12509 0C9.46744 0 11.7117 1.2418 12.7122 3.34482L10.3287 4.68667C9.66754 3.5253 8.62584 2.78375 7.00346 2.78375C4.76116 2.78375 3.13877 4.567 3.13877 7.00941C3.13877 9.45181 4.74154 11.2351 7.00346 11.2351C8.62584 11.2351 9.70678 10.4935 10.3287 9.33214L12.7122 10.674C11.7117 12.777 9.46744 14.0188 7.12509 14.0188Z" fill="currentColor"/>
+        <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
+      </g>
+    </svg></span>
+    </div>
+    <div class="foot-legal"><div class="links"><a href="#">Terms</a><a href="#">Privacy</a></div><p class="f-copy">©2027 CUOLEGA, Inc.</p></div>
+  </footer>
+
+</div><!-- /stage -->
+
+<script>
+(function(){ /* reveal */
+  var t=[].slice.call(document.querySelectorAll('[data-reveal],[data-stagger],[data-observe]'));
+  t.forEach(function(el){var d=el.getAttribute('data-delay'); if(d) el.style.setProperty('--reveal-delay',d+'s');});
+  if(!('IntersectionObserver' in window)){t.forEach(function(e){e.classList.add('is-inview');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return; e.target.classList.add('is-inview'); io.unobserve(e.target);});},
+    {threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  t.forEach(function(e){io.observe(e);});
+})();
+(function(){ /* 追従ヘッダー */
+  var h=document.getElementById('hdr'); if(!h) return; var last=0;
+  addEventListener('scroll',function(){var y=Math.max(0,scrollY);
+    h.classList.toggle('is-scrolled',y>8);
+    if(y>last&&y>240) h.classList.add('is-hidden'); else h.classList.remove('is-hidden');
+    last=y;},{passive:true});
+})();
+(function(){ /* 横送りトラック（バリュー／メンバー） */
+  var tracks=[].slice.call(document.querySelectorAll('.val-track, .mem-track'));
+  tracks.forEach(function(tr){
+    var wrap=tr.parentElement, bar=wrap?wrap.querySelector('.progress .bar'):null;
+    var nav=tr.id?document.querySelector('[data-nav-for="'+tr.id+'"]'):null;
+    var now=nav&&nav.querySelector('.now'), total=nav&&nav.querySelector('.total');
+    var prev=nav&&nav.querySelector('.tarrow.prev'), next=nav&&nav.querySelector('.tarrow.next');
+    var cards=[].slice.call(tr.children);
+    if(total) total.textContent=('0'+cards.length).slice(-2);
+    function step(){ return cards.length<2 ? tr.clientWidth : cards[1].offsetLeft-cards[0].offsetLeft; }
+    function draw(){
+      var max=tr.scrollWidth-tr.clientWidth;
+      if(bar){
+        if(bar.parentElement) bar.parentElement.style.visibility = max>1?'visible':'hidden';
+        if(max>1){var r=Math.min(1,tr.clientWidth/tr.scrollWidth);
+          bar.style.width=(r*100)+'%'; bar.style.left=((tr.scrollLeft/max)*(100-r*100))+'%';}
+      }
+      if(nav){
+        var st=step(), gap=parseFloat(getComputedStyle(tr).columnGap)||0;
+        var per=Math.max(1,Math.floor((tr.clientWidth+gap)/st));
+        var first=Math.max(0,Math.min(cards.length-per,Math.round(tr.scrollLeft/st)));
+        var lastI=Math.min(cards.length,first+per);
+        var pad=function(n){return ('0'+n).slice(-2);};
+        if(now) now.textContent = per>=cards.length ? pad(1)+'–'+pad(cards.length)
+                 : (per===1 ? pad(first+1) : pad(first+1)+'–'+pad(lastI));
+        if(prev) prev.classList.toggle('is-off',tr.scrollLeft<=1);
+        if(next) next.classList.toggle('is-off',tr.scrollLeft>=max-1);
+      }
+    }
+    if(prev) prev.addEventListener('click',function(){tr.scrollLeft-=step();});
+    if(next) next.addEventListener('click',function(){tr.scrollLeft+=step();});
+    tr.addEventListener('scroll',draw,{passive:true});
+    addEventListener('resize',draw);
+    if(window.ResizeObserver) new ResizeObserver(draw).observe(tr);
+    var down=false,sx=0,sl=0,moved=false;
+    tr.addEventListener('pointerdown',function(e){
+      if(e.target.closest&&e.target.closest('a')) return;
+      down=true;moved=false;sx=e.clientX;sl=tr.scrollLeft;});
+    tr.addEventListener('pointermove',function(e){
+      if(!down)return; if(Math.abs(e.clientX-sx)>3) moved=true; tr.scrollLeft=sl-(e.clientX-sx);});
+    ['pointerup','pointercancel','pointerleave'].forEach(function(t){tr.addEventListener(t,function(){down=false;});});
+    tr.addEventListener('click',function(e){if(moved) e.preventDefault();},true);
+    draw();
+  });
+})();
+</script>
+</body>
+</html>
