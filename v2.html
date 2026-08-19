@@ -66,7 +66,7 @@ img{max-width:100%;display:block}
 }
 
 /* ---- WF部品 ---- */
-.ph{background:var(--fill2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+.ph{background:var(--fill2);border:none;display:flex;align-items:center;justify-content:center;
   color:var(--caption);font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
   line-height:1.6;text-align:center;width:100%;height:100%}
 .ph i{font-style:normal}
@@ -795,6 +795,27 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     if(!e.isIntersecting) return; e.target.classList.add('is-inview'); io.unobserve(e.target);});},
     {threshold:.15,rootMargin:'0px 0px -8% 0px'});
   t.forEach(function(el){io.observe(el);});
+
+  /* clip-path を持つ要素は交差比が 0 になり、IO だけだと取りこぼす。
+     矩形での判定を併走させて確実に開かせる。 */
+  var pending=new Set(t);
+  function sweep(){
+    pending.forEach(function(el){
+      var b=el.getBoundingClientRect();
+      /* 上へ通り過ぎた要素（top<0）も開く。bottom>0 を条件に入れると
+         速いスクロールで飛ばした分が閉じたまま残る。 */
+      if(b.top<innerHeight*0.94){el.classList.add('is-inview');pending.delete(el);}
+    });
+    if(!pending.size){removeEventListener('scroll',onScroll);removeEventListener('resize',sweep);}
+  }
+  var ticking=false;
+  function onScroll(){ if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){ticking=false;sweep();}); }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',sweep);
+  addEventListener('load',sweep);
+  setTimeout(sweep,1200);
+  sweep();
 })();
 
 /* 2) 追従ヘッダー — 下へ送ると隠れ、上へ戻すと現れる（応募CTAを常に連れて回る） */

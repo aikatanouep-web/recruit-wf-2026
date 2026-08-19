@@ -50,7 +50,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* WF部品 */
-.ph{background:var(--fill2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+.ph{background:var(--fill2);border:none;display:flex;align-items:center;justify-content:center;
   color:var(--caption);font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
   line-height:1.6;text-align:center;width:100%;height:100%}
 .ph i{font-style:normal}
@@ -672,6 +672,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     if(!e.isIntersecting)return; e.target.classList.add('is-inview'); io.unobserve(e.target);});},
     {threshold:.15,rootMargin:'0px 0px -8% 0px'});
   t.forEach(function(e){io.observe(e);});
+
+  /* clip-path を持つ要素は交差比が 0 になり、IO だけだと取りこぼす。
+     矩形での判定を併走させて確実に開かせる。 */
+  var pending=new Set(t);
+  function sweep(){
+    pending.forEach(function(el){
+      var b=el.getBoundingClientRect();
+      /* 上へ通り過ぎた要素（top<0）も開く。bottom>0 を条件に入れると
+         速いスクロールで飛ばした分が閉じたまま残る。 */
+      if(b.top<innerHeight*0.94){el.classList.add('is-inview');pending.delete(el);}
+    });
+    if(!pending.size){removeEventListener('scroll',onScroll);removeEventListener('resize',sweep);}
+  }
+  var ticking=false;
+  function onScroll(){ if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){ticking=false;sweep();}); }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',sweep);
+  addEventListener('load',sweep);
+  setTimeout(sweep,1200);
+  sweep();
 })();
 (function(){ /* 追従ヘッダー */
   var h=document.getElementById('hdr'); if(!h) return; var last=0;
