@@ -79,10 +79,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
 }
 .more--ondark{color:var(--paper)}
 .more--ondark .circ{background:var(--paper);color:var(--ink)}
-.ext{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;flex:none;
-  color:var(--caption);border:0;padding:0;transition:color var(--dur-hover) var(--ease-out-expo)}
+/* 外部遷移は別窓アイコンだけで示す。黒丸の矢印と併記すると印が二重になる。
+   色はリンクの文字と揃える（薄くすると別物の装飾に見える）。 */
+.ext{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;
+  color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block}
-a:hover > .ext{color:var(--ink)}
+@media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
 /* 追従ヘッダー */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
@@ -292,35 +294,35 @@ a:hover > .ext{color:var(--ink)}
   <section class="sec" id="company" style="padding-top:0">
     <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
     <div class="deck-row" data-stagger data-observe>
-      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Company Deck</i></div></div>
-      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Company Deck</i></div></div>
+      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="deck-thumb mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
     </div>
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | CA | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | RA | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Engineer | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Designer | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
       </article>
-      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Member photo</i></div></div>
+      <article class="mem"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <p class="mem-name">［氏名］</p>
         <p class="mem-meta">［入社年］ | Sales | ［役職］</p>
         <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
@@ -333,11 +335,11 @@ a:hover > .ext{color:var(--ink)}
   <div class="casual" data-reveal>
     <h2>カジュアル面談</h2>
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
-    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   </div>
 
   <section class="sec" id="blog">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="blog-row" data-stagger data-observe>
       <article class="blog"><div class="mask-img hover-zoom" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
@@ -362,7 +364,7 @@ a:hover > .ext{color:var(--ink)}
       </div>
       <span class="gate-rule" aria-hidden="true"></span>
       <div class="gate" data-reveal data-delay="0.1">
-        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
         <div class="gate-cols">
           <div class="gate-col"><span class="gate-role">Sales</span><a class="btn-entry" href="sales.html">Entry</a></div>
           <div class="gate-col"><span class="gate-role">Engineer</span><a class="btn-entry" href="#">Entry</a></div>
