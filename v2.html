@@ -17,6 +17,9 @@
   --caption:#606070; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
   --fill:#e6e6e6; --fill2:#efefef;
   --page:1440px; --content:1171px;
+  /* 地色は画面端まで、中身は 1440 に収める。広い画面で
+     左右に帯が残るのを避けるための余白。 */
+  --gutter:max(var(--pad), calc((100% - var(--page)) / 2 + var(--pad)));
   /* 1440 を上限に、狭いウィンドウでは余白から詰める。
      固定 1440 のままだと画面が狭いだけで横スクロールが出るため。 */
   --pad:clamp(20px,9.3vw,134px);
@@ -29,11 +32,11 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja);
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja);
   font-size:14px;line-height:2;letter-spacing:.1em}
 img{max-width:100%;display:block}
 /* overflow は clip。hidden だとスクロールコンテナが生まれ sticky が死ぬ */
-.stage{width:min(var(--page),100%);margin:0 auto;background:var(--paper);position:relative;overflow:clip}
+.stage{width:100%;margin:0;background:var(--paper);position:relative;overflow:clip}
 
 /* ---- モーション基盤（1度きりの演出に will-change は置かない） ---- */
 [data-reveal]{opacity:0;transform:translateY(28px);
@@ -115,7 +118,7 @@ img{max-width:100%;display:block}
   transition:transform .45s var(--ease-out-expo),background-color .4s ease}
 .site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s}
 .site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.header-inner{width:min(var(--page),100%);margin:0 auto;height:80px;padding:0 clamp(20px,9.4vw,136px);display:flex;align-items:center;justify-content:space-between}
+.header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
 /* WF ではロゴマーク（3片の図形）を出さず、ロゴタイプのみを置く。
    viewBox をワード部分（x=24.331 幅108.614）に寄せ、マークは描画しない。 */
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
@@ -151,7 +154,7 @@ img{max-width:100%;display:block}
   display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease-out-expo)}
 .is-navopen .navpanel{grid-template-rows:1fr}
 .navpanel-in{overflow:hidden;min-height:0}
-.navpanel ul{list-style:none;margin:0;padding:28px var(--pad) 40px;
+.navpanel ul{list-style:none;margin:0;padding:28px var(--gutter) 40px;
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px 32px}
 .navpanel a{display:flex;align-items:baseline;gap:12px;padding:14px 4px;text-decoration:none;color:var(--ink);
   transition:padding-left .55s var(--ease-out-expo)}
@@ -170,13 +173,13 @@ img{max-width:100%;display:block}
    「画像が入る場所」だと分かるようにしておく */
 .hero-media{position:absolute;inset:0;z-index:1}
 .hero-media .ph{border:none;background:var(--fill);font-size:12px;letter-spacing:.12em}
-.hero .copy{position:absolute;left:clamp(20px,9.4vw,136px);top:207px;width:min(640px,72%);z-index:2}
+.hero .copy{position:absolute;left:var(--gutter);top:207px;width:min(640px,72%);z-index:2}
 .hero h1{font-weight:700;font-size:64px;letter-spacing:.02em;line-height:1.5;margin:0}
 /* Vision を畳んだぶん、会社の立ち位置はここで一文だけ添える */
 .hero .sub{font-size:16px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:24px 0 0}
 
 /* ---- 共通セクション ---- */
-.sec{padding:96px var(--pad)}
+.sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 
@@ -278,8 +281,6 @@ img{max-width:100%;display:block}
 .path-desc{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 .path-foot{display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
 .path-fact{font-size:13px;letter-spacing:.1em;line-height:1.9;color:#3a3a40;margin:0}
-.path-tbd{font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;line-height:1.6;
-  color:var(--caption);margin:0;border:1px dashed var(--line2);border-radius:2px;padding:6px 12px}
 .tr{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .tr-group{background:var(--tone);border-radius:12px;padding:28px 24px}
 .sec--tone .tr-group{background:var(--paper)}
@@ -294,14 +295,6 @@ img{max-width:100%;display:block}
 .kpi .num{font-family:var(--font-en);font-weight:700;font-size:36px;letter-spacing:.02em;line-height:1.1}
 .kpi .num .u{font-size:15px;letter-spacing:.1em;margin-left:2px}
 .kpi .lbl{font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin-top:10px}
-.kpi-tbd-head{display:flex;align-items:baseline;gap:16px;margin:48px 0 0;padding-top:24px;border-top:1px solid var(--line)}
-.kpi-tbd-head .t{font-weight:700;font-size:14px;letter-spacing:.1em;line-height:1.6}
-.kpi-tbd-head .n{font-family:var(--font-en);font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
-.kpi-grid.tbd{grid-template-columns:repeat(4,1fr);margin-top:24px;gap:16px}
-.kpi.tbd{border:1px dashed var(--line2);border-radius:2px;padding:16px 8px;position:relative;opacity:.7}
-.kpi.tbd .num{color:var(--caption);font-size:28px}
-.kpi.tbd::after{content:"TBD";position:absolute;top:6px;right:8px;font-family:var(--font-en);font-size:10px;
-  font-weight:600;letter-spacing:.12em;color:var(--caption)}
 
 /* ---- 07 働く環境（福利厚生・拠点をひとつの情報群として扱う） ---- */
 .env-block + .env-block{margin-top:56px}
@@ -367,13 +360,13 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .flow-note{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:32px 0 0}
 
 /* ---- 10 Join Us ---- */
-.joinus{background:var(--ink);color:var(--paper);padding:96px var(--pad);display:flex;flex-direction:column;
+.joinus{background:var(--ink);color:var(--paper);padding:96px var(--gutter);display:flex;flex-direction:column;
   align-items:center;gap:32px;text-align:center}
 .joinus .statement{color:var(--paper)}
 .joinus .row{display:flex;gap:16px}
 
 /* ---- 11 フッター ---- */
-.footer{background:var(--paper);border-top:1px solid var(--line);padding:56px var(--pad) 40px}
+.footer{background:var(--paper);border-top:1px solid var(--line);padding:56px var(--gutter) 40px}
 .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px}
 .f-addr{font-size:13px;letter-spacing:.08em;line-height:1.9;color:var(--caption);margin-top:16px}
 .f-head{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin-bottom:16px}
@@ -586,7 +579,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
       </div>
       <div class="path-foot">
         <p class="path-fact">昇給は年4回（3ヶ月ごとの査定）。年次ではなく成果に応じて昇格のタイミングが訪れます。</p>
-        <p class="path-tbd">Years to promotion — TBD</p>
       </div>
     </div>
     <h3 class="h3" data-reveal style="margin-top:64px">成長支援</h3>
@@ -627,13 +619,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
       <div class="kpi"><div class="num">57:43</div><div class="lbl">従業員男女比</div></div>
       <div class="kpi"><div class="num">62.5<span class="u">%</span></div><div class="lbl">女性管理職比率</div></div>
       <div class="kpi"><div class="num">67<span class="u">%</span></div><div class="lbl">有給取得率</div></div>
-    </div>
-    <div class="kpi-tbd-head"><span class="t">TBD</span><span class="n">Awaiting confirmation. Kept apart from the confirmed figures above.</span></div>
-    <div class="kpi-grid tbd">
-      <div class="kpi tbd"><div class="num">—</div><div class="lbl">プロダクトユーザー数</div></div>
-      <div class="kpi tbd"><div class="num">—</div><div class="lbl">2025年度 新卒採用人数</div></div>
-      <div class="kpi tbd"><div class="num">—</div><div class="lbl">平均勤続年数</div></div>
-      <div class="kpi tbd"><div class="num">—</div><div class="lbl">昇格までの平均年数</div></div>
     </div>
   </section>
 

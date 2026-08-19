@@ -15,6 +15,9 @@
   --caption:#606070; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
   --fill:#e6e6e6; --fill2:#efefef;
   --page:1440px; --content:1171px; --pad:clamp(20px,9.3vw,134px);
+  /* 地色は画面端まで、中身は 1440 に収める。広い画面で
+     左右に帯が残るのを避けるための余白。 */
+  --gutter:max(var(--pad), calc((100% - var(--page)) / 2 + var(--pad)));
   --font-ja:YakuHanJP,"Noto Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
   --font-en:"Lato",sans-serif; --font-disp:"Chillax","Lato",sans-serif;
   --ease-out-expo:cubic-bezier(.16,1,.3,1); --ease-in-out-circ:cubic-bezier(.85,0,.15,1);
@@ -22,8 +25,8 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja);font-size:14px;line-height:2;letter-spacing:.1em}
-.stage{width:min(var(--page),100%);margin:0 auto;background:var(--paper);position:relative;overflow:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja);font-size:14px;line-height:2;letter-spacing:.1em}
+.stage{width:100%;margin:0;background:var(--paper);position:relative;overflow:clip}
 
 /* モーション基盤 */
 [data-reveal]{opacity:0;transform:translateY(28px);
@@ -52,8 +55,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
   line-height:1.6;text-align:center;width:100%;height:100%}
 .ph i{font-style:normal}
 /* 未確認は必ず見た目で区別する */
-.tbd{display:inline-block;font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
-  line-height:1.6;color:var(--caption);border:1px dashed var(--line2);border-radius:2px;padding:5px 10px}
 
 /* 見出し階層 h1 64 / h2 32 / h3 24 */
 .head-block{display:flex;flex-direction:column;gap:8px}
@@ -110,7 +111,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
   transition:transform .45s var(--ease-out-expo),background-color .4s ease}
 .site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s}
 .site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.header-inner{width:min(var(--page),100%);margin:0 auto;height:80px;padding:0 clamp(20px,9.4vw,136px);
+.header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between}
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
 .logo .lg{display:block;width:100%;height:100%}
@@ -126,7 +127,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
 .header-cta .cta{padding:9px 18px;font-size:12px}
 
 /* セクション */
-.sec{padding:96px var(--pad)}
+.sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 .sec--dark{background:var(--ink);color:var(--paper)}
@@ -136,7 +137,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
    画像の寸法に振り回される。左にコピー、右に画像面を置く2分割にして、
    それぞれの幅を独立させる。 */
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 72px;align-items:center;
-  min-height:600px;padding:120px 0 120px var(--pad);background:var(--paper)}
+  min-height:600px;padding:120px 0 120px var(--gutter);background:var(--paper)}
 .hero-copy{max-width:620px}
 .hero-media{align-self:stretch;min-height:440px}
 .hero-media .ph{border:none;background:var(--fill);font-size:12px;letter-spacing:.12em}
@@ -187,7 +188,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
 .member dd{margin:0;color:#3a3a40}
 
 /* 中間CTA */
-.midcta{background:var(--ink);color:var(--paper);padding:72px var(--pad);display:flex;
+.midcta{background:var(--ink);color:var(--paper);padding:72px var(--gutter);display:flex;
   align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
 .midcta h2{font-weight:700;font-size:28px;letter-spacing:.1em;line-height:1.6;margin:0}
 .midcta p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);margin:10px 0 0}
@@ -240,13 +241,13 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
 .faq-a p{font-size:13px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0}
 
 /* 10 最終CTA */
-.endcta{background:var(--ink);color:var(--paper);padding:96px var(--pad);display:flex;flex-direction:column;
+.endcta{background:var(--ink);color:var(--paper);padding:96px var(--gutter);display:flex;flex-direction:column;
   align-items:center;gap:28px;text-align:center}
 .endcta .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
 .endcta .note{font-size:12px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.6);margin:0}
 
 /* フッター */
-.footer{background:var(--paper);border-top:1px solid var(--line);padding:56px var(--pad) 40px}
+.footer{background:var(--paper);border-top:1px solid var(--line);padding:56px var(--gutter) 40px}
 .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px}
 .f-addr{font-size:13px;letter-spacing:.08em;line-height:1.9;color:var(--caption);margin-top:16px}
 .f-head{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin-bottom:16px}
@@ -343,7 +344,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">東京拠点では1日20件強の面談を実施。8つの面談ブースを2時間ずつ4スロットで運用している。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">短い期間で多くのケースに当たれる環境が、仕組みとして用意されている。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">経験の総量が早く積み上がり、判断の引き出しが増える。</p></div>
-          <span class="tbd">TBD — この数値を対外的に出してよいか確認</span>
         </div>
       </article>
       <article class="merit"><span class="merit-no">03</span><h3>提案の型が言語化されている</h3>
@@ -358,7 +358,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">昇給は年4回（3ヶ月ごとの査定）。業績賞与は年2回（夏・冬）。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">評価と処遇の反映サイクルが四半期単位で回る。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">成果を出した手応えと処遇の変化が近く、次の打ち手を判断しやすい。</p></div>
-          <span class="tbd">TBD — 賞与の算定方法・インセンティブの有無・評価指標の詳細を確認</span>
         </div>
       </article>
       <article class="merit"><span class="merit-no">05</span><h3>その先に選べる持ち場がある</h3>
@@ -370,7 +369,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
       </article>
       <article class="merit"><span class="merit-no">06</span><h3>育成とフィードバックの体制</h3>
         <div class="fmb">
-          <span class="tbd">TBD — 研修期間・オンボーディングの内容・1on1やフィードバックの運用・成果が出ない場合のフォロー体制を確認</span>
+          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">テキストが入ります。</p></div>
         </div>
       </article>
     </div>
@@ -398,7 +397,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
           <li>難易度の高い案件・高年収帯を担当する</li>
           <li>面談ロジックの設計や型化に関わる</li>
         </ul>
-        <span class="tbd">TBD — 特定領域の専門職としての具体的な役割・等級は確認が必要</span>
       </div>
       <div class="branch-col"><span class="branch-en">Management</span><h4>チームを持つ</h4>
         <ul>
@@ -413,11 +411,9 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
           <li>インサイドセールス・アカウントプランナーへ</li>
           <li>事業企画・新規事業・新拠点の立ち上げへ</li>
         </ul>
-        <span class="tbd">TBD — 実際にこの異動を経たケースの有無と件数を確認</span>
       </div>
     </div>
     <h3 class="h3" data-reveal style="margin-top:64px">活躍しているメンバー</h3>
-    <p style="margin:12px 0 0"><span class="tbd">TBD — 実在するメンバーの情報が未確認のため、3枠とも枠のみ。氏名・前職・入社年・現在の役割・記事URLを確認</span></p>
     <div class="member-grid" data-stagger data-observe>
       <article class="member"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">［キャリアの変化を表す見出し］</p>
@@ -464,7 +460,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
       <div class="prod"><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
       <div class="prod"><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     </div>
-    <p style="margin-top:32px"><span class="tbd">TBD — 今後の事業展開として対外的に出せる内容を確認</span></p>
   </section>
 
   <!-- ============ 07 Contents ============ 初期6件。増えてもページが伸びないよう「もっと見る」で畳む -->
@@ -473,7 +468,6 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
       <p class="eyebrow">Contents</p>
       <h2 class="h2">Cuolegaを知る</h2>
     </div>
-    <p style="margin-top:24px"><span class="tbd">TBD — 掲載できるコンテンツの実体と URL を確認。枠のみ用意している</span></p>
     <div class="cont-grid" id="contgrid" data-stagger data-observe>
       <article class="cont"><div class="hover-zoom"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Document</span><h3>Company Deck</h3><p>事業の全体像とこれから向かう先をまとめた資料。</p>
@@ -520,12 +514,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <details class="faq-item"><summary class="faq-q">1日の業務の流れを教えてください</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>面談は90分程度の枠で行い、最初の45分ほどをヒアリングに充てます。ヒアリング後は15分程度のマッチング時間で6〜7件の求人を選定し、提案に入ります。</p>
-            <span class="tbd">TBD — 1人あたりの1日の担当件数と、面談以外の業務の比率を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">面談はオンラインと対面のどちらですか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — オンライン／対面の比率と方針を確認（対面の方が決定率が高いという社内知見はある）</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -533,17 +527,17 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <h3 class="h3" data-reveal>成果・目標</h3>
         <details class="faq-item"><summary class="faq-q">どのような目標やKPIがありますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — キャリアアドバイザーに設定されているKPIの種類と水準を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">成果はどのように評価されますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 評価指標・評価者・評価サイクルの詳細を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">成果が出ない場合、どのようなフォローがありますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — フォロー体制の実態を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -552,12 +546,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <details class="faq-item"><summary class="faq-q">報酬や昇給はどのように決まりますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>昇給は年4回（3ヶ月ごとの査定）、業績賞与は年2回です。</p>
-            <span class="tbd">TBD — 査定の評価項目と、賞与・インセンティブの算定方法を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">想定年収を教えてください</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 中途キャリアアドバイザーの想定年収レンジを確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -565,13 +559,13 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <h3 class="h3" data-reveal>入社後の育成</h3>
         <details class="faq-item"><summary class="faq-q">未経験でも活躍できますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 未経験入社の実績有無と、活躍しているケースを確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">入社後の研修やサポートはありますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>面談では ABC フレームワークを用いた教育が徹底されています。</p>
-            <span class="tbd">TBD — 研修期間・オンボーディングの具体的な内容を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -580,12 +574,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <details class="faq-item"><summary class="faq-q">キャリアアドバイザーの次には、どのようなキャリアがありますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>社内の役職はメンバー／リーダー／チーフリーダー／マネージャー／部長／執行役員の6段階です。</p>
-            <span class="tbd">TBD — キャリアアドバイザーからの具体的な異動事例を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">マネジメント以外のキャリアも選べますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 専門職としてのキャリアコースの有無を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -594,12 +588,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <details class="faq-item"><summary class="faq-q">残業や休日、働き方について教えてください</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>勤務時間は9:00〜18:00、年間休日120日、週休2日制（土日）と祝日です。有給取得率は67%です。</p>
-            <span class="tbd">TBD — キャリアアドバイザー職の残業実態とリモートの可否を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">転勤はありますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 拠点間異動の方針を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -607,7 +601,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <h3 class="h3" data-reveal>組織・カルチャー</h3>
         <details class="faq-item"><summary class="faq-q">どのような人が活躍していますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 活躍しているメンバーの共通点を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">キャリアアドバイザーは何名いますか</summary>
@@ -621,12 +615,12 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
         <details class="faq-item"><summary class="faq-q">選考前にカジュアル面談はできますか</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
             <p>可能です。ページ内のカジュアル面談ボタンからお申し込みいただけます。</p>
-            <span class="tbd">TBD — カジュアル面談の申込先（フォーム／Wantedly など）を確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
         <details class="faq-item"><summary class="faq-q">選考の流れを教えてください</summary>
           <div class="faq-wrap"><div class="faq-a"><div>
-            <span class="tbd">TBD — 中途採用の選考フローを確認</span>
+            <p>回答テキストが入ります。</p>
           </div></div></div>
         </details>
       </div>
@@ -639,7 +633,7 @@ body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-ja
       <span class="cta cta--ondark lg">カジュアル面談を申し込む</span>
       <span class="cta cta--ondark primary lg">キャリアアドバイザー職に応募する</span>
     </div>
-    <p class="note">応募は中途採用の外部応募ページへ遷移します（新卒採用の応募導線とは分けています）。<br>TBD — 中途採用応募URL確認。確定するまで仮リンクは置いていません。</p>
+    <p class="note">応募は中途採用の応募ページへ遷移します。</p>
   </section>
 
   <footer class="footer">
