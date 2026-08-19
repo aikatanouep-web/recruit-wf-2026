@@ -130,16 +130,18 @@ a:hover > .ext{color:var(--ink)}
 .sec--dark{background:var(--ink);color:var(--paper)}
 
 /* 01 FV */
-.hero{position:relative;height:640px;overflow:hidden;background:var(--fill)}
-.hero-media{position:absolute;inset:0;z-index:1}
-.hero-media .ph{border:none;background:var(--fill);align-items:flex-end;justify-content:flex-end;
-  padding:32px clamp(20px,9.4vw,136px);font-size:12px}
-.hero-media .ph::before{content:"";position:absolute;inset:24px;border:1px dashed var(--line2);pointer-events:none}
-.hero .copy{position:absolute;left:clamp(20px,9.4vw,136px);top:180px;width:min(700px,74%);z-index:2}
-.hero .kicker{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin:0 0 20px}
-.hero h1{font-weight:700;font-size:56px;letter-spacing:.02em;line-height:1.5;margin:0}
-.hero .sub{font-size:16px;letter-spacing:.08em;line-height:1.9;color:#3a3a40;margin:24px 0 0}
-.hero .row{display:flex;gap:14px;margin-top:32px}
+/* 全面の画像にコピーを重ねると、見出しの折り返しとCTAの居場所が
+   画像の寸法に振り回される。左にコピー、右に画像面を置く2分割にして、
+   それぞれの幅を独立させる。 */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 72px;align-items:center;
+  min-height:600px;padding:120px 0 120px var(--pad);background:var(--paper)}
+.hero-copy{max-width:620px}
+.hero-media{align-self:stretch;min-height:440px}
+.hero-media .ph{border:none;background:var(--fill);font-size:12px;letter-spacing:.12em}
+.hero .kicker{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;color:var(--caption);margin:0 0 24px}
+.hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0}
+.hero .sub{font-size:15px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:24px 0 0;max-width:520px}
+.hero .row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap}
 
 /* 02 Message */
 .msg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px}
@@ -292,8 +294,7 @@ a:hover > .ext{color:var(--ink)}
 
   <!-- ============ 01 FV ============ 特設ページ独自のコピー。会社のVisionコピーは置かない -->
   <section class="hero">
-    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Main visual — advisor at work</i></div></div>
-    <div class="copy">
+    <div class="hero-copy">
       <p class="kicker">Career Advisor — Recruiting</p>
       <h1 class="line-reveal" data-observe>
         <span class="line"><span>人のキャリアを動かす経験が、</span></span>
@@ -305,6 +306,7 @@ a:hover > .ext{color:var(--ink)}
         <span class="cta primary">エントリー</span>
       </div>
     </div>
+    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Image</i></div></div>
   </section>
 
   <!-- ============ 02 Message ============ 仕事と社会的意義の接点。理念の長い説明にはしない -->
