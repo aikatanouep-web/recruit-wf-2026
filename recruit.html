@@ -98,8 +98,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 01 FV（黒地） */
 /* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
    縦に長い画面で下に白が覗く。svh は端末のバーの出入りに追従させるため。 */
-.hero{background:var(--ink);color:var(--paper);padding:200px var(--gutter) 176px;
+.hero{position:relative;background:var(--ink);color:var(--paper);padding:200px var(--gutter) 176px;
   min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+/* この面いっぱいにメインビジュアルが入る。黒地のままだと何も来ない面に
+   見えるので、他の画像枠と同じ Image の文字を置いておく。 */
+.hero-media{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:flex-end}
+.hero-media .ph{width:50%}   /* コピーは左半分にあるので、空いている右半分の中央に置く */
+.hero-media .ph{background:transparent;color:rgba(255,255,255,.45)}
+.hero > h1,.hero > .lead{position:relative;z-index:2}
 .hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.4;margin:0}
 .hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);margin:64px 0 0}
 
@@ -232,6 +238,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <!-- ============ 01 FV（黒地） ============ -->
   <section class="hero">
+    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Image</i></div></div>
     <h1 class="line-reveal" data-observe><span class="line"><span>日本の価値を上げる</span></span></h1>
     <p class="lead" data-reveal data-delay="0.35">IT・製造業で海外企業が台頭し、<br>人口減少による経済衰退も懸念される日本。<br>一方で、「食・宿泊文化」は今なお世界に誇れる強みです。<br>私たちは、この産業を支える人材の採用・就業を支援し、<br>日本の価値向上に貢献します。</p>
   </section>
