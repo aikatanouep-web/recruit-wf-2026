@@ -96,7 +96,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
 
 /* 01 FV（黒地） */
-.hero{background:var(--ink);color:var(--paper);padding:200px var(--gutter) 176px}
+/* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
+   縦に長い画面で下に白が覗く。svh は端末のバーの出入りに追従させるため。 */
+.hero{background:var(--ink);color:var(--paper);padding:200px var(--gutter) 176px;
+  min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
 .hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.4;margin:0}
 .hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);margin:64px 0 0}
 
