@@ -115,10 +115,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .joblist{margin-top:32px;display:none}
 .joblist.is-on{display:block}
 .jobrow{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
-  background:var(--card);border:1px solid var(--line);border-radius:8px;padding:24px 28px;
+  background:var(--tone);border:0;border-radius:8px;padding:24px 28px;
   transition:border-color .5s var(--ease-out-expo),transform .5s var(--ease-out-expo)}
 .jobrow + .jobrow{margin-top:16px}
-@media (hover:hover){.jobrow:hover{border-color:var(--line2);transform:translateY(-2px)}}
+@media (hover:hover){.jobrow:hover{background:#ededed;transform:translateY(-2px)}}
 .jobrow-name{font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.6}
 .jobrow-actions{display:flex;gap:12px;flex:none}
 .jobrow-actions .cta{padding:11px 20px;font-size:13px}
