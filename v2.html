@@ -58,10 +58,15 @@ img{max-width:100%;display:block}
 }
 
 /* ---- WF部品 ---- */
-.ph{background:var(--fill2);border:none;display:flex;align-items:center;justify-content:center;
-  color:var(--caption);font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
-  line-height:1.6;text-align:center;width:100%;height:100%}
-.ph i{font-style:normal}
+.ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;color:var(--caption);font-family:var(--font-en);font-size:13px;
+  font-weight:500;letter-spacing:.18em;line-height:1.6;text-align:center;width:100%;height:100%}
+.ph i{font-style:normal;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:.75}
+/* 文字だけだと素っ気ないので画像を表す絵と組みにする。
+   currentColor を敷いてマスクで抜くので、黒地でも白で出る。 */
+.ph i::before{content:"";display:block;width:32px;height:32px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 
 /* ---- 見出し階層：h1 64 / h2 32 / h3 24。同階層は必ず同サイズ ---- */
 .head-block{display:flex;flex-direction:column;gap:8px}

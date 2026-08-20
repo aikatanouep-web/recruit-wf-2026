@@ -47,10 +47,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* WF部品 */
-.ph{background:var(--fill);border:none;display:flex;align-items:center;justify-content:center;
-  color:var(--caption);font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.12em;
-  line-height:1.6;text-align:center;width:100%;height:100%}
-.ph i{font-style:normal}
+.ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;color:var(--caption);font-family:var(--font-en);font-size:13px;
+  font-weight:500;letter-spacing:.18em;line-height:1.6;text-align:center;width:100%;height:100%}
+.ph i{font-style:normal;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:.75}
+/* 文字だけだと素っ気ないので画像を表す絵と組みにする。
+   currentColor を敷いてマスクで抜くので、黒地でも白で出る。 */
+.ph i::before{content:"";display:block;width:32px;height:32px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 .ph--dark{background:#2a2a2e;color:rgba(255,255,255,.6)}
 
 /* 見出し階層 h1 56 / h2 40 / h3 24 */
@@ -117,7 +122,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mv-media{aspect-ratio:1/1}
 .mv-text h3{font-weight:700;font-size:24px;letter-spacing:.06em;line-height:1.6;margin:0 0 28px}
 .mv-text p{font-size:13px;letter-spacing:.04em;line-height:2.1;color:#3a3a40;margin:0}
-.mv-text p + p{margin-top:20px}
+/* 行間 2.1 のぶん（上下に約7pxずつ）が乗るので、箱の余白は 10px にして
+   見た目を約24pxに収める。20px のままだと見た目34pxで段落が分断されて見える。 */
+.mv-text p + p{margin-top:10px}
+@media (max-width:860px){.mv-text p + p{margin-top:6px}}
 
 /* 03 Our Value（大きな白カードを横に送る） */
 /* 縦スクロールに連動して横へ送る（参照サイトの Company と同じ作り）。
@@ -131,7 +139,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .val-rail{margin-top:40px;width:calc(100% - var(--gutter))}
 .vcard-head{display:flex;align-items:center;gap:40px}
 .vno{font-family:var(--font-en);font-weight:300;font-size:88px;letter-spacing:.02em;line-height:1}
-.vrule{width:1px;align-self:stretch;background:var(--line2)}
+.vrule{width:2px;align-self:stretch;background:var(--ink);opacity:.85;border-radius:1px}
 .vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
 .ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
 .vtx{font-size:14px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
@@ -170,8 +178,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 09 採用の入口（黒地） */
 .gates{background:var(--ink);color:var(--paper);padding:96px var(--gutter)}
-.gates-in{display:grid;grid-template-columns:1fr 1px 2fr;gap:0 72px;align-items:start}
-.gate-rule{background:rgba(255,255,255,.3);align-self:stretch}
+.gates-in{display:grid;grid-template-columns:1fr 2px 2fr;gap:0 72px;align-items:start}
+.gate-rule{background:rgba(255,255,255,.45);align-self:stretch}
 .gate h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0;text-align:center}
 .gate-head{display:flex;align-items:center;justify-content:center;gap:24px}
 .gate-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
