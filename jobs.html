@@ -54,7 +54,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
 .head-block{display:block}
-.body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
+/* 「ページから」のように語の途中で折れないよう、対応ブラウザでは文節単位で折り返す */
+.body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0;
+  word-break:auto-phrase;line-break:strict}
 
 /* 別窓アイコン。ボタンの文字は 12〜16px と場所ごとに違うので、寸法は em で
    ラベルに追従させる。線の太さだけは non-scaling-stroke で固定し、
@@ -63,6 +65,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block;stroke-width:1.5}
 .ext svg *{vector-effect:non-scaling-stroke}
+/* サイト内へ進むリンクは別窓アイコンではなく矢印にする */
+.arw{display:inline-flex;align-items:center;justify-content:center;width:1.08em;height:1.08em;flex:none;
+  color:currentColor;transition:transform var(--dur-hover) var(--ease-out-expo)}
+.arw svg{width:100%;height:100%;display:block;stroke-width:1.5}
+.arw svg *{vector-effect:non-scaling-stroke}
+@media (hover:hover){a:hover > .arw{transform:translateX(2px);transition-duration:.4s}}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
 .cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--ink);
@@ -94,32 +102,45 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+/* 現在地。下線を出したままにして、文字も一段強くする */
+.header-nav a[aria-current="page"]{font-weight:700}
+.header-nav a[aria-current="page"]::after{transform:scaleX(1)}
 
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
-.pagehead{padding:180px var(--gutter) 64px}
+/* 見出し・説明文・タブ・一覧をひとつの束として見せたいので、
+   pagehead の下余白は持たせず、間隔は .tabs の margin-top だけで作る。
+   旧: 64(pagehead) + 40(tabs) = 104px → 新: 56px */
+.pagehead{padding:180px var(--gutter) 0}
 .pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
 
 /* タブ：新卒／中途 */
-.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-top:40px}
+/* タブ。当たり判定は 84px 幅・上下15pxで確保し、文字はその中央に置く。
+   選択中の下線は文字幅＋左右14px に留めて、ボタン幅いっぱいに引かない。
+   下のグレー罫線は 1px・不透明度10%まで落とし、黒い下線より弱くする。 */
+.tabs{display:flex;gap:36px;border-bottom:1px solid rgba(13,13,14,.10);margin-top:56px}
 .tab{appearance:none;background:none;border:0;cursor:pointer;position:relative;
-  padding:14px 24px;font-family:var(--font-ja);font-weight:700;font-size:15px;letter-spacing:.1em;
-  line-height:1;color:var(--caption);transition:color .45s var(--ease-out-expo)}
-.tab::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);
-  transform:scaleX(0);transform-origin:center;transition:transform .5s var(--ease-out-expo)}
-.tab.is-on{color:var(--ink)}
-.tab.is-on::after{transform:scaleX(1)}
+  min-width:84px;padding:15px 0;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-ja);font-weight:500;font-size:15px;letter-spacing:.1em;
+  line-height:1;color:var(--caption)}
+.tab > span{position:relative;display:inline-block}
+/* 下線は文字を包む span 基準。bottom:-16px でグレー罫線の上に重なる */
+.tab.is-on{color:var(--ink);font-weight:700}
+.tab.is-on > span::after{content:"";position:absolute;left:-14px;right:-14px;bottom:-16px;
+  height:2px;background:var(--ink)}
 @media (hover:hover){.tab:hover{color:var(--ink)}}
 
 /* 求人の行 */
-.joblist{margin-top:32px;display:none}
+.joblist{margin-top:28px;display:none}
 .joblist.is-on{display:block}
-.jobrow{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
-  background:var(--card);border:1px solid var(--line);border-radius:8px;padding:24px 28px;
+/* 職種名とボタンだけの行なので、高さを詰めて一覧として読ませる（高さ76px） */
+.jobrow{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  min-height:76px;background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:16px 24px;
   transition:border-color .5s var(--ease-out-expo),transform .5s var(--ease-out-expo)}
-.jobrow + .jobrow{margin-top:16px}
+.jobrow + .jobrow{margin-top:12px}
 @media (hover:hover){.jobrow:hover{border-color:var(--line2);transform:translateY(-2px)}}
-.jobrow-name{font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.6}
+.jobrow-name{min-width:0;font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.6}
 .jobrow-actions{display:flex;gap:12px;flex:none}
 .jobrow-actions .cta{padding:11px 20px;font-size:13px}
 
@@ -174,6 +195,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 小さいピルの中は文字とアイコンの間を少し詰める */
 .cta .ext{margin-left:-1px}
+
+/* ── SP ──
+   ※このWFは <meta viewport width=1440> で固定キャンバスなので、
+   この指定はSPフレームを起こすときの基準として置いてある。 */
+@media (max-width:768px){
+  .pagehead{padding:120px var(--gutter) 0}
+  .pagehead .h1{font-size:28px}
+  .body-tx{font-size:13px}
+  /* 束の間隔をPCより詰める（56px → 36px） */
+  .tabs{margin-top:36px;gap:24px}
+  .tab{min-width:80px;padding:15px 0;font-size:14px}  /* 高さ44px・幅80px。指で押せる大きさを保つ */
+  .joblist{margin-top:20px}
+  /* 職種名とボタンを縦に積む */
+  .jobrow{flex-direction:column;align-items:stretch;gap:14px;min-height:0;padding:18px 20px}
+  .jobrow + .jobrow{margin-top:10px}
+  .jobrow-actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .jobrow-actions .cta{width:100%}
+}
 </style>
 </head>
 <body>
@@ -198,7 +237,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </svg></a>
     <nav class="header-nav">
       <a href="recruit.html">カルチャー</a>
-      <a href="jobs.html">募集職種一覧</a>
+      <a href="jobs.html" aria-current="page">募集職種一覧</a>
       <a href="casual.html">カジュアル面談</a>
       <a href="entry.html">エントリー</a>
     </nav>
@@ -209,42 +248,42 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="pagehead">
     <h1 class="h1 line-reveal" data-observe><span class="line"><span>募集職種一覧</span></span></h1>
-    <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:24px;max-width:720px">新卒採用と中途採用で、それぞれ募集中の職種を掲載しています。求人の詳細と応募は各職種のページからお進みください。</p>
+    <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:24px;max-width:840px">新卒採用と中途採用で、それぞれ募集中の職種を掲載しています。<br>求人の詳細・応募は、各職種のページからご確認ください。</p>
   </section>
 
   <!-- ============ 求人一覧（新卒／中途のタブ） ============ -->
   <section class="sec" style="padding-top:0">
     <div class="tabs" role="tablist" data-reveal>
-      <button class="tab is-on" role="tab" aria-selected="true" data-tab="new">新卒</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="mid">中途</button>
+      <button class="tab is-on" role="tab" aria-selected="true" data-tab="new"><span>新卒</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="mid"><span>中途</span></button>
     </div>
     <div class="joblist is-on" data-list="new" data-stagger data-observe>
         <article class="jobrow">
           <span class="jobrow-name">CA（キャリアアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">エンジニア</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">デザイナー</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
     </div>
@@ -252,29 +291,29 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <article class="jobrow">
           <span class="jobrow-name">CA（キャリアアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">エンジニア</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">デザイナー</span>
           <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta primary" href="entry.html">求人詳細<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           </div>
         </article>
     </div>
