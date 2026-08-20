@@ -56,11 +56,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .head-block{display:block}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
-/* 別窓アイコン：Figma「Base icons」の external-link（24×24 / stroke 2）をそのまま使う。
-   文字サイズが 13〜16px と混在するので、em ではなく実寸で固定して線の太さを揃える */
-.ext{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;
+/* 別窓アイコン。ボタンの文字は 12〜16px と場所ごとに違うので、寸法は em で
+   ラベルに追従させる。線の太さだけは non-scaling-stroke で固定し、
+   どの大きさでも実効 1.5px になるようにする。 */
+.ext{display:inline-flex;align-items:center;justify-content:center;width:1.08em;height:1.08em;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
-.ext svg{width:100%;height:100%;display:block}
+.ext svg{width:100%;height:100%;display:block;stroke-width:1.5}
+.ext svg *{vector-effect:non-scaling-stroke}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
 .cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--ink);
@@ -186,11 +188,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .gallery .ph{aspect-ratio:1/1}
 
 
-/* ラベルが 13px の場所ではアイコンが文字より大きく見えるので一段小さく。
-   線幅も一緒に上げて、実効の太さ(1.5px)は 18px 版とそろえる。 */
-.ext svg{stroke-width:2}
-.cta .ext,.tlink--light .ext{width:15px;height:15px}
-.cta .ext svg,.tlink--light .ext svg{stroke-width:2.4}
+/* 小さいピルの中は文字とアイコンの間を少し詰める */
+.cta .ext{margin-left:-1px}
 </style>
 </head>
 <body>
