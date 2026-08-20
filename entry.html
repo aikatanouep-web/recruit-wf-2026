@@ -86,9 +86,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-.header-nav{display:flex;gap:32px}
-.header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:4px 0;color:var(--ink);text-decoration:none}
-.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
+/* 語間はキャップハイトの約4倍。sales の欧文ナビと同じ間隔に揃える */
+.header-nav{display:flex;gap:40px}
+.header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
+.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
 
@@ -205,10 +206,10 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .rich h3:first-child{margin-top:0}
 .rich p{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 .rich ul{list-style:none;margin:0;padding:0}
-.rich li{position:relative;padding-left:22px;font-size:14px;letter-spacing:.1em;
+/* 文頭の記号は置かない。頭を本文と揃える */
+.rich li{font-size:14px;letter-spacing:.1em;
   line-height:2;color:#3a3a40}
-.rich li + li{margin-top:6px}
-.rich li::before{content:"";position:absolute;left:2px;top:.95em;width:8px;height:2px;background:var(--line2)}
+.rich li + li{margin-top:8px}
 .sec-label{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
   line-height:1.6;color:var(--caption);margin:0 0 14px}
 
@@ -247,6 +248,12 @@ body{padding-bottom:0}
   .jobbody{grid-template-columns:1fr;gap:48px}
   .jobside{position:static}
 }
+
+/* ラベルが 13px の場所ではアイコンが文字より大きく見えるので一段小さく。
+   線幅も一緒に上げて、実効の太さ(1.5px)は 18px 版とそろえる。 */
+.ext svg{stroke-width:2}
+.cta .ext,.tlink--light .ext{width:15px;height:15px}
+.cta .ext svg,.tlink--light .ext svg{stroke-width:2.4}
 </style>
 </head>
 <body>

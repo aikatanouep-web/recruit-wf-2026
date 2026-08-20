@@ -123,10 +123,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 .footer .logo{width:131px;height:16.87px}
-.header-nav{display:flex;gap:20px;margin-left:auto;padding-right:32px}
-.header-nav a{position:relative;font-family:var(--font-disp);font-weight:500;font-size:13px;letter-spacing:.1em;
-  line-height:1;padding:4px 0;color:var(--ink);text-decoration:none}
-.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
+/* 13px の欧文大文字＋字送り .1em。語の中がゆるいぶん、語間は
+   キャップハイトの約4倍(=40px)まで開けないと語の切れ目が読めない。
+   リンク群とボタン群は別のまとまりなので、そこは更に離す。 */
+.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px}
+/* 当たり判定を上下に広げる。margin で相殺するのでヘッダーの高さは変わらない。
+   下線は ::after の bottom で文字のすぐ下に戻す(padding 16 - 元の 4 = 12px)。 */
+.header-nav a{position:relative;padding:16px 0;margin:-12px 0;font-family:var(--font-disp);
+  font-weight:500;font-size:13px;letter-spacing:.1em;line-height:1;color:var(--ink);text-decoration:none}
+.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
 .header-cta{display:flex;gap:10px;flex:none}
@@ -168,29 +173,49 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .fmb-row.is-benefit .fmb-v{color:var(--ink);font-weight:700}
 
 /* 04 Career：枝分かれ */
-.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
-.branch-col{background:var(--tone);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:12px}
+.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:18px}
+/* ラベル→見出しは締めて一つの束に、見出し→項目は開けて別の束に見せる */
+.branch-col{background:var(--tone);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:0}
 .sec--tone .branch-col{background:var(--paper)}
-.branch-en{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;color:var(--caption)}
-.branch-col h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0}
-.branch-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.branch-col li{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);padding-left:14px;position:relative}
-.branch-col li::before{content:"";position:absolute;left:0;top:.85em;width:6px;height:1px;background:var(--line2)}
-.branch-head{display:flex;align-items:center;gap:16px;margin-top:24px}
-.branch-head .from{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.16em;
-  border:1px solid var(--line2);border-radius:999px;padding:8px 18px}
-.branch-head .rule{flex:1;height:1px;background:var(--line2)}
+.branch-en{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
+  line-height:1.6;color:var(--caption);margin:0 0 8px}
+.branch-col h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 18px}
+.branch-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+/* 文頭の記号は置かない。頭を見出しと揃えて、項目の切れ目は行間で見せる */
+.branch-col li{font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
+/* 「この先の選択肢」の起点。囲むとボタンに見えるので枠は持たせず、
+   いまどの職種の話をしているかをアイコンと文字だけで示す。 */
+.branch-head{display:flex;width:fit-content;align-items:center;gap:9px;margin:24px 0 0}
+.branch-head .from-ic{width:16px;height:16px;flex:none;color:var(--caption)}
+.branch-head .from-ic svg{width:100%;height:100%;display:block}
+.branch-head .from{font-family:var(--font-en);font-weight:700;font-size:13px;
+  letter-spacing:.16em;line-height:1.6;color:var(--ink)}
 .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:24px}
 .skill{border-top:1px solid var(--line);padding-top:16px}
 .skill h4{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0 0 6px}
 .skill p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* メンバー */
 .member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
-.member{display:flex;flex-direction:column;gap:14px}
+/* 画像 → 見出し → 人物 → 変化 → リンク。同じ間隔で並べると全部が
+   一つの塊に見えるので、束ごとに間隔と文字の強さを変える。 */
+.member{display:flex;flex-direction:column;gap:20px}
 .member .ph{aspect-ratio:4/3}
-.member dl{margin:0;display:grid;grid-template-columns:72px 1fr;gap:6px 12px;font-size:12px;line-height:1.8}
-.member dt{color:var(--caption);font-family:var(--font-en);font-size:11px;letter-spacing:.12em}
-.member dd{margin:0;color:#3a3a40}
+.m-body{display:flex;flex-direction:column}
+/* 一番強い段。ここだけ他より一回り大きくして主役にする */
+.m-title{font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.7;margin:0}
+/* 人物の束 */
+.m-name{font-family:var(--font-en);font-weight:700;font-size:14px;letter-spacing:.14em;
+  line-height:1.6;margin:18px 0 0}
+.m-meta{font-size:12px;letter-spacing:.08em;line-height:1.7;color:var(--caption);margin:5px 0 0}
+/* 変化の束。罫線ではなく面で囲って、カードの中で一段沈ませる */
+.m-change{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;
+  gap:16px;background:var(--tone);padding:16px 18px;margin-top:18px}
+.m-k{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.16em;
+  line-height:1.6;color:var(--caption);margin:0}
+.m-v{font-size:12px;letter-spacing:.06em;line-height:1.7;margin:5px 0 0}
+.m-arrow{display:block;width:16px;height:16px;flex:none;color:var(--caption)}
+.m-arrow svg{width:100%;height:100%;display:block}
+.m-more{margin-top:20px}
 
 /* 中間CTA */
 .midcta{background:var(--ink);color:var(--paper);padding:72px var(--gutter);display:flex;
@@ -263,6 +288,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .foot-legal{display:flex;align-items:baseline;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
 .f-copy{font-size:13px;letter-spacing:.1em;color:var(--caption)}
 .member dl dd.dd-en{font-family:var(--font-en);letter-spacing:.14em}
+
+/* ラベルが 13px の場所ではアイコンが文字より大きく見えるので一段小さく。
+   線幅も一緒に上げて、実効の太さ(1.5px)は 18px 版とそろえる。 */
+.ext svg{stroke-width:2}
+.cta .ext,.tlink--light .ext{width:15px;height:15px}
+.cta .ext svg,.tlink--light .ext svg{stroke-width:2.4}
 </style>
 </head>
 <body>
@@ -394,7 +425,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <div class="skill"><h4>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
     </div>
     <h3 class="h3" data-reveal style="margin-top:64px">この先の選択肢</h3>
-    <div class="branch-head" data-reveal><span class="from">Career Advisor</span><span class="rule"></span></div>
+    <p class="branch-head" data-reveal><span class="from-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="from">Career Advisor</span></p>
     <div class="branch" data-stagger data-observe>
       <div class="branch-col"><span class="branch-en">Player</span><h4>プレイヤーとして深める</h4>
         <ul>
@@ -421,19 +452,37 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <h3 class="h3" data-reveal style="margin-top:64px">活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
       <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">キャリアの変化を表す見出しが入ります</p>
-        <dl><dt>Name</dt><dd class="dd-en">Member A</dd><dt>Role</dt><dd>メンバー</dd><dt>Before</dt><dd>前職名が入ります</dd><dt>Joined</dt><dd>2020年入社</dd><dt>Now</dt><dd>現在の役割が入ります</dd></dl>
-        <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member A</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">キャリアの変化を表す見出しが入ります</p>
-        <dl><dt>Name</dt><dd class="dd-en">Member B</dd><dt>Role</dt><dd>メンバー</dd><dt>Before</dt><dd>前職名が入ります</dd><dt>Joined</dt><dd>2020年入社</dd><dt>Now</dt><dd>現在の役割が入ります</dd></dl>
-        <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member B</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <div><p style="font-weight:700;font-size:15px;line-height:1.7;margin:0">キャリアの変化を表す見出しが入ります</p>
-        <dl><dt>Name</dt><dd class="dd-en">Member C</dd><dt>Role</dt><dd>メンバー</dd><dt>Before</dt><dd>前職名が入ります</dd><dt>Joined</dt><dd>2020年入社</dd><dt>Now</dt><dd>現在の役割が入ります</dd></dl>
-        <div style="margin-top:12px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member C</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
     </div>
   </section>
@@ -476,27 +525,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="cont-grid" id="contgrid" data-stagger data-observe>
       <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Document</span><h3>Company Deck</h3><p>事業の全体像とこれから向かう先をまとめた資料。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Document</span><h3>Culture Deck</h3><p>組織の考え方と働き方をまとめた資料。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Interview</span><h3>社員インタビュー</h3><p>実際に働くメンバーの話。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Article</span><h3>note</h3><p>事業やカルチャーについての記事。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Movie</span><h3>動画コンテンツ</h3><p>仕事の様子や社内の雰囲気。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
       <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
         <div><span class="cont-label">Message</span><h3>代表メッセージ</h3><p>これから目指す方向について。</p>
-        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
     </div>
     <div class="cont-more"><span class="tlink" id="contmore"><span class="label">もっと見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></div>
