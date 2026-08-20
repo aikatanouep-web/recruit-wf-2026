@@ -14,7 +14,7 @@
 :root{
   --ink:#0d0d0e; --paper:#fbfbfb; --tone:#f4f4f4; --card:#ffffff;
   --caption:#606070; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
-  --fill:#e6e6e6; --fill2:#efefef;
+  --fill:#eaeaea; --fill2:#f1f1f1;
   --page:1440px; --pad:clamp(20px,9.3vw,134px);
   --gutter:max(var(--pad), calc((100% - var(--page)) / 2 + var(--pad)));
   --font-ja:YakuHanJP,"Noto Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
@@ -56,12 +56,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .head-block{display:block}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
-.ext{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;
+.ext{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
-.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--ink);
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--ink);
   border-radius:999px;padding:10px 24px;font-size:13px;letter-spacing:.1em;line-height:1;color:var(--ink);
   background:transparent;white-space:nowrap;cursor:pointer;text-decoration:none;
   transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
@@ -76,7 +76,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,251,251,.92);
   transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s}
+.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
+/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
+.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
 .site-header.is-scrolled{background:rgba(251,251,251,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
@@ -196,7 +198,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <a href="recruit.html">カルチャー</a>
       <a href="jobs.html">募集職種一覧</a>
       <a href="casual.html">カジュアル面談</a>
-      <a href="jobs.html">エントリー</a>
+      <a href="entry.html">エントリー</a>
     </nav>
   </div>
 </header>
@@ -211,7 +213,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="duo" style="margin-top:0">
       <div class="duo-text" data-reveal>
         <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-        <a class="cta primary" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="cta primary" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
       </div>
       <div class="duo-media" data-observe><div class="ph"><i>Image</i></div></div>
     </div>
@@ -231,24 +233,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="person-name">メンバー A</p>
         <p class="person-msg">一言メッセージが入ります。</p>
         <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         </div>
       </article>
       <article class="person"><div class="person-media"><div class="ph"><i>Image</i></div></div>
         <p class="person-name">メンバー B</p>
         <p class="person-msg">一言メッセージが入ります。</p>
         <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         </div>
       </article>
       <article class="person"><div class="person-media"><div class="ph"><i>Image</i></div></div>
         <p class="person-name">メンバー C</p>
         <p class="person-msg">一言メッセージが入ります。</p>
         <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         </div>
       </article>
     </div>
@@ -257,7 +259,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec sec--tone">
     <div class="head-block" data-reveal><h2 class="h2">申込・日程調整</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>Image</i></div></div>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   </section>
 
 
@@ -317,7 +319,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   var h=document.getElementById('hdr'); if(!h) return; var last=0;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    if(y>last&&y>240) h.classList.add('is-hidden'); else h.classList.remove('is-hidden');
+    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
+    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
+    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
     last=y;},{passive:true});
 })();
 </script>

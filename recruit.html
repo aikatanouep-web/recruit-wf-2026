@@ -13,7 +13,7 @@
 <style>:root{
   --ink:#0d0d0e; --paper:#fbfaf8; --stage:#e9e9e9; --tone:#f2f2f2; --card:#ffffff;
   --caption:#6b6b70; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
-  --fill:#d6d6d6; --fill2:#e4e4e4;
+  --fill:#eaeaea; --fill2:#f1f1f1;
   --page:1440px; --pad:clamp(20px,9.4vw,136px);
   /* 地色は画面端まで、中身は 1440 に収める。広い画面で
      左右に帯が残るのを避けるための余白。 */
@@ -56,7 +56,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ph i::before{content:"";display:block;width:32px;height:32px;background:currentColor;
   -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
-.ph--dark{background:#2a2a2e;color:rgba(255,255,255,.6)}
+.ph--dark{background:#232327;color:rgba(255,255,255,.6)}
 
 /* 見出し階層 h1 56 / h2 40 / h3 24 */
 .eyebrow{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.2em;line-height:1;color:var(--caption);margin:0}
@@ -66,7 +66,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
 
 /* More リンク */
-.more{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-en);font-weight:500;font-size:16px;
+.more{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-en);font-weight:500;font-size:16px;
   letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;cursor:pointer;flex:none}
 .more .circ{width:20px;height:20px;border-radius:50%;position:relative;flex:none;background:var(--ink);color:var(--paper);overflow:hidden}
 .more .circ svg{position:absolute;inset:0;margin:auto;width:6.51px;height:6px;transition:transform var(--dur-hover) var(--ease-out-expo)}
@@ -79,7 +79,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .more--ondark .circ{background:var(--paper);color:var(--ink)}
 /* 外部遷移は別窓アイコンだけで示す。黒丸の矢印と併記すると印が二重になる。
    色はリンクの文字と揃える（薄くすると別物の装飾に見える）。 */
-.ext{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;
+.ext{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
@@ -87,7 +87,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 追従ヘッダー */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
   transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s}
+.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
+/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
+.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
 .site-header.is-scrolled{background:rgba(251,250,248,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between}
@@ -135,10 +137,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   display:flex;flex-direction:column;justify-content:center;padding-left:var(--gutter)}
 .val-head{flex:none;margin-bottom:40px}
 .val-track{display:flex;gap:40px;will-change:transform}
-.vcard{flex:0 0 756px;background:var(--card);padding:64px 56px;display:flex;flex-direction:column;gap:48px}
+.vcard{flex:0 0 756px;background:var(--card);padding:56px;display:flex;flex-direction:column;gap:32px}
 .val-rail{margin-top:40px;width:calc(100% - var(--gutter))}
-.vcard-head{display:flex;align-items:center;gap:40px}
-.vno{font-family:var(--font-en);font-weight:300;font-size:88px;letter-spacing:.02em;line-height:1}
+.vcard-head{display:flex;align-items:center;gap:20px}
+/* ワイヤーの段階では番号を装飾にしない。順番が分かる最小限のラベルに留める。 */
+.vno{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;
+  line-height:1.6;color:var(--caption)}
 .vrule{width:2px;align-self:stretch;background:var(--ink);opacity:.85;border-radius:1px}
 .vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
 .ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
@@ -189,7 +193,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   background:var(--paper);color:var(--ink);border-radius:2px;font-weight:700;font-size:14px;letter-spacing:.06em;
   line-height:1;text-decoration:none;transition:transform .45s var(--ease-out-expo),background-color .45s var(--ease-out-expo)}
 .btn-entry:hover{transform:translateY(-2px);background:#fff}
-.gate-single{display:flex;flex-direction:column;align-items:center;gap:64px}
+/* 新卒側にも中途と同じ役割ラベルぶんの高さを持たせて、Entry の高さを揃える */
+.gate-cols--one{grid-template-columns:1fr;max-width:240px;margin-left:auto;margin-right:auto}
 
 /* 10 フッター */
 .footer{background:var(--tone);padding:96px var(--gutter) 40px}
@@ -197,7 +202,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .biglink{display:inline-flex;align-items:center;gap:24px;font-family:var(--font-en);font-weight:400;
   font-size:56px;letter-spacing:.02em;line-height:1.1;color:var(--ink);text-decoration:none;
   border-bottom:1px solid var(--ink);padding-bottom:12px}
-.biglink svg{width:34px;height:22px;transition:transform .55s var(--ease-out-expo)}
+.biglink svg{width:44px;height:28px;flex:none;transition:transform .55s var(--ease-out-expo)}
 @media (hover:hover){.biglink:hover svg{transform:translateX(8px)}}
 .biglink--sm{font-size:40px;border-bottom:none;padding-bottom:0}
 .foot-nav{display:flex;flex-wrap:wrap;gap:20px 40px}
@@ -237,7 +242,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <a href="#value">カルチャー</a>
       <a href="jobs.html">募集職種一覧</a>
       <a href="casual.html">カジュアル面談</a>
-      <a href="#entry">エントリー</a>
+      <a href="entry.html">エントリー</a>
     </nav>
   </div>
 </header>
@@ -298,32 +303,32 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">［氏名］</p>
-        <p class="mem-meta">［入社年］ | CA | ［役職］</p>
-        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+        <p class="mem-name">田中 太郎</p>
+        <p class="mem-meta">2020年入社 | CA | メンバー</p>
+        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">［氏名］</p>
-        <p class="mem-meta">［入社年］ | RA | ［役職］</p>
-        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+        <p class="mem-name">田中 太郎</p>
+        <p class="mem-meta">2020年入社 | RA | メンバー</p>
+        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">［氏名］</p>
-        <p class="mem-meta">［入社年］ | Engineer | ［役職］</p>
-        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+        <p class="mem-name">田中 太郎</p>
+        <p class="mem-meta">2020年入社 | Engineer | メンバー</p>
+        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">［氏名］</p>
-        <p class="mem-meta">［入社年］ | Designer | ［役職］</p>
-        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+        <p class="mem-name">田中 太郎</p>
+        <p class="mem-meta">2020年入社 | Designer | メンバー</p>
+        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">［氏名］</p>
-        <p class="mem-meta">［入社年］ | Sales | ［役職］</p>
-        <p class="mem-tx">［キャリアや仕事を一言で表す紹介文］</p>
+        <p class="mem-name">田中 太郎</p>
+        <p class="mem-meta">2020年入社 | Sales | メンバー</p>
+        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
     </div>
     <div class="progress"><div class="bar"></div></div>
@@ -332,11 +337,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <div class="casual" data-reveal id="casual">
     <h2>カジュアル面談</h2>
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
-    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   </div>
 
   <section class="sec" id="blog">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="blog-row" data-stagger data-observe>
       <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
@@ -355,13 +360,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <!-- ============ 09 採用の入口 ============ 新卒／中途をここで分岐させる -->
   <section class="gates" id="entry">
     <div class="gates-in">
-      <div class="gate gate-single" data-reveal>
-        <h2>新卒採用</h2>
-        <a class="btn-entry" href="v2.html">Entry</a>
+      <div class="gate" data-reveal>
+        <div class="gate-head"><h2>新卒採用</h2></div>
+        <div class="gate-cols gate-cols--one">
+          <div class="gate-col"><span class="gate-role" aria-hidden="true">&nbsp;</span>
+            <a class="btn-entry" href="v2.html">Entry</a></div>
+        </div>
       </div>
       <span class="gate-rule" aria-hidden="true"></span>
       <div class="gate" data-reveal data-delay="0.1">
-        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
         <div class="gate-cols">
           <div class="gate-col"><span class="gate-role">Sales</span><a class="btn-entry" href="sales.html">Entry</a></div>
           <div class="gate-col"><span class="gate-role">Engineer</span><a class="btn-entry" href="engineer.html">Entry</a></div>
@@ -373,13 +381,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <footer class="footer">
     <div class="foot-top">
-      <div data-reveal><a class="biglink" href="#">CONTACT US <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      <div data-reveal><a class="biglink" href="#">CONTACT US <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       <div class="foot-nav" data-reveal data-delay="0.08"><a href="#">ABOUT</a><a href="#">PRODUCTS</a><a href="#">COMPANY</a><a href="#">NEWS</a><a href="#">CAREERS</a></div>
     </div>
     <div class="foot-mid">
       <div class="foot-mid-l">
         <p class="foot-award">働きがいのある会社ランキング<br>中規模部門 上位ランクイン</p>
-        <a class="biglink biglink--sm" href="#">RECRUIT <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="biglink biglink--sm" href="#">RECRUIT <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <span class="foot-logo"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
       <g class="lg-mark">
@@ -438,7 +446,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   var h=document.getElementById('hdr'); if(!h) return; var last=0;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    if(y>last&&y>240) h.classList.add('is-hidden'); else h.classList.remove('is-hidden');
+    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
+    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
+    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
     last=y;},{passive:true});
 })();
 (function(){ /* 横送りトラック（バリュー／メンバー） */

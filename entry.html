@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=1440">
 <meta name="robots" content="noindex, nofollow">
-<title>クオレガ 募集職種一覧 ワイヤーフレーム</title>
+<title>クオレガ エントリー（求人詳細） ワイヤーフレーム</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
@@ -164,6 +164,87 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .f-col li a{color:var(--ink);text-decoration:none}
 .foot-legal{display:flex;align-items:baseline;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
 .f-copy{font-size:13px;letter-spacing:.1em;color:var(--caption)}
+table.spec{width:100%;border-collapse:collapse;font-size:14px;margin-top:20px}
+table.spec th,table.spec td{border:none;border-bottom:1px solid var(--line);padding:20px 0;vertical-align:top;text-align:left}
+table.spec tr:first-child th,table.spec tr:first-child td{border-top:1px solid var(--line)}
+table.spec th{width:220px;font-weight:400;font-size:13px;letter-spacing:.1em;color:var(--caption)}
+table.spec td{letter-spacing:.1em;line-height:2;color:#3a3a40}
+table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
+
+/* ============ エントリー（求人詳細）ページ ============
+   HERP の求人ページの情報設計を、既存WFのトークンに載せ替えたもの。
+   現行は「詳細は Wantedly」で外部に出てしまうので、詳細までは自社側で持ち、
+   最後の応募だけを HERP（別タブ）に渡す想定。 */
+
+/* 求人ヘッダー */
+.jobhead{padding:180px var(--gutter) 48px}
+.jobtags{display:flex;flex-wrap:wrap;gap:8px}
+.jobtag{border:1px solid var(--line);border-radius:999px;padding:7px 15px;
+  font-size:12px;letter-spacing:.1em;line-height:1;color:var(--caption)}
+.jobhead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.6;margin:24px 0 0;max-width:20em}
+.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:20px 0 0}
+.jobhead .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+
+/* 本文＋サイドの概要カード */
+.jobbody{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:72px;
+  padding:0 var(--gutter) 104px;align-items:start}
+.jobbody-main{min-width:0}
+.jobside{position:sticky;top:112px;background:var(--tone);padding:32px 32px 36px}
+.jobside dl{margin:0}
+.jobside dt{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.18em;
+  color:var(--caption);line-height:1.6}
+.jobside dd{margin:6px 0 0;font-size:14px;letter-spacing:.08em;line-height:1.9}
+.jobside .item + .item{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+.jobside .cta{width:100%;margin-top:28px}
+
+/* 記事本文 */
+.rich > * + *{margin-top:22px}
+.rich h3{font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.7;margin:56px 0 0}
+.rich h3:first-child{margin-top:0}
+.rich p{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
+.rich ul{list-style:none;margin:0;padding:0}
+.rich li{position:relative;padding-left:22px;font-size:14px;letter-spacing:.1em;
+  line-height:2;color:#3a3a40}
+.rich li + li{margin-top:6px}
+.rich li::before{content:"";position:absolute;left:2px;top:.95em;width:8px;height:2px;background:var(--line2)}
+.sec-label{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
+  line-height:1.6;color:var(--caption);margin:0 0 14px}
+
+/* 業務の流れ：番号は装飾せず、順番が分かるだけの大きさに留める */
+.steps{margin-top:24px;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;align-items:baseline;
+  padding:18px 0;border-bottom:1px solid var(--line)}
+.step-no{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.16em;
+  line-height:2;color:var(--caption)}
+.step-tx{font-size:14px;letter-spacing:.1em;line-height:2;margin:0}
+
+/* 関連リンク */
+.linklist{margin-top:24px;border-top:1px solid var(--line)}
+.linkrow{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:18px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);
+  transition:padding-left var(--dur-hover) var(--ease-out-expo)}
+@media (hover:hover){.linkrow:hover{padding-left:8px}}
+.linkrow-name{font-size:14px;letter-spacing:.1em;line-height:1.8}
+.linkrow-kind{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.16em;
+  color:var(--caption);flex:none}
+.linkrow .right{display:inline-flex;align-items:center;gap:14px;flex:none}
+
+/* 追従の応募バー。画面下に出しっぱなしにせず、本文に入ってから出す */
+.applybar{position:fixed;left:0;right:0;bottom:0;z-index:90;
+  background:rgba(13,13,14,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--paper);padding:16px var(--gutter);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  transform:translateY(101%);transition:transform .6s var(--ease-out-expo)}
+.applybar.is-on{transform:none}
+.applybar-name{font-size:14px;font-weight:700;letter-spacing:.08em;line-height:1.5}
+.applybar-meta{font-size:12px;letter-spacing:.1em;line-height:1.6;color:rgba(255,255,255,.62);margin:3px 0 0}
+.applybar .row{display:flex;gap:12px;flex:none}
+body{padding-bottom:0}
+
+@media (max-width:1180px){
+  .jobbody{grid-template-columns:1fr;gap:48px}
+  .jobside{position:static}
+}
 </style>
 </head>
 <body>
@@ -195,115 +276,163 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </div>
 </header>
 
+
 <div class="stage">
 
-  <section class="pagehead">
-    <h1 class="h1 line-reveal" data-observe><span class="line"><span>募集職種一覧</span></span></h1>
-    <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:24px;max-width:720px">新卒採用と中途採用で、それぞれ募集中の職種を掲載しています。求人の詳細と応募は各職種のページからお進みください。</p>
-  </section>
-
-  <!-- ============ 求人一覧（新卒／中途のタブ） ============ -->
-  <section class="sec" style="padding-top:0">
-    <div class="tabs" role="tablist" data-reveal>
-      <button class="tab is-on" role="tab" aria-selected="true" data-tab="new">新卒</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="mid">中途</button>
+  <!-- ============ 求人ヘッダー ============ -->
+  <section class="jobhead">
+    <div class="jobtags" data-reveal>
+      <span class="jobtag">中途採用</span>
+      <span class="jobtag">キャリアアドバイザー</span>
+      <span class="jobtag">東京・新橋</span>
     </div>
-    <div class="joblist is-on" data-list="new" data-stagger data-observe>
-        <article class="jobrow">
-          <span class="jobrow-name">CA（キャリアアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">エンジニア</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">デザイナー</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-    </div>
-    <div class="joblist" data-list="mid" data-stagger data-observe>
-        <article class="jobrow">
-          <span class="jobrow-name">CA（キャリアアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">エンジニア</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">デザイナー</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-          </div>
-        </article>
+    <h1 class="h1 line-reveal" data-observe data-delay="0.08"><span class="line"><span>一人の転職に、最後まで付き合うキャリアアドバイザー</span></span></h1>
+    <p class="jobhead-sub" data-reveal data-delay="0.16">株式会社クオレガ ／ 人材紹介事業部</p>
+    <div class="row" data-reveal data-delay="0.24">
+      <a class="cta primary lg" href="#" target="_blank" rel="noopener">この求人に応募する<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <a class="cta lg" href="casual.html">まずはカジュアル面談</a>
     </div>
   </section>
 
-  <section class="sec sec--tone">
-    <div class="head-block" data-reveal><h2 class="h2">選考フロー</h2></div>
-    <div class="flow-row" data-stagger data-observe>
-      <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>Image</i></div></div><p class="flow-cap">新卒採用の選考フロー</p></div>
-      <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>Image</i></div></div><p class="flow-cap">中途採用の選考フロー</p></div>
+  <!-- ============ 本文 ＋ 概要カード ============ -->
+  <div class="jobbody">
+    <div class="jobbody-main rich">
+
+      <div data-reveal>
+        <p class="sec-label">Overview</p>
+        <h3 style="margin-top:0">仕事概要</h3>
+      </div>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>キャリアアドバイザーの役割</h3>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>業務全体の流れ</h3>
+      <p data-reveal>お一人の求職者さまが入社されるまでに、担当者が関わる業務の流れです。</p>
+      <div class="steps" data-stagger data-observe>
+        <div class="step"><span class="step-no">01</span><p class="step-tx">初回面談</p></div>
+        <div class="step"><span class="step-no">02</span><p class="step-tx">求人のご提案</p></div>
+        <div class="step"><span class="step-no">03</span><p class="step-tx">企業へのご推薦</p></div>
+        <div class="step"><span class="step-no">04</span><p class="step-tx">日程調整・選考対策</p></div>
+        <div class="step"><span class="step-no">05</span><p class="step-tx">入社までのフォロー</p></div>
+      </div>
+
+      <h3 data-reveal>この仕事の魅力</h3>
+      <ul data-stagger data-observe>
+        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+      </ul>
+
+      <h3 data-reveal>キャリアパス</h3>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>必須スキル</h3>
+      <ul data-stagger data-observe>
+        <li>テキストが入ります。</li>
+        <li>テキストが入ります。</li>
+        <li>テキストが入ります。</li>
+      </ul>
+
+      <h3 data-reveal>求める人物像</h3>
+      <ul data-stagger data-observe>
+        <li>テキストが入ります。</li>
+        <li>テキストが入ります。</li>
+        <li>テキストが入ります。</li>
+      </ul>
+
+      <h3 data-reveal>仕事の雰囲気が分かる記事・動画</h3>
+      <div class="linklist" data-stagger data-observe>
+        <a class="linkrow" href="#" target="_blank" rel="noopener">
+          <span class="linkrow-name">キャリアアドバイザー特設ページ</span>
+          <span class="right"><span class="linkrow-kind">Site</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></a>
+        <a class="linkrow" href="#" target="_blank" rel="noopener">
+          <span class="linkrow-name">社員インタビュー</span>
+          <span class="right"><span class="linkrow-kind">Note</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></a>
+        <a class="linkrow" href="#" target="_blank" rel="noopener">
+          <span class="linkrow-name">会社紹介資料</span>
+          <span class="right"><span class="linkrow-kind">Deck</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></a>
+      </div>
+
+      <!-- ============ 応募概要 ============ -->
+      <div data-reveal style="margin-top:72px">
+        <p class="sec-label">Requirements</p>
+        <h3 style="margin-top:0">応募概要</h3>
+      </div>
+      <table class="spec">
+        <tr><th>給与</th><td>月給 ◯◯◯,◯◯◯円 〜 ◯◯◯,◯◯◯円<br><span class="note">※固定残業代◯◯時間分（◯◯,◯◯◯円）を含む。超過分は別途支給<br>※ご経験・スキルを踏まえ、当社規定に基づき決定します</span></td></tr>
+        <tr><th>雇用形態</th><td>正社員<br><span class="note">※試用期間3ヶ月（期間中の待遇に変更はありません）</span></td></tr>
+        <tr><th>勤務地</th><td>東京都港区新橋1-10-6 新橋M-SQUARE 11階</td></tr>
+        <tr><th>勤務時間</th><td>9:00〜18:00<br><span class="note">※早番、遅番シフトが発生する月もあります</span></td></tr>
+        <tr><th>休日・休暇</th><td>年間休日120日／週休2日制（土日）、祝日<br><span class="note">休暇制度：有給休暇・GW休暇・夏季休暇・年末年始休暇・慶弔休暇・産前・産後休暇・育児休暇・永年勤続表彰休暇・ファミリー制度休暇</span></td></tr>
+        <tr><th>各種保険</th><td>社会保険完備（雇用・労災・健康・厚生年金）</td></tr>
+        <tr><th>各種待遇</th><td>昇給年4回（3ヶ月ごとの査定）<br>業績賞与年2回（夏・冬）</td></tr>
+      </table>
+
+      <!-- ============ 企業情報 ============ -->
+      <div data-reveal style="margin-top:72px">
+        <p class="sec-label">Company</p>
+        <h3 style="margin-top:0">企業情報</h3>
+      </div>
+      <table class="spec">
+        <tr><th>企業名</th><td>株式会社クオレガ</td></tr>
+        <tr><th>設立</th><td>◯◯◯◯年◯月</td></tr>
+        <tr><th>本社所在地</th><td>〒105-0004 東京都港区新橋1-10-6 新橋M-SQUARE 11階</td></tr>
+        <tr><th>資本金</th><td>◯,◯◯◯万円</td></tr>
+        <tr><th>従業員数</th><td>◯◯◯名</td></tr>
+        <tr><th>事業内容</th><td>人材紹介事業／求人メディア事業／ITソリューション事業</td></tr>
+      </table>
+
+      <!-- ============ 選考フロー ============ -->
+      <div data-reveal style="margin-top:72px">
+        <p class="sec-label">Process</p>
+        <h3 style="margin-top:0">選考の流れ</h3>
+      </div>
+      <div class="steps" data-stagger data-observe>
+        <div class="step"><span class="step-no">01</span><p class="step-tx">エントリー</p></div>
+        <div class="step"><span class="step-no">02</span><p class="step-tx">書類選考</p></div>
+        <div class="step"><span class="step-no">03</span><p class="step-tx">面接（1〜3回）</p></div>
+        <div class="step"><span class="step-no">04</span><p class="step-tx">内定</p></div>
+      </div>
+      <p data-reveal style="margin-top:24px">各ステップの日程はご都合に合わせて調整します。選考の途中でも、気になることがあれば人事までお気軽にご相談ください。</p>
+
+      <!-- ============ FAQ ============ -->
+      <div data-reveal style="margin-top:72px">
+        <p class="sec-label">FAQ</p>
+        <h3 style="margin-top:0">応募にあたって、よくある質問</h3>
+      </div>
+      <div class="faq">
+        <details class="faq-item"><summary class="faq-q">選考にはどれくらい時間がかかりますか？</summary>
+          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
+        <details class="faq-item"><summary class="faq-q">現職中でも応募できますか？</summary>
+          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
+        <details class="faq-item"><summary class="faq-q">カジュアル面談だけでも参加できますか？</summary>
+          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
+      </div>
     </div>
-  </section>
 
-  <section class="sec">
-    <div class="head-block" data-reveal><h2 class="h2">よくある質問</h2></div>
-    <div class="faq">
-      <details class="faq-item"><summary class="faq-q">選考にはどれくらい時間がかかりますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-      <details class="faq-item"><summary class="faq-q">面接は何回ありますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-      <details class="faq-item"><summary class="faq-q">カジュアル面談だけでも参加できますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-    </div>
-  </section>
+    <!-- ============ サイドの概要カード ============ -->
+    <aside class="jobside" data-reveal data-delay="0.12">
+      <div class="item"><dl><dt>Employment</dt><dd>正社員（試用期間3ヶ月）</dd></dl></div>
+      <div class="item"><dl><dt>Salary</dt><dd>月給 ◯◯◯,◯◯◯円 〜</dd></dl></div>
+      <div class="item"><dl><dt>Location</dt><dd>東京都港区新橋1-10-6<br>新橋M-SQUARE 11階</dd></dl></div>
+      <div class="item"><dl><dt>Hours</dt><dd>9:00〜18:00</dd></dl></div>
+      <div class="item"><dl><dt>Holidays</dt><dd>年間休日120日／週休2日制（土日）、祝日</dd></dl></div>
+      <a class="cta primary" href="#" target="_blank" rel="noopener">この求人に応募する<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    </aside>
+  </div>
 
-  <section class="sec sec--tone">
-    <div class="head-block" data-reveal><h2 class="h2">ダイレクト入社ボーナス</h2></div>
-    <div class="bonus" data-reveal data-delay="0.08"><div class="ph"><i>Image</i></div></div>
-  </section>
-
+  <!-- ============ 迷っている方へ ============ -->
   <section class="undecided">
     <div>
       <h2>迷っている方へ</h2>
       <p>まずは気軽にお話ししませんか？ 応募を決めていなくても構いません。</p>
     </div>
-    <div class="row"><span class="cta cta--ondark lg">カジュアル面談を申し込む</span></div>
+    <div class="row">
+      <a class="cta cta--ondark lg" href="casual.html">カジュアル面談を申し込む</a>
+      <a class="cta cta--ondark primary lg" href="jobs.html">ほかの職種を見る</a>
+    </div>
   </section>
 
   <footer class="footer">
@@ -333,7 +462,20 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="foot-legal"><span></span><p class="f-copy">© Cuolega, Inc.</p></div>
   </footer>
 
+
 </div><!-- /stage -->
+
+<!-- 追従の応募バー -->
+<div class="applybar" id="applybar">
+  <div>
+    <p class="applybar-name">一人の転職に、最後まで付き合うキャリアアドバイザー</p>
+    <p class="applybar-meta">中途採用 ／ キャリアアドバイザー ／ 東京・新橋</p>
+  </div>
+  <div class="row">
+    <a class="cta cta--ondark" href="casual.html">カジュアル面談</a>
+    <a class="cta cta--ondark primary" href="#" target="_blank" rel="noopener">応募する<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+  </div>
+</div>
 
 <script>
 (function(){ /* reveal（clip-path 対策の矩形判定つき） */
@@ -397,6 +539,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       } else { d.open=true; requestAnimationFrame(function(){d.classList.add('is-open');}); }
     });
   });
+})();
+
+(function(){ /* 追従の応募バー：ヘッダーのボタンを見送ってから出す */
+  var bar=document.getElementById('applybar'), head=document.querySelector('.jobhead .row');
+  if(!bar||!head) return;
+  function upd(){
+    var passed=head.getBoundingClientRect().bottom<0;
+    var atFoot=document.querySelector('.undecided').getBoundingClientRect().top<innerHeight;
+    bar.classList.toggle('is-on',passed&&!atFoot);
+  }
+  var t=false;
+  addEventListener('scroll',function(){if(t)return;t=true;requestAnimationFrame(function(){t=false;upd();});},{passive:true});
+  addEventListener('resize',upd); upd();
 })();
 </script>
 </body>
