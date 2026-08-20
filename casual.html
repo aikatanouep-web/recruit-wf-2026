@@ -104,24 +104,26 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 
 /* FAQ */
-.faq{margin-top:40px}
-.faq-item{border-top:1px solid var(--line)}
-.faq-item:last-child{border-bottom:1px solid var(--line)}
-.faq-q{list-style:none;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;
-  padding:24px 0;font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.7;
-  transition:padding-left var(--dur-hover) var(--ease-out-expo)}
-@media (hover:hover){.faq-q:hover{padding-left:8px}}
+/* FAQ。罫線は項目の下だけに絞り、見出しの直下に線が来ないようにする。
+   ＋は 1px のヘアラインをやめ、アイコン類と同じ 1.5px に。開いたら縦棒だけが
+   消えて − になる。行長は 900px で止めて、＋が文末から離れすぎないようにする。 */
+.faq{margin-top:36px;max-width:760px}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{list-style:none;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;
+  gap:40px;padding:24px 0;font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1.8;
+  transition:opacity var(--dur-hover) var(--ease-out-expo)}
 .faq-q::-webkit-details-marker{display:none}
-.faq-q::after{content:"";width:12px;height:12px;position:relative;flex:0 0 12px;margin-top:8px;
-  background:linear-gradient(currentColor,currentColor) center/12px 1px no-repeat,
-             linear-gradient(currentColor,currentColor) center/1px 12px no-repeat;
-  transition:background-size .55s var(--ease-out-expo)}
-.faq-item.is-open > .faq-q::after{background-size:12px 1px,1px 0}
+.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:7px;opacity:.5;
+  background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
+             linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
+  transition:background-size .5s var(--ease-out-expo),opacity .4s var(--ease-out-expo)}
+.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0;opacity:1}
+@media (hover:hover){.faq-q:hover::after{opacity:1}}
 .faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease-out-expo)}
 .faq-item.is-open .faq-wrap{grid-template-rows:1fr}
 .faq-a{overflow:hidden;min-height:0;opacity:0;transition:opacity .45s var(--ease-out-expo)}
 .faq-item.is-open .faq-a{opacity:1;transition-delay:.1s}
-.faq-a p{font-size:13px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0;padding:0 40px 24px 0}
+.faq-a p{font-size:14px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0;padding:0 54px 28px 0}
 
 
 /* 迷っている方へ */
