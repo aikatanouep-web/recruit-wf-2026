@@ -247,7 +247,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cont h3{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:2px 0 0}
 .cont p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 .cont.is-more{display:none}
-.cont-more{display:flex;justify-content:center;margin-top:32px}
+/* カード内の「詳しく見る」と近すぎたので間隔を広げる。
+   ボタン自体は主役ではないので、小さな英字＋シェブロンに留める。 */
+.cont-more{display:flex;justify-content:center;margin-top:76px}
+.morebtn{display:inline-flex;align-items:center;gap:7px;appearance:none;background:none;border:0;
+  cursor:pointer;padding:8px 4px;font-family:var(--font-en);font-weight:700;font-size:13px;
+  letter-spacing:.14em;line-height:1;color:var(--ink)}
+.morebtn .chev{width:14px;height:14px;display:block;
+  transition:transform .45s var(--ease-out-expo)}
+.morebtn .chev svg{width:100%;height:100%;display:block;stroke-width:1.5}
+.morebtn .chev svg *{vector-effect:non-scaling-stroke}
+.morebtn[aria-expanded="true"] .chev{transform:rotate(180deg)}
 .cont-grid.is-open .cont.is-more{display:flex}
 
 /* 09 FAQ */
@@ -262,9 +272,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* カテゴリ。設問より一段大きく太くして、上に十分な間隔を取る */
 .faq-cat + .faq-cat{margin-top:72px}
-.faq-cat-en{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
-  line-height:1.6;color:var(--caption);margin:0 0 6px}
-.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 8px}
+.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 12px}
 
 /* 設問行。行全体がボタン。ホバーの下地は左右に16px はみ出させて、
    文字の頭は右カラムの左端に揃えたままにする。 */
@@ -281,11 +289,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-q-tx{min-width:0}
 
 /* ＋／− 。開くと縦棒だけが消える */
-.faq-mark{position:relative;width:22px;height:22px;flex:none;color:#3a3a40}
+.faq-mark{position:relative;width:16px;height:16px;flex:none;color:#3a3a40}
 .faq-mark::before,.faq-mark::after{content:"";position:absolute;left:50%;top:50%;
   background:currentColor;border-radius:1px;transform:translate(-50%,-50%)}
-.faq-mark::before{width:22px;height:2px}
-.faq-mark::after{width:2px;height:22px;transition:height .24s var(--ease-out-expo)}
+.faq-mark::before{width:16px;height:1.5px}
+.faq-mark::after{width:1.5px;height:16px;transition:height .24s var(--ease-out-expo)}
 .faq-item.is-open .faq-mark::after{height:0}
 
 .faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .26s var(--ease-out-expo)}
@@ -306,9 +314,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .faq-cat + .faq-cat{margin-top:52px}
   .faq-cat-ttl{font-size:19px}
   .faq-q{font-size:15px;min-height:68px;gap:20px}
-  .faq-mark{width:20px;height:20px}
-  .faq-mark::before{width:20px}
-  .faq-mark::after{height:20px}
+  .faq-mark{width:15px;height:15px}
+  .faq-mark::before{width:15px}
+  .faq-mark::after{height:15px}
   .faq-a > div{padding:0 0 24px}
 }
 
@@ -587,7 +595,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
     </div>
-    <div class="cont-more"><span class="tlink" id="contmore"><span class="label">もっと見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></div>
+        <div class="cont-more"><button class="morebtn" type="button" id="contmore" aria-expanded="false"><span class="label">More</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></div>
   </section>
 
   <!-- ============ 08 FAQ ============ 聞きづらい質問に正面から。答えが無いものは推測で埋めない -->
@@ -601,7 +609,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <!-- 右：カテゴリと設問 -->
       <div class="faq-main">
         <div class="faq-cat">
-          <p class="faq-cat-en">Job</p>
           <h3 class="faq-cat-ttl" data-reveal>仕事内容</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q1" aria-expanded="false" aria-controls="faq-a1">
@@ -624,7 +631,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Goal</p>
           <h3 class="faq-cat-ttl" data-reveal>成果・目標</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q3" aria-expanded="false" aria-controls="faq-a3">
@@ -646,7 +652,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Reward</p>
           <h3 class="faq-cat-ttl" data-reveal>評価・報酬</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q5" aria-expanded="false" aria-controls="faq-a5">
@@ -669,7 +674,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Support</p>
           <h3 class="faq-cat-ttl" data-reveal>教育・サポート</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q7" aria-expanded="false" aria-controls="faq-a7">
@@ -701,7 +705,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Career</p>
           <h3 class="faq-cat-ttl" data-reveal>キャリアパス</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q10" aria-expanded="false" aria-controls="faq-a10">
@@ -724,7 +727,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Workstyle</p>
           <h3 class="faq-cat-ttl" data-reveal>働き方</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q12" aria-expanded="false" aria-controls="faq-a12">
@@ -747,7 +749,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Culture</p>
           <h3 class="faq-cat-ttl" data-reveal>組織・カルチャー</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q14" aria-expanded="false" aria-controls="faq-a14">
@@ -769,7 +770,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <p class="faq-cat-en">Process</p>
           <h3 class="faq-cat-ttl" data-reveal>応募・選考</h3>
           <div class="faq-item">
             <button class="faq-q" type="button" id="faq-q16" aria-expanded="false" aria-controls="faq-a16">
@@ -810,7 +810,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <span class="cta cta--ondark lg">カジュアル面談を申し込む</span>
       <span class="cta cta--ondark primary lg">キャリアアドバイザー職に応募する</span>
     </div>
-    <p class="note">応募は中途採用の応募ページへ遷移します。</p>
   </section>
 
   <footer class="footer">
@@ -896,7 +895,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   if(!b||!g) return;
   b.addEventListener('click',function(){
     var open=g.classList.toggle('is-open');
-    b.querySelector('.label').textContent = open ? '閉じる' : 'もっと見る';
+    b.setAttribute('aria-expanded',open?'true':'false');
+    b.querySelector('.label').textContent = open ? 'Close' : 'More';
   });
 })();
 </script>
