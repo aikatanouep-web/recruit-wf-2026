@@ -54,8 +54,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 文字だけだと素っ気ないので画像を表す絵と組みにする。
    currentColor を敷いてマスクで抜くので、黒地でも白で出る。 */
 .ph i::before{content:"";display:block;width:32px;height:32px;background:currentColor;
-  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
-  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2718%27%20height%3D%2718%27%20rx%3D%272%27%20ry%3D%272%27%2F%3E%3Ccircle%20cx%3D%278.5%27%20cy%3D%278.5%27%20r%3D%271.5%27%2F%3E%3Cpolyline%20points%3D%2721%2015%2016%2010%205%2021%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2718%27%20height%3D%2718%27%20rx%3D%272%27%20ry%3D%272%27%2F%3E%3Ccircle%20cx%3D%278.5%27%20cy%3D%278.5%27%20r%3D%271.5%27%2F%3E%3Cpolyline%20points%3D%2721%2015%2016%2010%205%2021%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 .ph--dark{background:#232327;color:rgba(255,255,255,.6)}
 
 /* 見出し階層 h1 56 / h2 40 / h3 24 */
@@ -79,7 +79,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .more--ondark .circ{background:var(--paper);color:var(--ink)}
 /* 外部遷移は別窓アイコンだけで示す。黒丸の矢印と併記すると印が二重になる。
    色はリンクの文字と揃える（薄くすると別物の装飾に見える）。 */
-.ext{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;flex:none;
+/* 別窓アイコン：Figma「Base icons」の external-link（24×24 / stroke 2）をそのまま使う。
+   文字サイズが 13〜16px と混在するので、em ではなく実寸で固定して線の太さを揃える */
+.ext{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
@@ -161,7 +163,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mem-track::-webkit-scrollbar{display:none}
 .mem{flex:0 0 268px;scroll-snap-align:start;display:flex;flex-direction:column;gap:14px}
 .mem .ph{aspect-ratio:2/1}
-.mem-name{font-weight:700;font-size:15px;letter-spacing:.06em;line-height:1.5;margin:0}
+/* ダミー名。実名を入れると確定情報に見えるので、英字書体の Member A〜E で通す */
+.mem-name{font-family:var(--font-en);font-weight:700;font-size:15px;letter-spacing:.14em;
+  line-height:1.5;margin:0}
 .mem-meta{font-family:var(--font-en);font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin:0}
 .mem-tx{font-size:12px;letter-spacing:.04em;line-height:1.9;color:#3a3a40;margin:0}
 
@@ -303,30 +307,30 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">田中 太郎</p>
+        <p class="mem-name">Member A</p>
         <p class="mem-meta">2020年入社 | CA | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">田中 太郎</p>
+        <p class="mem-name">Member B</p>
         <p class="mem-meta">2020年入社 | RA | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">田中 太郎</p>
+        <p class="mem-name">Member C</p>
         <p class="mem-meta">2020年入社 | Engineer | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">田中 太郎</p>
+        <p class="mem-name">Member D</p>
         <p class="mem-meta">2020年入社 | Designer | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
-        <p class="mem-name">田中 太郎</p>
+        <p class="mem-name">Member E</p>
         <p class="mem-meta">2020年入社 | Sales | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
@@ -337,11 +341,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <div class="casual" data-reveal id="casual">
     <h2>カジュアル面談</h2>
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
-    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </div>
 
   <section class="sec" id="blog">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="blog-row" data-stagger data-observe>
       <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
@@ -369,7 +373,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <span class="gate-rule" aria-hidden="true"></span>
       <div class="gate" data-reveal data-delay="0.1">
-        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
         <div class="gate-cols">
           <div class="gate-col"><span class="gate-role">Sales</span><a class="btn-entry" href="sales.html">Entry</a></div>
           <div class="gate-col"><span class="gate-role">Engineer</span><a class="btn-entry" href="engineer.html">Entry</a></div>

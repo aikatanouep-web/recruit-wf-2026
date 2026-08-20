@@ -48,15 +48,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 文字だけだと素っ気ないので画像を表す絵と組みにする。
    currentColor を敷いてマスクで抜くので、黒地でも白で出る。 */
 .ph i::before{content:"";display:block;width:32px;height:32px;background:currentColor;
-  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
-  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272.6%27%20y%3D%274.4%27%20width%3D%2718.8%27%20height%3D%2715.2%27%20rx%3D%272.2%27%2F%3E%3Ccircle%20cx%3D%278.6%27%20cy%3D%279.8%27%20r%3D%271.7%27%2F%3E%3Cpath%20d%3D%27M3.4%2016.8l4.8-4.3%203.9%203.4%203.4-2.9%205.1%204.5%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2718%27%20height%3D%2718%27%20rx%3D%272%27%20ry%3D%272%27%2F%3E%3Ccircle%20cx%3D%278.5%27%20cy%3D%278.5%27%20r%3D%271.5%27%2F%3E%3Cpolyline%20points%3D%2721%2015%2016%2010%205%2021%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2718%27%20height%3D%2718%27%20rx%3D%272%27%20ry%3D%272%27%2F%3E%3Ccircle%20cx%3D%278.5%27%20cy%3D%278.5%27%20r%3D%271.5%27%2F%3E%3Cpolyline%20points%3D%2721%2015%2016%2010%205%2021%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
 .head-block{display:block}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
-.ext{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;flex:none;
+/* 別窓アイコン：Figma「Base icons」の external-link（24×24 / stroke 2）をそのまま使う。
+   文字サイズが 13〜16px と混在するので、em ではなく実寸で固定して線の太さを揃える */
+.ext{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
@@ -236,13 +238,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <article class="thumb"><div class="ph"><i>Image</i></div><p>メンバー A の更新記事</p></article>
       <article class="thumb"><div class="ph"><i>Image</i></div><p>メンバー B の更新記事</p></article>
     </div>
-    <a class="cta" href="#" target="_blank" rel="noopener" data-reveal>noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="cta" href="#" target="_blank" rel="noopener" data-reveal>noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 
   <section class="sec">
     <div class="head-block" data-reveal><h2 class="h2">募集要項</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>Image</i></div></div>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9.6 6.9v3.1H2V2.4h3.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 1.9h2.9v2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1 1.9 5.9 6.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 
 
