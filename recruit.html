@@ -79,8 +79,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    どの大きさでも実効 1.5px になるようにする。 */
 .ext{display:inline-flex;align-items:center;justify-content:center;width:1.08em;height:1.08em;flex:none;
   color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
-.ext svg{width:100%;height:100%;display:block;stroke-width:1.5}
+.ext svg{width:100%;height:100%;display:block;stroke-width:2}
 .ext svg *{vector-effect:non-scaling-stroke}
+/* サイト内へ進むリンクの矢印。別窓アイコンと同じ仕組みで、
+   寸法はラベル追従・線幅は non-scaling-stroke で固定する */
+.arw{display:inline-flex;align-items:center;justify-content:center;width:1.08em;height:1.08em;flex:none;
+  color:currentColor;transition:transform var(--dur-hover) var(--ease-out-expo)}
+.arw svg{width:100%;height:100%;display:block;stroke-width:2}
+.arw svg *{vector-effect:non-scaling-stroke}
+@media (hover:hover){a:hover .arw{transform:translateX(3px);transition-duration:.4s}}
+
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
 /* 追従ヘッダー */
@@ -118,7 +126,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 02 Mission,Value（テキストと画像を交互に） */
 .sec{padding:120px var(--gutter)}
-.mv-row{display:grid;grid-template-columns:1fr 1fr;gap:0 84px;align-items:center}
+/* 中央揃えだと、隣の正方形画像(543px)の高さぶん見出しが下がって
+   Mission,Value との間に大きな空きができるので、頭を揃える */
+.mv-row{display:grid;grid-template-columns:1fr 1fr;gap:0 84px;align-items:start}
 .mv-row + .mv-row{margin-top:120px}
 .mv-row.is-flip .mv-text{order:2}
 .mv-media{aspect-ratio:1/1}
@@ -139,11 +149,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .val-track{display:flex;gap:40px;will-change:transform}
 .vcard{flex:0 0 756px;background:var(--card);padding:56px;display:flex;flex-direction:column;gap:32px}
 .val-rail{margin-top:40px;width:calc(100% - var(--gutter))}
-.vcard-head{display:flex;align-items:center;gap:20px}
+.vcard-head{display:flex;align-items:center;gap:40px}
 /* ワイヤーの段階では番号を装飾にしない。順番が分かる最小限のラベルに留める。 */
-.vno{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;
-  line-height:1.6;color:var(--caption)}
-.vrule{width:2px;align-self:stretch;background:var(--ink);opacity:.85;border-radius:1px}
+.vno{font-family:var(--font-en);font-weight:300;font-size:88px;letter-spacing:.02em;line-height:1}
+.vrule{width:1px;align-self:stretch;background:var(--line2)}
 .vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
 .ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
 .vtx{font-size:14px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
@@ -183,20 +192,49 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .entry-lead .h2{font-size:44px;letter-spacing:.06em;margin-top:16px}
 
 /* 09 採用の入口（黒地） */
+/* ============ 採用導線 ============
+   左右で「区分の見出し → 補足 → 職種／CTA」の3段に揃える。
+   白ベタのボタンを横並びにすると、そこだけ強く見えて職種名との対応も読めないので、
+   細い罫線で区切った行にして、職種名とCTAを同じ行に置く。 */
 .gates{background:var(--ink);color:var(--paper);padding:96px var(--gutter)}
-.gates-in{display:grid;grid-template-columns:1fr 2px 2fr;gap:0 72px;align-items:start}
-.gate-rule{background:rgba(255,255,255,.45);align-self:stretch}
-.gate h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0;text-align:center}
-.gate-head{display:flex;align-items:center;justify-content:center;gap:24px}
-.gate-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
-.gate-col{display:flex;flex-direction:column;align-items:center;gap:20px}
-.gate-role{font-family:var(--font-en);font-size:14px;letter-spacing:.1em;color:rgba(255,255,255,.85)}
-.btn-entry{display:inline-flex;align-items:center;justify-content:center;min-width:156px;padding:14px 24px;
-  background:var(--paper);color:var(--ink);border-radius:2px;font-weight:700;font-size:14px;letter-spacing:.06em;
-  line-height:1;text-decoration:none;transition:transform .45s var(--ease-out-expo),background-color .45s var(--ease-out-expo)}
-.btn-entry:hover{transform:translateY(-2px);background:#fff}
-/* 新卒側にも中途と同じ役割ラベルぶんの高さを持たせて、Entry の高さを揃える */
-.gate-cols--one{grid-template-columns:1fr;max-width:240px;margin-left:auto;margin-right:auto}
+.gates-in{display:grid;grid-template-columns:1fr 1px 1.35fr;gap:0 72px;align-items:start}
+.gate-rule{background:rgba(255,255,255,.22);align-self:stretch}
+
+/* 見出しの行。左に区分名、右に一覧リンク。同じ要素に見えないよう間を空ける */
+.gate-head{display:flex;align-items:baseline;justify-content:space-between;gap:48px;
+  min-height:46px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.22)}
+.gate h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0}
+.gate-all{display:inline-flex;align-items:center;gap:8px;flex:none;
+  font-size:13px;letter-spacing:.08em;line-height:1.6;color:rgba(255,255,255,.82);
+  text-decoration:none;transition:color .4s var(--ease-out-expo)}
+.gate-all:hover{color:var(--paper)}
+.gate-note{font-size:13px;letter-spacing:.06em;line-height:2;color:rgba(255,255,255,.6);
+  margin:22px 0 0;min-height:52px}
+
+/* 職種の行。行全体がリンク */
+.gate-list{margin-top:14px}
+.gate-row{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  min-height:76px;padding:0 4px;border-bottom:1px solid rgba(255,255,255,.14);
+  color:var(--paper);text-decoration:none;
+  transition:background-color .3s var(--ease-out-expo),padding-left .5s var(--ease-out-expo)}
+.gate-row:first-child{border-top:1px solid rgba(255,255,255,.14)}
+@media (hover:hover){.gate-row:hover{background:rgba(255,255,255,.05);padding-left:12px}}
+.gate-role{font-family:var(--font-en);font-weight:700;font-size:18px;letter-spacing:.08em;
+  line-height:1.6;color:var(--paper)}
+.gate-role--ja{font-family:var(--font-ja);font-size:16px;letter-spacing:.06em}
+.gate-cta{display:inline-flex;align-items:center;gap:9px;flex:none;
+  font-size:13px;letter-spacing:.08em;line-height:1.6;color:rgba(255,255,255,.82)}
+@media (hover:hover){.gate-row:hover .gate-cta{color:var(--paper)}}
+
+@media (max-width:860px){
+  /* 縦積みにして、中央の縦罫は横罫へ */
+  .gates-in{grid-template-columns:1fr;gap:40px 0}
+  .gate-rule{height:1px;align-self:auto}
+  .gate-head{gap:20px;flex-wrap:wrap}
+  .gate h2{font-size:26px}
+  .gate-note{min-height:0;margin-top:16px}
+  .gate-row{min-height:64px;flex-wrap:wrap;gap:6px 16px;padding:14px 4px}
+}
 
 /* 10 フッター */
 .footer{background:var(--tone);padding:96px var(--gutter) 40px}
@@ -367,18 +405,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="gates-in">
       <div class="gate" data-reveal>
         <div class="gate-head"><h2>新卒採用</h2></div>
-        <div class="gate-cols gate-cols--one">
-          <div class="gate-col"><span class="gate-role" aria-hidden="true">&nbsp;</span>
-            <a class="btn-entry" href="v2.html">Entry</a></div>
+        <p class="gate-note">仕事の内容から選考の流れ、募集要項までまとめています。</p>
+        <div class="gate-list">
+          <a class="gate-row" href="v2.html"><span class="gate-role gate-role--ja">新卒採用情報</span><span class="gate-cta">新卒採用情報を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
         </div>
       </div>
       <span class="gate-rule" aria-hidden="true"></span>
       <div class="gate" data-reveal data-delay="0.1">
-        <div class="gate-head"><h2>中途採用</h2><a class="more more--ondark" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-        <div class="gate-cols">
-          <div class="gate-col"><span class="gate-role">Sales</span><a class="btn-entry" href="sales.html">Entry</a></div>
-          <div class="gate-col"><span class="gate-role">Engineer</span><a class="btn-entry" href="engineer.html">Entry</a></div>
-          <div class="gate-col"><span class="gate-role">Designer</span><a class="btn-entry" href="designer.html">Entry</a></div>
+        <div class="gate-head">
+          <h2>中途採用</h2>
+          <a class="gate-all" href="jobs.html">募集職種をすべて見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+        </div>
+        <p class="gate-note">職種ごとに、仕事の内容と募集要項を掲載しています。</p>
+        <div class="gate-list">
+          <a class="gate-row" href="sales.html"><span class="gate-role">Sales</span><span class="gate-cta">Salesの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+          <a class="gate-row" href="engineer.html"><span class="gate-role">Engineer</span><span class="gate-cta">Engineerの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+          <a class="gate-row" href="designer.html"><span class="gate-role">Designer</span><span class="gate-cta">Designerの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
         </div>
       </div>
     </div>
@@ -386,13 +428,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <footer class="footer">
     <div class="foot-top">
-      <div data-reveal><a class="biglink" href="#">CONTACT US <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      <div data-reveal><a class="biglink" href="#">CONTACT US <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="butt" stroke-linejoin="miter"/></svg></a></div>
       <div class="foot-nav" data-reveal data-delay="0.08"><a href="#">ABOUT</a><a href="#">PRODUCTS</a><a href="#">COMPANY</a><a href="#">NEWS</a><a href="#">CAREERS</a></div>
     </div>
     <div class="foot-mid">
       <div class="foot-mid-l">
         <p class="foot-award">働きがいのある会社ランキング<br>中規模部門 上位ランクイン</p>
-        <a class="biglink biglink--sm" href="#">RECRUIT <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="biglink biglink--sm" href="#">RECRUIT <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 11h31M23 2l9 9-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="butt" stroke-linejoin="miter"/></svg></a>
       </div>
       <span class="foot-logo"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
       <g class="lg-mark">
