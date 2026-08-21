@@ -131,7 +131,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mv-row{display:grid;grid-template-columns:1fr 1fr;gap:0 84px;align-items:start}
 .mv-row + .mv-row{margin-top:120px}
 .mv-row.is-flip .mv-text{order:2}
-.mv-media{aspect-ratio:1/1}
+/* 正方形(543px)だと本文(251〜279px)より290px近く高く、本文の下が空いて見える。
+   横位置の写真として16:9(305px)まで詰めて、左右の高さを近づける */
+.mv-media{aspect-ratio:16/9}
 .mv-text h3{font-weight:700;font-size:24px;letter-spacing:.06em;line-height:1.6;margin:0 0 28px}
 .mv-text p{font-size:13px;letter-spacing:.04em;line-height:2.1;color:#3a3a40;margin:0}
 /* 行間 2.1 のぶん（上下に約7pxずつ）が乗るので、箱の余白は 10px にして
@@ -193,47 +195,58 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 09 採用の入口（黒地） */
 /* ============ 採用導線 ============
-   左右で「区分の見出し → 補足 → 職種／CTA」の3段に揃える。
-   白ベタのボタンを横並びにすると、そこだけ強く見えて職種名との対応も読めないので、
-   細い罫線で区切った行にして、職種名とCTAを同じ行に置く。 */
+   罫線で区切ると管理画面のように見えるので、罫線は一切使わず、
+   黒地よりわずかに明るい面と余白だけで階層をつくる。
+   左右のパネルは grid の stretch で同じ高さになり、
+   新卒側は space-between で CTA を下端に落として重心を揃える。 */
 .gates{background:var(--ink);color:var(--paper);padding:96px var(--gutter)}
-.gates-in{display:grid;grid-template-columns:1fr 1px 1.35fr;gap:0 72px;align-items:start}
-.gate-rule{background:rgba(255,255,255,.22);align-self:stretch}
+.gates-in{display:grid;grid-template-columns:38fr 62fr;gap:28px;
+  max-width:1220px;margin:0 auto;align-items:stretch}
 
-/* 見出しの行。左に区分名、右に一覧リンク。同じ要素に見えないよう間を空ける */
-.gate-head{display:flex;align-items:baseline;justify-content:space-between;gap:48px;
-  min-height:46px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.22)}
-.gate h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0}
-.gate-all{display:inline-flex;align-items:center;gap:8px;flex:none;
-  font-size:13px;letter-spacing:.08em;line-height:1.6;color:rgba(255,255,255,.82);
-  text-decoration:none;transition:color .4s var(--ease-out-expo)}
-.gate-all:hover{color:var(--paper)}
-.gate-note{font-size:13px;letter-spacing:.06em;line-height:2;color:rgba(255,255,255,.6);
-  margin:22px 0 0;min-height:52px}
-
-/* 職種の行。行全体がリンク */
-.gate-list{margin-top:14px}
-.gate-row{display:flex;align-items:center;justify-content:space-between;gap:24px;
-  min-height:76px;padding:0 4px;border-bottom:1px solid rgba(255,255,255,.14);
+.gpanel{display:flex;flex-direction:column;justify-content:space-between;
+  background:rgba(255,255,255,.04);border-radius:4px;padding:48px 44px;
   color:var(--paper);text-decoration:none;
-  transition:background-color .3s var(--ease-out-expo),padding-left .5s var(--ease-out-expo)}
-.gate-row:first-child{border-top:1px solid rgba(255,255,255,.14)}
-@media (hover:hover){.gate-row:hover{background:rgba(255,255,255,.05);padding-left:12px}}
-.gate-role{font-family:var(--font-en);font-weight:700;font-size:18px;letter-spacing:.08em;
-  line-height:1.6;color:var(--paper)}
-.gate-role--ja{font-family:var(--font-ja);font-size:16px;letter-spacing:.06em}
-.gate-cta{display:inline-flex;align-items:center;gap:9px;flex:none;
-  font-size:13px;letter-spacing:.08em;line-height:1.6;color:rgba(255,255,255,.82)}
-@media (hover:hover){.gate-row:hover .gate-cta{color:var(--paper)}}
+  transition:background-color .2s var(--ease-out-expo)}
+a.gpanel:hover{background:rgba(255,255,255,.07)}
+.gpanel h2{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.4;margin:0}
+.gpanel-lead{font-size:13px;letter-spacing:.06em;line-height:2;
+  color:rgba(255,255,255,.66);margin:20px 0 0;max-width:30em}
+.gpanel-cta{display:inline-flex;align-items:center;gap:10px;margin-top:56px;
+  font-size:14px;letter-spacing:.08em;line-height:1.6;color:var(--paper)}
+
+.gpanel-head{display:flex;align-items:baseline;justify-content:space-between;gap:40px}
+.gpanel-all{display:inline-flex;align-items:center;gap:9px;flex:none;
+  padding:12px 0;margin:-12px 0;
+  font-size:13px;letter-spacing:.08em;line-height:1.6;color:rgba(255,255,255,.8);
+  text-decoration:none;transition:color .2s var(--ease-out-expo)}
+.gpanel-all:hover{color:var(--paper)}
+
+/* 職種カード。3枚とも同じ幅・同じ高さ、上に職種名／下にCTA */
+.gjobs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.gjob{display:flex;flex-direction:column;justify-content:space-between;gap:40px;
+  min-height:152px;background:rgba(255,255,255,.06);border-radius:4px;padding:26px 24px;
+  color:var(--paper);text-decoration:none;
+  transition:background-color .2s var(--ease-out-expo)}
+.gjob-name{font-family:var(--font-en);font-weight:700;font-size:18px;
+  letter-spacing:.08em;line-height:1.4}
+.gjob-cta{display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;letter-spacing:.06em;line-height:1.6;color:rgba(255,255,255,.8)}
+.gates .arw{transition-duration:.2s}
+@media (hover:hover){
+  .gjob:hover{background:rgba(255,255,255,.11)}
+  a.gpanel:hover .arw,.gjob:hover .arw,.gpanel-all:hover .arw{transform:translateX(4px)}
+  .gjob:hover .gjob-cta{color:var(--paper)}
+}
 
 @media (max-width:860px){
-  /* 縦積みにして、中央の縦罫は横罫へ */
-  .gates-in{grid-template-columns:1fr;gap:40px 0}
-  .gate-rule{height:1px;align-self:auto}
-  .gate-head{gap:20px;flex-wrap:wrap}
-  .gate h2{font-size:26px}
-  .gate-note{min-height:0;margin-top:16px}
-  .gate-row{min-height:64px;flex-wrap:wrap;gap:6px 16px;padding:14px 4px}
+  .gates{padding:72px var(--gutter)}
+  .gates-in{grid-template-columns:1fr;gap:24px}
+  .gpanel{padding:32px 24px}
+  .gpanel h2{font-size:26px}
+  .gpanel-cta{margin-top:32px;min-height:44px;align-items:flex-end}
+  .gpanel-head{flex-wrap:wrap;gap:8px 24px}
+  .gjobs{grid-template-columns:1fr;gap:12px;margin-top:28px}
+  .gjob{min-height:0;gap:20px;padding:22px 20px}
 }
 
 /* 10 フッター */
@@ -403,24 +416,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <!-- ============ 09 採用の入口 ============ 新卒／中途をここで分岐させる -->
   <section class="gates" id="entry">
     <div class="gates-in">
-      <div class="gate" data-reveal>
-        <div class="gate-head"><h2>新卒採用</h2></div>
-        <p class="gate-note">仕事の内容から選考の流れ、募集要項までまとめています。</p>
-        <div class="gate-list">
-          <a class="gate-row" href="v2.html"><span class="gate-role gate-role--ja">新卒採用情報</span><span class="gate-cta">新卒採用情報を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+      <a class="gpanel" href="v2.html" data-reveal>
+        <div>
+          <h2>新卒採用</h2>
+          <p class="gpanel-lead">募集要項や選考フローなど、新卒採用に関する情報をご案内します。</p>
         </div>
-      </div>
-      <span class="gate-rule" aria-hidden="true"></span>
-      <div class="gate" data-reveal data-delay="0.1">
-        <div class="gate-head">
-          <h2>中途採用</h2>
-          <a class="gate-all" href="jobs.html">募集職種をすべて見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+        <span class="gpanel-cta">新卒採用情報を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+      </a>
+      <div class="gpanel" data-reveal data-delay="0.1">
+        <div>
+          <div class="gpanel-head">
+            <h2>中途採用</h2>
+            <a class="gpanel-all" href="jobs.html">募集職種をすべて見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+          </div>
+          <p class="gpanel-lead">職種ごとに、仕事の内容と募集要項を掲載しています。</p>
         </div>
-        <p class="gate-note">職種ごとに、仕事の内容と募集要項を掲載しています。</p>
-        <div class="gate-list">
-          <a class="gate-row" href="sales.html"><span class="gate-role">Sales</span><span class="gate-cta">Salesの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
-          <a class="gate-row" href="engineer.html"><span class="gate-role">Engineer</span><span class="gate-cta">Engineerの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
-          <a class="gate-row" href="designer.html"><span class="gate-role">Designer</span><span class="gate-cta">Designerの求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+        <div class="gjobs">
+        <a class="gjob" href="sales.html"><span class="gjob-name">Sales</span><span class="gjob-cta">求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+        <a class="gjob" href="engineer.html"><span class="gjob-name">Engineer</span><span class="gjob-cta">求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
+        <a class="gjob" href="designer.html"><span class="gjob-name">Designer</span><span class="gjob-cta">求人を見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span></a>
         </div>
       </div>
     </div>
