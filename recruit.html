@@ -175,13 +175,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   scroll-snap-type:x proximity;cursor:grab;margin-top:40px}
 .mem-track:active{cursor:grabbing}
 .mem-track::-webkit-scrollbar{display:none}
-.mem{flex:0 0 268px;scroll-snap-align:start;display:flex;flex-direction:column;gap:14px}
-.mem .ph{aspect-ratio:2/1}
+/* 段ごとに間隔が違うので、一律の gap ではなく要素側の margin で持たせる。
+   写真→氏名 20px ／ 氏名→所属 8px ／ 所属→説明 12px（Figma のオートレイアウト実測）*/
+.mem{flex:0 0 268px;scroll-snap-align:start;display:flex;flex-direction:column;gap:0}
+.mem .media{margin-bottom:20px}
+.mem .ph{aspect-ratio:268/135}
 /* ダミー名。実名を入れると確定情報に見えるので、英字書体の Member A〜E で通す */
 .mem-name{font-family:var(--font-en);font-weight:700;font-size:15px;letter-spacing:.14em;
   line-height:1.5;margin:0}
-.mem-meta{font-family:var(--font-en);font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin:0}
-.mem-tx{font-size:12px;letter-spacing:.04em;line-height:1.9;color:#3a3a40;margin:0}
+.mem-meta{font-family:var(--font-en);font-size:12px;letter-spacing:.1em;line-height:1.6;
+  color:var(--caption);margin:8px 0 0}
+.mem-tx{font-size:12px;letter-spacing:.04em;line-height:1.9;color:#3a3a40;margin:12px 0 0}
 
 /* 06 カジュアル面談バナー */
 .casual{background:var(--fill2);padding:88px var(--gutter);margin-top:96px}
@@ -190,7 +194,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 07 Blog */
 .blog-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
-.blog{display:flex;flex-direction:column;gap:16px}
+.blog{display:flex;flex-direction:column;gap:20px}
 .blog .ph{aspect-ratio:16/10}
 .blog h3{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.9;margin:0}
 
