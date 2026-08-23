@@ -67,7 +67,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
 /* リンク */
-.tlink{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-en);font-weight:500;font-size:16px;
+.tlink{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-en);font-weight:500;font-size:16px;
   letter-spacing:.1em;line-height:1;white-space:nowrap;color:var(--ink);text-decoration:none;cursor:pointer}
 .tlink .circ{width:20px;height:20px;border-radius:50%;position:relative;flex:none;background:var(--ink);color:var(--paper);overflow:hidden}
 .tlink .circ svg{position:absolute;inset:0;margin:auto;width:6.51px;height:6px;transition:transform var(--dur-hover) var(--ease-out-expo)}
@@ -76,7 +76,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .tlink:hover .circ svg{transform:translate(16px,-16px);transition-duration:.45s}
   .tlink:hover .circ svg + svg{transform:translate(0,0);transition-duration:.45s}
 }
-.tlink--light{font-size:13px;gap:6px}
+.tlink--light{font-size:13px;gap:4px}
 .tlink--light .circ{width:auto;height:auto;background:none;color:var(--ink);overflow:visible}
 .tlink--light .circ svg{position:static;width:7px;height:6.5px;margin:0;transition:transform .45s var(--ease-out-expo)}
 .tlink--light .circ svg + svg{display:none}
@@ -186,7 +186,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .branch-col li{font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
 /* 「この先の選択肢」の起点。囲むとボタンに見えるので枠は持たせず、
    いまどの職種の話をしているかをアイコンと文字だけで示す。 */
-.branch-head{display:flex;width:fit-content;align-items:center;gap:9px;margin:24px 0 0}
+.branch-head{display:flex;width:fit-content;align-items:center;gap:7px;margin:24px 0 0}
 .branch-head .from-ic{width:16px;height:16px;flex:none;color:var(--caption)}
 .branch-head .from-ic svg{width:100%;height:100%;display:block}
 .branch-head .from{font-family:var(--font-en);font-weight:700;font-size:13px;
@@ -249,7 +249,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* カード内の「詳しく見る」と近すぎたので間隔を広げる。
    ボタン自体は主役ではないので、小さな英字＋シェブロンに留める。 */
 .cont-more{display:flex;justify-content:center;margin-top:76px}
-.morebtn{display:inline-flex;align-items:center;gap:7px;appearance:none;background:none;border:0;
+.morebtn{display:inline-flex;align-items:center;gap:4px;appearance:none;background:none;border:0;
   cursor:pointer;padding:8px 4px;font-family:var(--font-en);font-weight:700;font-size:13px;
   letter-spacing:.14em;line-height:1;color:var(--ink)}
 .morebtn .chev{width:14px;height:14px;display:block;
@@ -338,8 +338,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .f-copy{font-size:13px;letter-spacing:.1em;color:var(--caption)}
 .member dl dd.dd-en{font-family:var(--font-en);letter-spacing:.14em}
 
-/* 小さいピルの中は文字とアイコンの間を少し詰める */
-.cta .ext{margin-left:-1px}
 </style>
 </head>
 <body>

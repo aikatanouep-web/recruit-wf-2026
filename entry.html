@@ -64,7 +64,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ext svg *{vector-effect:non-scaling-stroke}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
-.cta{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--ink);
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1px solid var(--ink);
   border-radius:999px;padding:10px 24px;font-size:13px;letter-spacing:.1em;line-height:1;color:var(--ink);
   background:transparent;white-space:nowrap;cursor:pointer;text-decoration:none;
   transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
@@ -233,7 +233,7 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .linkrow-name{font-size:14px;letter-spacing:.1em;line-height:1.8}
 .linkrow-kind{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.16em;
   color:var(--caption);flex:none}
-.linkrow .right{display:inline-flex;align-items:center;gap:14px;flex:none}
+.linkrow .right{display:inline-flex;align-items:center;gap:10px;flex:none}
 
 /* 追従の応募バー。画面下に出しっぱなしにせず、本文に入ってから出す */
 .applybar{position:fixed;left:0;right:0;bottom:0;z-index:90;
@@ -252,8 +252,6 @@ body{padding-bottom:0}
   .jobside{position:static}
 }
 
-/* 小さいピルの中は文字とアイコンの間を少し詰める */
-.cta .ext{margin-left:-1px}
 </style>
 </head>
 <body>
