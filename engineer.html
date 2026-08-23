@@ -194,19 +194,20 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .band--wide{aspect-ratio:1172/260}
 
 /* 2枚組のサムネイル */
-/* note：2枚ずつ見せて横に流す（Figma 550幅・間隔70） */
-.notesec{background:var(--tone);padding:96px var(--gutter)}
-.thumbs{display:flex;gap:70px;margin-top:32px;overflow-x:auto;
-  scrollbar-width:none;scroll-snap-type:x mandatory}
-.thumbs::-webkit-scrollbar{display:none}
-.thumb{flex:0 0 550px;scroll-snap-align:start;display:flex;flex-direction:column;gap:15px}
+/* note：Our Value と同じ、ページのスクロール量で横に送るカルーセル。
+   セクションを画面に貼り付け、余分な高さぶんだけトラックを左へ動かす */
+.notesec{position:relative;background:var(--tone)}
+.note-sticky{position:sticky;top:0;height:100vh;min-height:680px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;padding-left:var(--gutter)}
+.thumbs{display:flex;gap:70px;margin-top:32px;will-change:transform}
+.thumb{flex:0 0 550px;display:flex;flex-direction:column;gap:15px}
+.progress{height:1px;background:rgba(13,13,14,.14);position:relative;
+  margin-top:40px;width:calc(100% - var(--gutter))}
+.progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:24%}
 .thumb .ph{aspect-ratio:550/289;background:#fff}
 .thumb-meta{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
 .thumb p{font-size:13px;letter-spacing:.06em;line-height:1.8;color:#3a3a40;margin:0}
 .thumb .cta{height:36px;min-width:117px;padding:0 18px;border-radius:18px;font-size:13px}
-/* 帯の底を1本の罫で締める */
-.sec-rule{height:1px;background:var(--ink);margin-top:60px}
-
 /* 募集要項：箱のあと中央にエントリー */
 .reqsec .band{margin-top:32px}
 .reqcta{display:flex;justify-content:center;margin-top:40px}
@@ -286,9 +287,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
   </section>
 
-  <section class="sec notesec">
+  <section class="notesec" id="notesec">
+   <div class="note-sticky">
     <div class="head-block" data-reveal><h2 class="h2">note：エンジニアの発信</h2></div>
-    <div class="thumbs" data-stagger data-observe>
+    <div class="thumbs" id="notetrack" data-stagger data-observe>
       <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div>
         <div class="thumb-meta"><p>メンバー A の更新記事</p>
           <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
@@ -306,7 +308,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
       </article>
     </div>
-    <div class="sec-rule" aria-hidden="true"></div>
+    <div class="progress note-rail"><div class="bar"></div></div>
+   </div>
   </section>
 
   <section class="sec reqsec">
@@ -377,6 +380,35 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
     else if(y<last-2||y<=240) h.classList.remove('is-hidden');
     last=y;},{passive:true});
+})();
+
+/* note：スクロール連動の横送り。セクションの余りの高さを進捗に読み替える */
+(function(){
+  var sec=document.getElementById('notesec'); if(!sec) return;
+  var sticky=sec.querySelector('.note-sticky'), tr=document.getElementById('notetrack');
+  var bar=sec.querySelector('.note-rail .bar');
+  if(!sticky||!tr) return;
+  var travel=0;
+  function measure(){
+    /* 幅が出る前に走らせると height:0 を書き込んでセクションごと潰れる */
+    if(!tr.scrollWidth||!sticky.offsetHeight) return;
+    travel=Math.max(0, tr.scrollWidth-sticky.clientWidth+parseFloat(getComputedStyle(sticky).paddingLeft||0));
+    sec.style.height=(sticky.offsetHeight+travel)+'px';
+    draw();
+  }
+  function draw(){
+    var r=sec.getBoundingClientRect();
+    var total=sec.offsetHeight-sticky.offsetHeight;
+    if(total<=0) return;
+    var st=parseFloat(getComputedStyle(sticky).top)||0;
+    var p=Math.min(1,Math.max(0,(st-r.top)/total));
+    tr.style.transform='translateX('+(-p*travel).toFixed(2)+'px)';
+    if(bar){ var w=24; bar.style.width=w+'%'; bar.style.left=(p*(100-w))+'%'; }
+  }
+  addEventListener('scroll',draw,{passive:true});
+  addEventListener('resize',measure);
+  if(window.ResizeObserver) new ResizeObserver(measure).observe(tr);
+  measure(); addEventListener('load',measure);
 })();
 </script>
 </body>
