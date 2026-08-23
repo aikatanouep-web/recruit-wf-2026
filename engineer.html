@@ -41,10 +41,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   [data-reveal],[data-stagger] > *,.line-reveal .line > span{opacity:1 !important;transform:none !important}
 }
 
+/* あたり画像。Figma の指定どおり「VISUAL ASSETS / place holder」の2行に。
+   色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;color:var(--caption);font-family:var(--font-en);font-size:13px;
-  font-weight:500;letter-spacing:.18em;line-height:1.6;text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;opacity:.75}
+  justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
+  text-align:center;width:100%;height:100%}
+.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
+  letter-spacing:.08em;line-height:1.6}
 
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
@@ -215,7 +219,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   </section>
 
   <section class="sec" style="padding-top:0">
-    <div class="band band--kv" style="margin-top:0" data-observe><div class="ph"><i>Image</i></div></div>
+    <div class="band band--kv" style="margin-top:0" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <a class="cta" href="casual.html" data-reveal>カジュアル面談を申し込む</a>
   </section>
 
@@ -223,7 +227,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="head-block" data-reveal><h2 class="h2">プロダクト組織紹介</h2></div>
     <div class="duo">
       <div class="duo-text" data-reveal><p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
-      <div class="duo-media" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="duo-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
@@ -231,22 +235,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="head-block" data-reveal><h2 class="h2">エンジニアカルチャーデック</h2></div>
     <div class="duo is-flip">
       <div class="duo-text" data-reveal><p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
-      <div class="duo-media" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="duo-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
   <section class="sec sec--tone">
     <div class="head-block" data-reveal><h2 class="h2">note：エンジニアの発信</h2></div>
     <div class="thumbs" data-stagger data-observe>
-      <article class="thumb"><div class="ph"><i>Image</i></div><p>メンバー A の更新記事</p></article>
-      <article class="thumb"><div class="ph"><i>Image</i></div><p>メンバー B の更新記事</p></article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div><p>メンバー A の更新記事</p></article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div><p>メンバー B の更新記事</p></article>
     </div>
     <a class="cta" href="#" target="_blank" rel="noopener" data-reveal>noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 
   <section class="sec">
     <div class="head-block" data-reveal><h2 class="h2">募集要項</h2></div>
-    <div class="band band--wide" data-observe><div class="ph"><i>Image</i></div></div>
+    <div class="band band--wide" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 

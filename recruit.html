@@ -47,10 +47,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* WF部品 */
+/* あたり画像。Figma の指定どおり「VISUAL ASSETS / place holder」の2行に。
+   色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;color:var(--caption);font-family:var(--font-en);font-size:13px;
-  font-weight:500;letter-spacing:.18em;line-height:1.6;text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;opacity:.75}
+  justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
+  text-align:center;width:100%;height:100%}
+.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
+  letter-spacing:.08em;line-height:1.6}
 .ph--dark{background:#232327;color:rgba(255,255,255,.6)}
 
 /* 見出し階層 h1 56 / h2 40 / h3 24 */
@@ -113,16 +117,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 01 FV（黒地） */
 /* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
    縦に長い画面で下に白が覗く。svh は端末のバーの出入りに追従させるため。 */
-.hero{position:relative;background:var(--ink);color:var(--paper);padding:200px var(--gutter) 176px;
-  min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
-/* この面いっぱいにメインビジュアルが入る。黒地のままだと何も来ない面に
-   見えるので、他の画像枠と同じ Image の文字を置いておく。 */
-.hero-media{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:flex-end}
-.hero-media .ph{width:50%}   /* コピーは左半分にあるので、空いている右半分の中央に置く */
-.hero-media .ph{background:transparent;color:rgba(255,255,255,.45)}
+.hero{position:relative;background:var(--ink);color:var(--paper);
+  padding:195px var(--gutter) 0;height:700px}
+/* メインビジュアルは黒地いっぱいではなく、右に寄せた 533×481 の面。
+   右端はコピーと同じ内側の余白に揃える。 */
+.hero-media{position:absolute;top:114px;right:var(--gutter);z-index:1;
+  width:533px;height:481px}
+.hero-media .ph{background:#383838}
 .hero > h1,.hero > .lead{position:relative;z-index:2}
-.hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.4;margin:0}
-.hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);margin:64px 0 0}
+.hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.2;margin:0}
+.hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);
+  margin:60px 0 0;max-width:580px}
 
 /* 02 Mission,Value（テキストと画像を交互に） */
 .sec{padding:120px var(--gutter)}
@@ -307,9 +312,9 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
 
   <!-- ============ 01 FV（黒地） ============ -->
   <section class="hero">
-    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Image</i></div></div>
+    <div class="hero-media" aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <h1 class="line-reveal" data-observe><span class="line"><span>日本の価値を上げる</span></span></h1>
-    <p class="lead" data-reveal data-delay="0.35">IT・製造業で海外企業が台頭し、<br>人口減少による経済衰退も懸念される日本。<br>一方で、「食・宿泊文化」は今なお世界に誇れる強みです。<br>私たちは、この産業を支える人材の採用・就業を支援し、<br>日本の価値向上に貢献します。</p>
+    <p class="lead" data-reveal data-delay="0.35">IT・製造業で海外企業が台頭し、人口減少による経済衰退も懸念される日本。一方で、「食・宿泊文化」は今なお世界に誇れる強みです。私たちは、この産業を支える人材の採用・就業を支援し、日本の価値向上に貢献します。</p>
   </section>
 
   <!-- ============ 02 Mission, Value ============ テキストと画像を交互に組む -->
@@ -321,7 +326,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         <p>過去記録を塗り替える観光客数と伸び盛りのインバウンド業界ですが、その秘密は日本の「おもてなし」文化にあります。JapanBrand調査によると、日本は「再び観光に訪れたい国・地域」で1位を獲得しました。</p>
         <p>グルメ・日本の文化・自然景観を目的として来日する訪日客も多く、来日の目的1位が「庶民的な和食レストラン」と、日本食の魅力がさらに高まっています。</p>
       </div>
-      <div class="mv-media" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="mv-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
     <div class="mv-row is-flip" style="margin-top:120px">
       <div class="mv-text" data-reveal>
@@ -329,7 +334,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         <p>インバウンド需要の急増により、日本の食・宿泊産業は盛り上がりを見せています。しかしながら、業界全体の「人手不足」という慢性的な課題は改善の兆しを見せません。私たちは採用DXプラットフォームを提供することで、業界の課題解決・地位向上を目指しています。</p>
         <p>インバウンド業界で働く人たちが元気になることで、日本全体もさらに活気に満ち溢れていきます。私たちは、業界の繁栄が、観光立国としての「日本の価値を上げる」鍵と信じ、プロダクトを進化させ続けます。</p>
       </div>
-      <div class="mv-media" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="mv-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
@@ -353,35 +358,35 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   <section class="sec" id="company" style="padding-top:0">
     <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
     <div class="deck-row" data-stagger data-observe>
-      <div class="deck-thumb" data-observe><div class="ph"><i>Image</i></div></div>
-      <div class="deck-thumb" data-observe><div class="ph"><i>Image</i></div></div>
+      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
     <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
-      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <p class="mem-name">Member A</p>
         <p class="mem-meta">2020年入社 | CA | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
-      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <p class="mem-name">Member B</p>
         <p class="mem-meta">2020年入社 | RA | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
-      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <p class="mem-name">Member C</p>
         <p class="mem-meta">2020年入社 | Engineer | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
-      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <p class="mem-name">Member D</p>
         <p class="mem-meta">2020年入社 | Designer | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
       </article>
-      <article class="mem"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <p class="mem-name">Member E</p>
         <p class="mem-meta">2020年入社 | Sales | メンバー</p>
         <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
@@ -399,11 +404,11 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   <section class="sec" id="blog">
     <div class="sec-head" data-reveal><div><p class="eyebrow">Blog</p><h2 class="h2">ブログ</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="blog-row" data-stagger data-observe>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3></article>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3>保険業界出身だからこそ、飲食ホテル×HRミドルベンチャーの営業で即戦力に</h3></article>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>Image</i></div></div>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3></article>
     </div>
   </section>
@@ -427,7 +432,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         <div>
           <div class="gpanel-head">
             <h2>中途採用</h2>
-            <a class="gpanel-all" href="jobs.html">募集職種をすべて見る<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
+            <a class="gpanel-all" href="jobs.html">募集職種一覧<span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
           </div>
           <p class="gpanel-lead">職種ごとに、仕事の内容と募集要項を掲載しています。</p>
         </div>

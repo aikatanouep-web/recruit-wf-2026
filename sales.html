@@ -47,10 +47,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* WF部品 */
+/* あたり画像。Figma の指定どおり「VISUAL ASSETS / place holder」の2行に。
+   色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;color:var(--caption);font-family:var(--font-en);font-size:13px;
-  font-weight:500;letter-spacing:.18em;line-height:1.6;text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;opacity:.75}
+  justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
+  text-align:center;width:100%;height:100%}
+.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
+  letter-spacing:.08em;line-height:1.6}
 /* 未確認は必ず見た目で区別する */
 
 /* 見出し階層 h1 64 / h2 32 / h3 24 */
@@ -387,7 +391,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="cta primary">エントリー</span>
       </div>
     </div>
-    <div class="hero-media" aria-hidden="true"><div class="ph"><i>Image</i></div></div>
+    <div class="hero-media" aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
   </section>
 
   <!-- ============ 02 Message ============ 仕事と社会的意義の接点。理念の長い説明にはしない -->
@@ -493,7 +497,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3" data-reveal style="margin-top:64px">活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
-      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member A</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -504,7 +508,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member B</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -515,7 +519,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member C</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -565,27 +569,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2 class="h2">Cuolegaを知る</h2>
     </div>
     <div class="cont-grid" id="contgrid" data-stagger data-observe>
-      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Document</span><h3>Company Deck</h3><p>事業の全体像とこれから向かう先をまとめた資料。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Document</span><h3>Culture Deck</h3><p>組織の考え方と働き方をまとめた資料。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Interview</span><h3>社員インタビュー</h3><p>実際に働くメンバーの話。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Article</span><h3>note</h3><p>事業やカルチャーについての記事。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Movie</span><h3>動画コンテンツ</h3><p>仕事の様子や社内の雰囲気。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>Image</i></div></div>
+      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Message</span><h3>代表メッセージ</h3><p>これから目指す方向について。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
