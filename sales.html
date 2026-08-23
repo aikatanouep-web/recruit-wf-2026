@@ -112,7 +112,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta.primary{background:var(--ink);color:var(--paper)}
 .cta.primary:hover{background:transparent;color:var(--ink)}
 .cta.lg{padding:15px 40px;font-size:14px}
-.cta--ondark{border-color:rgba(255,255,255,.4);color:var(--paper)}
+/* 黒地の枠線ボタン。透過させると線が沈んで押せるものに見えないので、
+   白の実線・1.5px で立たせる */
+.cta--ondark{border-color:#fff;border-width:2px;color:var(--paper)}
 .cta--ondark:hover{background:var(--paper);color:var(--ink)}
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
@@ -158,11 +160,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    それぞれの幅を独立させる。 */
 /* FV：黒帯 700px の上に、右へ寄せた 533×458 の面を置く。
    文字は 200px から始め、見出し→本文 24px、本文→ボタン 60px（Figma実測）。 */
-.hero{position:relative;background:#000;color:var(--paper);height:700px;
-  padding:200px var(--gutter) 0}
+/* 黒は画面の下端まで届かせる。中の組みは Figma の 700px 基準のまま上から積む */
+.hero{position:relative;background:#000;color:var(--paper);
+  min-height:max(700px,100vh);padding:240px var(--gutter) 0}
 /* 画像は幅を可変にし、コピーは「残り幅」までに抑える。
    固定幅どうしだと、窓を縮めたときに文字が画像の下に潜り込むため。 */
-.hero-media{position:absolute;top:121px;right:var(--gutter);z-index:1;
+.hero-media{position:absolute;top:161px;right:var(--gutter);z-index:1;
   width:clamp(300px,44vw,533px);height:458px}
 .hero-copy{position:relative;z-index:2;
   max-width:min(639px, calc(100% - clamp(300px,44vw,533px) - 32px))}
@@ -170,7 +173,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0;color:var(--paper)}
 .hero .sub{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:24px 0 0;max-width:514px}
 .hero .row{display:flex;gap:24px;margin-top:60px;flex-wrap:wrap}
-.hero .cta{height:35px;padding:0 25px;font-size:13px;border-color:rgba(255,255,255,.55);color:var(--paper)}
+.hero .cta{height:35px;padding:0 25px;font-size:13px;border-color:#fff;border-width:2px;color:var(--paper)}
 .hero .cta:hover{background:var(--paper);color:var(--ink)}
 .hero .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
 .hero .cta.primary:hover{background:transparent;color:var(--paper)}

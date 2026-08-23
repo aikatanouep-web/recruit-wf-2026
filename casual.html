@@ -78,7 +78,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta.primary{background:var(--ink);color:var(--paper)}
 .cta.primary:hover{background:transparent;color:var(--ink)}
 .cta.lg{padding:15px 40px;font-size:14px}
-.cta--ondark{border-color:rgba(255,255,255,.4);color:var(--paper)}
+/* 黒地の枠線ボタン。透過させると線が沈んで押せるものに見えないので、
+   白の実線・1.5px で立たせる */
+.cta--ondark{border-color:#fff;border-width:2px;color:var(--paper)}
 .cta--ondark:hover{background:var(--paper);color:var(--ink)}
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
@@ -102,8 +104,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
-.pagehead{padding:180px var(--gutter) 64px}
-.pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
+/* ---- ファーストビュー（Figma 実測：黒帯 620px・写真 533x445・本文 547） ---- */
+/* ヘッダー(80px)がかぶさるので上は 168px。黒帯は Figma の 700px 分を確保しつつ、
+   画面が高いときは下端まで伸ばす */
+.hero{background:#000;color:var(--paper);
+  padding:168px var(--gutter) 87px;min-height:max(700px,100vh);
+  display:flex;flex-direction:column;justify-content:flex-start}
+.hero-in{display:grid;grid-template-columns:547px minmax(0,533px);gap:0 75px;
+  align-items:center;justify-content:space-between;min-height:445px}
+/* 見出し→本文 32px、本文→CTA 70px */
+.hero-copy{display:flex;flex-direction:column;align-items:flex-start}
+.hero-copy .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;
+  margin:0;color:var(--paper)}
+.hero-copy p{font-size:14px;letter-spacing:.08em;line-height:2;color:#fff;margin:32px 0 0}
+.hero-cta{margin-top:70px}
+.hero-media{align-self:start;height:445px}
+.hero-media .ph{background:#383838}
+/* 黒地の上のボタンは白で抜く（Figma 127x36 / r18） */
+.hero-cta{height:36px;padding:0 25px;border-radius:18px;font-size:13px;letter-spacing:.1em;
+  background:#fff;border-color:var(--ink);color:var(--ink)}
 
 
 
@@ -169,6 +188,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .duo-text .cta{margin-top:32px}
 
 /* 大きな画像帯 */
+.applysec{background:#c6c6c6;padding:96px var(--gutter) 84px}
+.applysec .band{margin-top:24px}
+.applysec .ph{background:#ededed}
+.applysec .cta.lg{height:47px;min-width:165px;padding:0 24px;border-radius:23.5px;margin-top:60px}
 .band{margin-top:40px}
 .band--kv{aspect-ratio:1171/440}
 .band--wide{aspect-ratio:1171/260}
@@ -180,18 +203,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .thumb p{font-size:13px;letter-spacing:.06em;line-height:1.8;color:#3a3a40;margin:0}
 
 /* 担当メンバー */
-.people{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
-.person{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
-.person .ph{aspect-ratio:1/1}
-.person-media{width:180px}
+/* 3枚を段の中央に置くが、カードの中身は左揃え（Figma 実測） */
+.people-wrap{padding:40px 96px;margin-top:40px}
+.people{display:flex;justify-content:center;gap:120px}
+.person{flex:0 0 239px;display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+.person-txt{display:flex;flex-direction:column;gap:14px}
+.person .ph{aspect-ratio:239/180}
+.person-media{width:239px}
 .person-name{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.6;margin:0}
 .person-msg{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
-.person-links{display:flex;gap:10px;margin-top:4px}
-.person-links .cta{padding:9px 16px;font-size:12px}
+.person-body{display:flex;flex-direction:column;gap:32px;align-items:flex-start}
+.person-links{display:flex;gap:24px;margin:0}
+.person-links .cta{height:33px;padding:0 18px;border-radius:16.5px;font-size:12px;letter-spacing:.1em}
 
 /* 2列のテキスト */
-.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 72px;margin-top:40px}
-.cols2 .h3{margin-bottom:20px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 80px;margin-top:40px}
+.cols2 .h3{margin-bottom:22px}
 .cols2 p{font-size:14px;letter-spacing:.08em;line-height:2;color:#3a3a40;margin:0}
 
 .sec .cta{margin-top:32px}
@@ -229,17 +256,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 <div class="stage">
 
-  <section class="pagehead">
-    <h1 class="h1 line-reveal" data-observe><span class="line"><span>カジュアル面談</span></span></h1>
-  </section>
-
-  <section class="sec" style="padding-top:0">
-    <div class="duo" style="margin-top:0">
-      <div class="duo-text" data-reveal>
-        <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-        <a class="cta primary" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+  <section class="hero">
+    <div class="hero-in">
+      <div class="hero-copy">
+        <h1 class="h1 line-reveal" data-observe><span class="line"><span>カジュアル面談</span></span></h1>
+        <p data-reveal data-delay="0.12">テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+        <a class="cta hero-cta" href="#" target="_blank" rel="noopener" data-reveal data-delay="0.2">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </div>
-      <div class="duo-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <div class="hero-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
@@ -252,35 +276,43 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="sec">
     <div class="head-block" data-reveal><h2 class="h2">担当メンバー</h2></div>
+    <div class="people-wrap">
     <div class="people" data-stagger data-observe>
       <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <p class="person-name">メンバー A</p>
+        <div class="person-body">
+          <div class="person-txt"><p class="person-name">メンバー A</p>
         <p class="person-msg">一言メッセージが入ります。</p>
-        <div class="person-links">
+        </div>
+          <div class="person-links">
           <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
         </div>
       </article>
       <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <p class="person-name">メンバー B</p>
+        <div class="person-body">
+          <div class="person-txt"><p class="person-name">メンバー B</p>
         <p class="person-msg">一言メッセージが入ります。</p>
-        <div class="person-links">
+        </div>
+          <div class="person-links">
           <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
         </div>
       </article>
       <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <p class="person-name">メンバー C</p>
+        <div class="person-body">
+          <div class="person-txt"><p class="person-name">メンバー C</p>
         <p class="person-msg">一言メッセージが入ります。</p>
-        <div class="person-links">
+        </div>
+          <div class="person-links">
           <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
           <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
         </div>
       </article>
     </div>
+    </div>
   </section>
 
-  <section class="sec sec--tone">
+  <section class="sec applysec">
     <div class="head-block" data-reveal><h2 class="h2">申込・日程調整</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>

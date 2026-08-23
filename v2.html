@@ -114,7 +114,9 @@ img{max-width:100%;display:block}
 .cta.primary{background:var(--ink);color:var(--paper)}
 .cta.primary:hover{background:transparent;color:var(--ink)}
 .cta.lg{padding:15px 40px;font-size:14px}
-.cta--ondark{border-color:rgba(255,255,255,.4);color:var(--paper)}
+/* 黒地の枠線ボタン。透過させると線が沈んで押せるものに見えないので、
+   白の実線・1.5px で立たせる */
+.cta--ondark{border-color:#fff;border-width:2px;color:var(--paper)}
 .cta--ondark:hover{background:var(--paper);color:var(--ink)}
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
