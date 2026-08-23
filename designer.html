@@ -132,16 +132,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .undecided p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);margin:10px 0 0}
 .undecided .row{display:flex;gap:14px;flex:none}
 
-.footer{background:var(--tone);padding:56px var(--gutter) 40px}
-.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px}
-.f-addr{font-size:13px;letter-spacing:.08em;line-height:1.9;color:var(--caption);margin-top:16px}
-.f-head{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin-bottom:16px}
-.f-col ul{list-style:none;margin:0;padding:0}
-.f-col li{font-size:14px;letter-spacing:.1em;line-height:1.6;margin-bottom:14px}
-.f-col li:last-child{margin-bottom:0}
-.f-col li a{color:var(--ink);text-decoration:none}
-.foot-legal{display:flex;align-items:baseline;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
-.f-copy{font-size:13px;letter-spacing:.1em;color:var(--caption)}
+/* ============ フッター ============
+   参考サイト（X Mile）と同じ1段構成。ロゴを左、メニューを1行で右に並べ、
+   その下に著作権表示を右端へ。高さは 60+30+20+17+60 = 187px。 */
+.footer{background:var(--tone);padding:60px var(--gutter)}
+.foot-in{display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.foot-in .logo{flex:none;width:109px;height:14.021px;color:var(--ink)}
+.foot-nav{display:flex;align-items:center;gap:40px;flex-wrap:wrap}
+.foot-nav a{position:relative;font-size:16px;letter-spacing:.06em;line-height:1.875;
+  color:var(--ink);text-decoration:none}
+.foot-nav a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
+@media (hover:hover){.foot-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+.f-copy{font-size:12px;letter-spacing:.06em;line-height:1.4;color:var(--caption);
+  margin:20px 0 0;text-align:right}
+@media (max-width:860px){
+  .footer{padding:40px var(--gutter)}
+  .foot-in{gap:24px}
+  .foot-nav{gap:20px 24px}
+  .foot-nav a{font-size:14px}
+  .f-copy{text-align:left;margin-top:24px}
+}
 
 /* 2カラム（テキスト＋画像）。左右の入れ替えは .is-flip で */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:0 72px;align-items:center;margin-top:40px}
@@ -258,9 +269,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 
   <footer class="footer">
-    <div class="foot-grid">
-      <div>
-        <a class="logo" href="recruit.html"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+    <div class="foot-in">
+      <a class="logo" href="recruit.html"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
       <g class="lg-mark">
         <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
         <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
@@ -276,12 +286,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-        <p class="f-addr">株式会社クオレガ<br>〒105-0004 東京都港区新橋1-10-6 新橋M-SQUARE 11階</p>
-      </div>
-      <div class="f-col"><p class="f-head">Recruit</p><ul><li><a href="recruit.html">採用サイト</a></li><li><a href="jobs.html">募集職種一覧</a></li><li><a href="v2.html">新卒採用</a></li><li><a href="sales.html">キャリアアドバイザー採用</a></li><li><a href="engineer.html">エンジニア採用</a></li><li><a href="designer.html">デザイナー採用</a></li></ul></div>
-      <div class="f-col"><p class="f-head">Link</p><ul><li><a href="#">コーポレートサイト</a></li><li><a href="#">note</a></li><li><a href="#">プライバシーポリシー</a></li></ul></div>
+      <nav class="foot-nav">
+        <a href="recruit.html">採用サイト</a>
+        <a href="jobs.html">募集職種一覧</a>
+        <a href="casual.html">カジュアル面談</a>
+        <a href="entry.html">エントリー</a>
+        <a href="#">プライバシーポリシー</a>
+      </nav>
     </div>
-    <div class="foot-legal"><span></span><p class="f-copy">© Cuolega, Inc.</p></div>
+    <p class="f-copy">© Cuolega, Inc.</p>
   </footer>
 </div><!-- /stage -->
 
