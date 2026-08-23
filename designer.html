@@ -210,21 +210,23 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .orgsec .h2{color:var(--paper)}
 .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin-top:32px}
 .role{display:flex;flex-direction:column;gap:17px}
-.role .ph{aspect-ratio:350/208}
+.role .ph{aspect-ratio:350/208;height:auto}
 .role h3{font-weight:700;font-size:18px;letter-spacing:.08em;line-height:1.6;margin:0;color:var(--paper)}
 .role p{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#fff;margin:0}
 
-/* 制作実績ギャラリー：550px のカードを 70px 間隔で横に流す */
-.gallerysec{background:var(--tone);padding:96px var(--gutter)}
-.gallery{display:flex;gap:70px;margin-top:32px;overflow-x:auto;
-  scrollbar-width:none;scroll-snap-type:x mandatory}
-.gallery::-webkit-scrollbar{display:none}
-.gcard{flex:0 0 550px;scroll-snap-align:start;display:flex;flex-direction:column;
-  align-items:flex-start;gap:24px}
-.gcard .ph{aspect-ratio:550/289;background:#fff;width:100%}
-.gcard .cta{height:36px;padding:0 25px;border-radius:18px;font-size:13px}
-/* 帯の底を1本の罫で締める */
-.sec-rule{height:1px;background:var(--ink);margin-top:60px}
+/* 制作実績ギャラリー：Our Value と同じ、ページのスクロール量で横に送る。
+   写真→ボタンは 24px（Figma 実測） */
+.gallerysec{position:relative;background:var(--tone)}
+.gal-sticky{position:sticky;top:0;height:100vh;min-height:680px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;padding-left:var(--gutter)}
+.gallery{display:flex;gap:70px;margin-top:32px;will-change:transform}
+.gcard{flex:0 0 550px;display:flex;flex-direction:column;align-items:flex-start;gap:24px}
+/* .ph 全体の height:100% が aspect-ratio に勝ってしまうので打ち消す */
+.gcard .ph{aspect-ratio:550/289;height:auto;background:#fff;width:100%}
+.gcard .cta{height:36px;padding:0 25px;border-radius:18px;font-size:13px;margin-top:0}
+.progress{height:1px;background:rgba(13,13,14,.14);position:relative;
+  margin-top:40px;width:calc(100% - var(--gutter))}
+.progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:24%}
 
 /* 募集要項：箱のあと中央にエントリー */
 .reqsec .band{margin-top:32px}
@@ -280,9 +282,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
   </section>
 
-  <section class="sec gallerysec">
+  <section class="gallerysec" id="gallerysec">
+   <div class="gal-sticky">
     <div class="head-block" data-reveal><h2 class="h2">制作実績ギャラリー</h2></div>
-    <div class="gallery" data-stagger data-observe>
+    <div class="gallery" id="galtrack" data-stagger data-observe>
       <div class="gcard"><div class="ph"><i>VISUAL ASSETS</i></div>
         <a class="cta" href="#" target="_blank" rel="noopener">詳しくはこちら<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </div>
@@ -299,7 +302,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <a class="cta" href="#" target="_blank" rel="noopener">詳しくはこちら<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </div>
     </div>
-    <div class="sec-rule" aria-hidden="true"></div>
+    <div class="progress gal-rail"><div class="bar"></div></div>
+   </div>
   </section>
 
   <section class="sec reqsec">
@@ -370,6 +374,34 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
     else if(y<last-2||y<=240) h.classList.remove('is-hidden');
     last=y;},{passive:true});
+})();
+
+/* ギャラリー：スクロール連動の横送り */
+(function(){
+  var sec=document.getElementById('gallerysec'); if(!sec) return;
+  var sticky=sec.querySelector('.gal-sticky'), tr=document.getElementById('galtrack');
+  var bar=sec.querySelector('.gal-rail .bar');
+  if(!sticky||!tr) return;
+  var travel=0;
+  function measure(){
+    if(!tr.scrollWidth||!sticky.offsetHeight) return;
+    travel=Math.max(0, tr.scrollWidth-sticky.clientWidth+parseFloat(getComputedStyle(sticky).paddingLeft||0));
+    sec.style.height=(sticky.offsetHeight+travel)+'px';
+    draw();
+  }
+  function draw(){
+    var r=sec.getBoundingClientRect();
+    var total=sec.offsetHeight-sticky.offsetHeight;
+    if(total<=0) return;
+    var st=parseFloat(getComputedStyle(sticky).top)||0;
+    var p=Math.min(1,Math.max(0,(st-r.top)/total));
+    tr.style.transform='translateX('+(-p*travel).toFixed(2)+'px)';
+    if(bar){ var w=24; bar.style.width=w+'%'; bar.style.left=(p*(100-w))+'%'; }
+  }
+  addEventListener('scroll',draw,{passive:true});
+  addEventListener('resize',measure);
+  if(window.ResizeObserver) new ResizeObserver(measure).observe(tr);
+  measure(); addEventListener('load',measure);
 })();
 </script>
 </body>

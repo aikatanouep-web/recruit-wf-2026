@@ -204,7 +204,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .progress{height:1px;background:rgba(13,13,14,.14);position:relative;
   margin-top:40px;width:calc(100% - var(--gutter))}
 .progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:24%}
-.thumb .ph{aspect-ratio:550/289;background:#fff}
+/* .ph 全体の height:100% が aspect-ratio に勝ってしまうので打ち消す */
+.thumb .ph{aspect-ratio:550/289;height:auto;background:#fff}
 .thumb-meta{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
 .thumb p{font-size:13px;letter-spacing:.06em;line-height:1.8;color:#3a3a40;margin:0}
 .thumb .cta{height:36px;min-width:117px;padding:0 18px;border-radius:18px;font-size:13px}

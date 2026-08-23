@@ -166,11 +166,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .bonus{margin-top:40px;aspect-ratio:1171/220}
 
 /* 迷っている方へ */
-.undecided{background:var(--ink);color:var(--paper);padding:88px var(--gutter);
-  display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+/* 締めの一言。左右に振らず中央に縦へ積む（Figma: pad70・16・24） */
+.undecided{background:var(--ink);color:var(--paper);padding:70px var(--gutter);
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
 .undecided h2{font-weight:700;font-size:28px;letter-spacing:.1em;line-height:1.6;margin:0}
-.undecided p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);margin:10px 0 0}
-.undecided .row{display:flex;gap:14px;flex:none}
+.undecided p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:#fff;margin:16px 0 0}
+.undecided .row{display:flex;gap:24px;flex:none;flex-wrap:wrap;justify-content:center}
 
 /* ============ フッター ============
    参考サイト（X Mile）と同じ1段構成。ロゴを左、メニューを1行で右に並べ、
@@ -206,18 +207,23 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
    現行は「詳細は Wantedly」で外部に出てしまうので、詳細までは自社側で持ち、
    最後の応募だけを HERP（別タブ）に渡す想定。 */
 
-/* 求人ヘッダー */
-.jobhead{padding:180px var(--gutter) 48px}
-.jobtags{display:flex;flex-wrap:wrap;gap:8px}
-.jobtag{border:1px solid var(--line);border-radius:999px;padding:7px 15px;
-  font-size:12px;letter-spacing:.1em;line-height:1;color:var(--caption)}
-.jobhead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.6;margin:24px 0 0;max-width:20em}
-.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:20px 0 0}
-.jobhead .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+/* 求人ヘッダー：帯全体が写真のプレースホルダ。文字は左に載せる（Figma 実測） */
+.jobhead{position:relative;background:#d9d9d9;min-height:620px;
+  padding:183px var(--gutter) 96px}
+.jobhead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.6;margin:0;max-width:788px}
+.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:16px 0 0}
+.jobhead .row{display:flex;flex-wrap:wrap;gap:24px;margin-top:60px}
+/* 右半分の中央に置くダミー表記。箱は帯そのもの */
+.jobhead-ph{position:absolute;top:calc(50% - 18px);left:75%;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;gap:2px;text-align:center;color:#676767;
+  font-family:var(--font-en);pointer-events:none}
+.jobhead-ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.18em;line-height:1.6}
+.jobhead-ph i::after{content:"place holder";display:block;font-size:10px;font-weight:500;
+  letter-spacing:.234em;line-height:1.6}
 
 /* 本文＋サイドの概要カード */
 .jobbody{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:72px;
-  padding:0 var(--gutter) 104px;align-items:start}
+  padding:96px var(--gutter) 104px;align-items:start}
 .jobbody-main{min-width:0}
 .jobside{position:sticky;top:112px;background:var(--tone);padding:32px 32px 36px}
 .jobside dl{margin:0}
@@ -312,11 +318,7 @@ body{padding-bottom:0}
 
   <!-- ============ 求人ヘッダー ============ -->
   <section class="jobhead">
-    <div class="jobtags" data-reveal>
-      <span class="jobtag">中途採用</span>
-      <span class="jobtag">キャリアアドバイザー</span>
-      <span class="jobtag">東京・新橋</span>
-    </div>
+    <div class="jobhead-ph" aria-hidden="true"><i>VISUAL ASSETS</i></div>
     <h1 class="h1 line-reveal" data-observe data-delay="0.08"><span class="line"><span>一人の転職に、最後まで付き合うキャリアアドバイザー</span></span></h1>
     <p class="jobhead-sub" data-reveal data-delay="0.16">株式会社クオレガ ／ 人材紹介事業部</p>
     <div class="row" data-reveal data-delay="0.24">
