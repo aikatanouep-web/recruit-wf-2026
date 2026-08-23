@@ -120,9 +120,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .hero{position:relative;background:var(--ink);color:var(--paper);
   padding:195px var(--gutter) 0;height:700px}
 /* メインビジュアルは黒地いっぱいではなく、右に寄せた 533×481 の面。
-   右端はコピーと同じ内側の余白に揃える。 */
-.hero-media{position:absolute;top:114px;right:var(--gutter);z-index:1;
-  width:533px;height:481px}
+   右端はコピーと同じ内側の余白に揃える。
+   縦位置は、固定ヘッダー(80px)が黒帯に重なるぶんを除いた
+   「見えている範囲」の中央に置く。上から114pxだと見えている黒地が
+   上34px・下105pxになり、上に寄って見えるため。 */
+.hero-media{position:absolute;top:calc(80px + (700px - 80px - 481px) / 2);
+  right:var(--gutter);z-index:1;width:533px;height:481px}
 .hero-media .ph{background:#383838}
 .hero > h1,.hero > .lead{position:relative;z-index:2}
 .hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.2;margin:0}

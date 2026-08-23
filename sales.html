@@ -139,7 +139,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .header-cta .cta{padding:9px 18px;font-size:12px}
 
 /* セクション */
-.sec{padding:96px var(--gutter)}
+.sec{padding:80px var(--gutter)}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 .sec--dark{background:var(--ink);color:var(--paper)}
@@ -148,33 +148,46 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 全面の画像にコピーを重ねると、見出しの折り返しとCTAの居場所が
    画像の寸法に振り回される。左にコピー、右に画像面を置く2分割にして、
    それぞれの幅を独立させる。 */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 72px;align-items:center;
-  min-height:600px;padding:120px 0 120px var(--gutter);background:var(--paper)}
-.hero-copy{max-width:620px}
-.hero-media{align-self:stretch;min-height:440px}
-.hero-media .ph{border:none;background:var(--fill);font-size:12px;letter-spacing:.12em}
-.hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0}
-.hero .sub{font-size:15px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:24px 0 0;max-width:520px}
-.hero .row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap}
+/* FV：黒帯 700px の上に、右へ寄せた 533×458 の面を置く。
+   文字は 200px から始め、見出し→本文 24px、本文→ボタン 60px（Figma実測）。 */
+.hero{position:relative;background:#000;color:var(--paper);height:700px;
+  padding:200px var(--gutter) 0}
+.hero-copy{position:relative;z-index:2;max-width:639px}
+.hero-media{position:absolute;top:121px;right:var(--gutter);z-index:1;width:533px;height:458px}
+.hero-media .ph{border:none;background:var(--fill)}
+.hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0;color:var(--paper)}
+.hero .sub{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:24px 0 0;max-width:514px}
+.hero .row{display:flex;gap:24px;margin-top:60px;flex-wrap:wrap}
+.hero .cta{height:35px;padding:0 25px;font-size:13px;border-color:rgba(255,255,255,.55);color:var(--paper)}
+.hero .cta:hover{background:var(--paper);color:var(--ink)}
+.hero .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
+.hero .cta.primary:hover{background:transparent;color:var(--paper)}
 
 /* 02 Message */
-.msg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px}
+/* Message：eyebrow→見出し→本文が 40px、本文→リンクが 60px（Figma実測）*/
+.msg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:40px}
+.msg .tlink{margin-top:20px}
 .msg .body-tx{max-width:780px}
 
 /* 03 Merit：FACT / MEANING / BENEFIT */
-.merit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
-.merit{background:var(--paper);border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:16px}
+/* Merit：6枚とも同じ高さ(298px)に揃え、中身は天地中央。間隔は縦横とも24px */
+.merit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:32px}
+.merit{background:var(--paper);border-radius:12px;padding:0 24px;min-height:298px;
+  display:flex;flex-direction:column;justify-content:center;gap:20px}
 .sec--paper .merit{background:var(--tone)}
-.merit-no{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;color:var(--caption)}
+/* 番号は見出しと同じ 20px。太さだけ Regular で落とす（Figma実測）*/
+.merit-no{font-family:var(--font-en);font-weight:400;font-size:20px;letter-spacing:.06em;
+  line-height:1.3;color:var(--ink);flex:none}
 .merit h3{font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.6;margin:0}
+.merit-head{display:flex;align-items:baseline;gap:12px}
 .fmb{display:flex;flex-direction:column;gap:12px;margin:0}
-.fmb-row{display:grid;grid-template-columns:76px 1fr;gap:0 16px;align-items:baseline}
+.fmb-row{display:grid;grid-template-columns:102px minmax(0,1fr);gap:0 35px;align-items:baseline}
 .fmb-k{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.14em;line-height:1.9;color:var(--caption)}
 .fmb-v{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
 .fmb-row.is-benefit .fmb-v{color:var(--ink);font-weight:700}
 
 /* 04 Career：枝分かれ */
-.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:18px}
+.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
 /* ラベル→見出しは締めて一つの束に、見出し→項目は開けて別の束に見せる */
 .branch-col{background:var(--tone);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:0}
 .sec--tone .branch-col{background:var(--paper)}
@@ -186,17 +199,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .branch-col li{font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
 /* 「この先の選択肢」の起点。囲むとボタンに見えるので枠は持たせず、
    いまどの職種の話をしているかをアイコンと文字だけで示す。 */
-.branch-head{display:flex;width:fit-content;align-items:center;gap:7px;margin:24px 0 0}
+.branch-head{display:flex;width:fit-content;align-items:center;gap:7px;margin:0}
 .branch-head .from-ic{width:16px;height:16px;flex:none;color:var(--caption)}
 .branch-head .from-ic svg{width:100%;height:100%;display:block}
 .branch-head .from{font-family:var(--font-en);font-weight:700;font-size:13px;
   letter-spacing:.16em;line-height:1.6;color:var(--ink)}
-.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:24px}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:24px}
 .skill{border-top:1px solid var(--line);padding-top:16px}
 .skill h4{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0 0 6px}
 .skill p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* メンバー */
-.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
+.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
 /* 画像 → 見出し → 人物 → 変化 → リンク。同じ間隔で並べると全部が
    一つの塊に見えるので、束ごとに間隔と文字の強さを変える。 */
 .member{display:flex;flex-direction:column;gap:20px}
@@ -219,11 +232,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .m-more{margin-top:20px}
 
 /* 中間CTA */
-.midcta{background:var(--ink);color:var(--paper);padding:72px var(--gutter);display:flex;
-  align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
-.midcta h2{font-weight:700;font-size:28px;letter-spacing:.1em;line-height:1.6;margin:0}
-.midcta p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);margin:10px 0 0}
+/* 中間の黒帯CTA：Figma では左右振り分けをやめて中央寄せ。
+   上下80px、見出し→本文16px、本文→ボタン24px */
+.midcta{background:var(--ink);color:var(--paper);padding:80px var(--gutter);
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
+.midcta h2{font-weight:700;font-size:28px;letter-spacing:.1em;line-height:1.25;margin:0;max-width:724px}
+.midcta p{font-size:13px;letter-spacing:.08em;line-height:1.8;color:rgba(255,255,255,.72);
+  margin:16px 0 0;max-width:724px}
 .midcta .row{display:flex;gap:14px;flex:none}
+.midcta .cta{height:46px;padding:0 41px}
 
 /* 07 Company */
 .co-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
@@ -239,7 +256,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .prod .tlink{margin-top:auto;padding-top:12px}
 
 /* 08 Contents */
-.cont-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.cont-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px}
 .cont{display:flex;flex-direction:column;gap:14px}
 .cont .ph{aspect-ratio:16/9}
 .cont-label{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--caption)}
@@ -270,8 +287,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-main{min-width:0}
 
 /* カテゴリ。設問より一段大きく太くして、上に十分な間隔を取る */
-.faq-cat + .faq-cat{margin-top:72px}
-.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 12px}
+.faq-cat + .faq-cat{margin-top:70px}
+.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 32px}
 
 /* 設問行。行全体がボタン。ホバーの下地は左右に16px はみ出させて、
    文字の頭は右カラムの左端に揃えたままにする。 */
@@ -310,7 +327,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* SP */
 @media (max-width:768px){
   .faq-layout{gap:28px}
-  .faq-cat + .faq-cat{margin-top:52px}
+  .faq-cat + .faq-cat{margin-top:70px}
   .faq-cat-ttl{font-size:19px}
   .faq-q{font-size:15px;min-height:68px;gap:20px}
   .faq-mark{width:15px;height:15px}
@@ -320,9 +337,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* 10 最終CTA */
-.endcta{background:var(--ink);color:var(--paper);padding:96px var(--gutter);display:flex;flex-direction:column;
-  align-items:center;gap:28px;text-align:center}
-.endcta .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+/* 末尾の黒帯CTA：上下80px、見出し→ボタン27px、ボタン間24px（Figma実測）*/
+.endcta{background:var(--ink);color:var(--paper);padding:80px var(--gutter);display:flex;flex-direction:column;
+  align-items:center;text-align:center;gap:27px}
+.endcta .row{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+.endcta .cta{height:46px;padding:0 41px}
 .endcta .note{font-size:12px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.6);margin:0}
 
 /* ============ フッター ============
@@ -408,7 +427,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="msg">
       <p class="eyebrow" data-reveal>Message</p>
       <p class="statement line-reveal" data-observe>
-        <span class="line"><span>産業を支えているのは、人だ。</span></span>
+        <span class="line"><span>産業を支えているのは人だ。</span></span>
       </p>
       <p class="body-tx" data-reveal data-delay="0.15">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。だから私たちは、その産業を支える「人」の採用・就業を支援しています。<br>キャリアアドバイザーは、求職者一人の次の一歩を決めると同時に、受け入れる企業の未来にも関わる仕事です。</p>
       <a class="tlink" href="#" target="_blank" rel="noopener"><span class="label">About Cuolega</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
@@ -423,42 +442,42 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <p class="lead" data-reveal data-delay="0.08" style="margin-top:24px;max-width:780px">制度や環境を売り込むのではなく、事実と、その事実が持つ意味を並べます。</p>
     <div class="merit-grid" data-stagger data-observe>
-      <article class="merit"><span class="merit-no">01</span><h3>飲食・宿泊に特化している</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">01</span><h3>飲食・宿泊に特化している</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">飲食・宿泊業界に特化したエージェントとして、年間4万人以上の転職支援を行っている。拠点は東京・大阪・名古屋・福岡・札幌の5拠点。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">業界内に求人と候補者の母集団が厚く、業界固有の職種・条件・キャリアの型が社内に蓄積されている。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">提案の打ち手が多く、担当した案件がそのまま業界知見として積み上がる。</p></div>
         </div>
       </article>
-      <article class="merit"><span class="merit-no">02</span><h3>面談の場数が早く積める</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">02</span><h3>面談の場数が早く積める</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">東京拠点では1日20件強の面談を実施。8つの面談ブースを2時間ずつ4スロットで運用している。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">短い期間で多くのケースに当たれる環境が、仕組みとして用意されている。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">経験の総量が早く積み上がり、判断の引き出しが増える。</p></div>
         </div>
       </article>
-      <article class="merit"><span class="merit-no">03</span><h3>提案の型が言語化されている</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">03</span><h3>提案の型が言語化されている</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">面談では ABC というフレームワークを用いる。A＝求職者の経歴と希望、B＝市場での客観的な評価と他社の選考状況、C＝実際に内定が出る可能性のある求人。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">希望に沿うだけの提案を「御用聞き」と定義し、A・B・C を結ぶ全体最適を介在価値と位置づけている。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">感覚ではなく型で提案できるようになり、他社でも通用する再現性のある力になる。</p></div>
         </div>
       </article>
-      <article class="merit"><span class="merit-no">04</span><h3>成果が処遇に返るまでが早い</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">04</span><h3>成果が処遇に返るまでが早い</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">昇給は年4回（3ヶ月ごとの査定）。業績賞与は年2回（夏・冬）。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">評価と処遇の反映サイクルが四半期単位で回る。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">成果を出した手応えと処遇の変化が近く、次の打ち手を判断しやすい。</p></div>
         </div>
       </article>
-      <article class="merit"><span class="merit-no">05</span><h3>その先に選べる持ち場がある</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">05</span><h3>その先に選べる持ち場がある</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">エージェント事業と、FoodsLabo・HotelsLabo・Cuoport Japan という自社プロダクトの二軸で事業を展開している。</p></div>
           <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">キャリアアドバイザーの経験が、事業側・プロダクト側の双方に接続する。</p></div>
           <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">キャリアアドバイザーを入口に、複数の方向へ進む選択肢がある。</p></div>
         </div>
       </article>
-      <article class="merit"><span class="merit-no">06</span><h3>育成とフィードバックの体制</h3>
+      <article class="merit"><div class="merit-head"><span class="merit-no">06</span><h3>育成とフィードバックの体制</h3></div>
         <div class="fmb">
           <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">テキストが入ります。</p></div>
         </div>
