@@ -45,10 +45,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
-  text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
-.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
-  letter-spacing:.08em;line-height:1.6}
+  text-align:center;width:100%;height:100%;container-type:inline-size}
+/* Figma 実測。箱が小さいときは組み全体を 0.676 倍に落とす（大 13/10px → 小 8.8/6.8px）。
+   字間は Figma では px 固定なので、段ごとに em に割り戻して持たせる */
+.ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
+  letter-spacing:.234em;line-height:1.6}
+@container (min-width:420px){
+  .ph i{font-size:13px}
+  .ph i::after{font-size:10px}
+}
 
 .h2{font-weight:700;font-size:32px;letter-spacing:.1em;line-height:1.5;margin:0}
 .h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}

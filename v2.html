@@ -62,10 +62,16 @@ img{max-width:100%;display:block}
    色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
-  text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
-.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
-  letter-spacing:.08em;line-height:1.6}
+  text-align:center;width:100%;height:100%;container-type:inline-size}
+/* Figma 実測。箱が小さいときは組み全体を 0.676 倍に落とす（大 13/10px → 小 8.8/6.8px）。
+   字間は Figma では px 固定なので、段ごとに em に割り戻して持たせる */
+.ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
+  letter-spacing:.234em;line-height:1.6}
+@container (min-width:420px){
+  .ph i{font-size:13px}
+  .ph i::after{font-size:10px}
+}
 
 /* ---- 見出し階層：h1 64 / h2 32 / h3 24。同階層は必ず同サイズ ---- */
 .head-block{display:flex;flex-direction:column;gap:8px}
@@ -172,9 +178,12 @@ img{max-width:100%;display:block}
 /* ---- 01 FV ---- */
 /* FV：黒帯 700px の上に、右へ寄せた 533×458 の面。文字は白（Figma実測）。 */
 .hero{position:relative;height:700px;overflow:hidden;background:#000;color:var(--paper)}
-.hero-media{position:absolute;top:121px;right:var(--gutter);z-index:1;width:533px;height:458px}
+.hero-media{position:absolute;top:121px;right:var(--gutter);z-index:1;
+  width:clamp(300px,44vw,533px);height:458px}
 .hero-media .ph{border:none;background:#383838}
-.hero .copy{position:absolute;left:var(--gutter);top:209px;width:min(590px,50%);z-index:2}
+/* コピーは画像の左側に収まる幅までに抑える */
+.hero .copy{position:absolute;left:var(--gutter);top:209px;z-index:2;
+  width:min(590px, calc(100% - var(--gutter) * 2 - clamp(300px,44vw,533px) - 32px))}
 .hero h1{font-weight:700;font-size:64px;letter-spacing:.02em;line-height:1.5;margin:0;color:var(--paper)}
 .hero .sub{font-size:16px;letter-spacing:.1em;line-height:2;color:#fff;margin:26px 0 0;max-width:590px}
 
@@ -189,9 +198,9 @@ img{max-width:100%;display:block}
 .prod{background:#fff;border:0;border-radius:12px;padding:32px;
   display:flex;flex-direction:column;gap:8px;min-height:212px}
 .sec--paper .prod{background:var(--tone);border-color:transparent}
-.prod-name{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.5}
-.prod-sub{font-size:13px;letter-spacing:.08em;line-height:1.9;color:var(--caption);margin:0}
-.prod .tlink{margin-top:auto;font-size:14px}
+.prod-name{font-family:var(--font-en);font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.5}
+.prod-sub{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
+.prod .tlink{margin-top:auto;font-size:13px}
 .prod .tlink .circ{width:18px;height:18px}
 
 /* ---- 03 職種 ---- */
@@ -200,9 +209,12 @@ img{max-width:100%;display:block}
 .job-main{min-width:0}
 /* 上下に128pxの余白があるので、区切りの罫線は置かない */
 .job-item + .job-item{margin-top:140px}
-.job-side{position:sticky;top:104px;display:flex;flex-direction:column;gap:8px}
-.job-no{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption)}
-.job-en{font-family:var(--font-en);font-weight:500;font-size:13px;letter-spacing:.2em;color:var(--caption)}
+.job-side{position:sticky;top:104px;display:flex;flex-direction:column;gap:0}
+/* 通し番号は見出しの一部ではなく、章の目印。大きく細く置いて主従を作る */
+.job-no{font-family:var(--font-en);font-weight:400;font-size:25px;letter-spacing:.02em;
+  line-height:1;color:var(--ink);margin-bottom:20px}
+.job-en{font-family:var(--font-en);font-weight:500;font-size:13px;letter-spacing:.2em;
+  line-height:2;color:var(--caption)}
 .job-catch{font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.8;margin:0}
 .job-body{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:16px 0 0}
 .job-more{margin-top:24px}
@@ -236,36 +248,28 @@ img{max-width:100%;display:block}
 .progress{height:1px;background:rgba(13,13,14,.14);position:relative;width:100%}
 .progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:30%}
 
-/* ---- 04 カルチャー ---- */
-.vals-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:32px}
-.track-nav{display:flex;align-items:center;gap:16px;flex:none}
-.track-count{font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--caption);margin-right:8px}
-.track-count b{color:var(--ink)}
-.tarrow{position:relative;width:40px;height:40px;border-radius:50%;flex:none;background:var(--paper);
-  border:1px solid var(--line2);cursor:pointer;transition:background-color .45s var(--ease-out-expo),opacity .45s var(--ease-out-expo)}
-.tarrow:hover{background:var(--fill2)}
-/* opacity で飛ばすと消えたように見える。輪郭と山形の色で「押せない」を示す */
-.tarrow.is-off{pointer-events:none;background:transparent;border-color:var(--line)}
-.tarrow.is-off::before{border-color:#b9b9be}
-.tarrow::before{content:"";position:absolute;top:50%;left:50%;width:7px;height:7px;
-  border-top:1.2px solid #555;border-right:1.2px solid #555;transform:translate(-5.97px,-3.5px) rotate(45deg)}
-.tarrow.prev::before{transform:translate(-1.12px,-3.5px) rotate(-135deg)}
+/* ---- 04 カルチャー ----
+   ページのスクロール量をそのまま横送りに使う。セクションを画面に貼り付けて
+   （sticky）、セクション自身の余分な高さぶんだけトラックを左へ送る。
+   送りボタンとページャは持たない＝操作を覚えさせない。 */
+.culsec{position:relative}
+.cul-sticky{position:sticky;top:0;height:100vh;min-height:720px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;padding-left:var(--gutter)}
+.vals-head{margin-top:32px}
 .vals{margin-top:70px}
-.vals-track{display:flex;gap:32px;overflow-x:auto;scrollbar-width:none;padding-bottom:24px;
-  scroll-snap-type:x mandatory;cursor:grab}
-.vals-track:active{cursor:grabbing}
-.vals-track::-webkit-scrollbar{display:none}
+.vals-track{display:flex;gap:32px;will-change:transform}
+.cul-rail{margin-top:40px;width:calc(100% - var(--gutter))}
 /* 採用サイトの Our Value と同じ組み。番号＋縦罫＋和文見出し＋英字、
    その下に本文。地がグレーなので白で抜いて罫線は使わない。 */
-.vcard{flex:0 0 459px;scroll-snap-align:start;background:#fff;padding:40px;min-height:352px;
-  display:flex;flex-direction:column;gap:24px}
-.vcard-head{display:flex;align-items:center;gap:16px}
-.vcard .vno{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
-  line-height:1.6;color:var(--caption);margin:0}
-.vcard .vrule{width:2px;align-self:stretch;background:var(--ink);opacity:.85;border-radius:1px}
+.vcard{flex:0 0 459px;background:#fff;padding:40px;min-height:352px;
+  display:flex;flex-direction:column;gap:32px}
+.vcard-head{display:flex;align-items:center;gap:17px}
+.vcard .vno{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.12em;
+  line-height:.96;color:var(--caption);margin:0}
+.vcard .vrule{width:1px;align-self:stretch;background:var(--ink);opacity:.85}
 .vcard .vja{font-weight:700;font-size:20px;letter-spacing:.08em;line-height:1.5;margin:0}
 .vcard .ven{font-family:var(--font-en);font-weight:700;font-size:14px;letter-spacing:.06em;
-  line-height:1;color:var(--ink);margin:10px 0 0}
+  line-height:1;color:var(--ink);margin:8px 0 0}
 .vcard .vtx{font-size:13px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
 
 /* ---- 05 キャリア ---- */
@@ -311,7 +315,9 @@ img{max-width:100%;display:block}
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:40px 24px;margin-top:40px}
 .kpi{text-align:center}
 .kpi .num{font-family:var(--font-en);font-weight:700;font-size:36px;letter-spacing:.02em;line-height:1.1}
-.kpi .num .u{font-size:15px;letter-spacing:.1em;margin-left:2px}
+.kpi .num .u{font-size:20px;letter-spacing:.036em;margin-left:2px}
+/* 「約」は数字の前に付く同格の添え字。後ろの単位と同じ大きさで、寄せだけ逆にする */
+.kpi .num .u.pre{margin-left:0;margin-right:2px}
 .kpi .lbl{font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin-top:10px}
 
 /* ---- 07 働く環境（福利厚生・拠点をひとつの情報群として扱う） ---- */
@@ -376,12 +382,13 @@ table.spec td{letter-spacing:.1em;line-height:2;color:#3a3a40}
 table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 /* 円を大きくして間を詰め、見出しと頭を揃える。円が地の上に乗るので、
    連結線は円の間だけに見える。 */
+/* Figma 実測：Ø120 の円を 200px ピッチで 5 つ＝幅 920px。段の中央に置く */
 .flow{position:relative;display:flex;justify-content:space-between;align-items:center;
-  max-width:880px;margin:36px 0 0}
-.flow::before{content:"";position:absolute;top:50%;left:60px;right:60px;height:1px;background:var(--line2)}
+  width:920px;max-width:100%;margin:60px auto 0}
+.flow::before{content:"";position:absolute;top:50%;left:60px;right:60px;height:1px;background:#000}
 .fnode{position:relative;z-index:1;width:120px;height:120px;border-radius:50%;display:flex;align-items:center;
   justify-content:center;text-align:center;font-size:13px;letter-spacing:.06em;line-height:1.5}
-.flow-note{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:32px 0 0}
+.flow-note{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:36px 0 0}
 
 /* ---- 10 Join Us ---- */
 .joinus{background:var(--ink);color:var(--paper);padding:96px var(--gutter);display:flex;flex-direction:column;
@@ -404,6 +411,10 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .f-copy{font-size:12px;letter-spacing:.06em;line-height:1.4;color:var(--caption);
   margin:20px 0 0;text-align:right}
 @media (max-width:860px){
+  .hero{height:auto;overflow:visible;padding:130px var(--gutter) 72px}
+  .hero .copy{position:static;width:auto}
+  .hero-media{position:static;width:100%;height:auto;aspect-ratio:533/458;margin-top:48px}
+
   .footer{padding:40px var(--gutter)}
   .foot-in{gap:24px}
   .foot-nav{gap:20px 24px}
@@ -557,18 +568,14 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     </div>
   </section>
 
-  <section class="sec sec--tone" id="culture">
+  <section class="sec--tone culsec" id="culture">
+   <div class="cul-sticky">
     <div class="head-block" data-reveal>
       <p class="eyebrow">Culture</p>
       <h2 class="h2">カルチャー</h2>
     </div>
     <div class="vals-head" data-reveal data-delay="0.1">
       <p class="statement">成長と挑戦を楽しもう</p>
-      <div class="track-nav" data-nav-for="valstrack">
-        <span class="track-count"><b class="now">01–03</b> / <span class="total">07</span></span>
-        <span class="tarrow prev" data-dir="-1" role="button" aria-label="前へ"></span>
-        <span class="tarrow next" data-dir="1" role="button" aria-label="次へ"></span>
-      </div>
     </div>
     <div class="vals">
       <div class="vals-track" id="valstrack">
@@ -580,8 +587,9 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
         <div class="vcard"><div class="vcard-head"><span class="vno">06</span><span class="vrule" aria-hidden="true"></span><div><h3 class="vja">ファクトで語り仕組みを創る</h3><p class="ven">FactBase, Lead DX</p></div></div><p class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。DXを単なるツール導入と誤解せず、ビジネスオペレーションを作り切り、成果を最大化するため磨き続ける。</p></div>
         <div class="vcard"><div class="vcard-head"><span class="vno">07</span><span class="vrule" aria-hidden="true"></span><div><h3 class="vja">ユーザーファーストで信頼を築く</h3><p class="ven">Build Trust</p></div></div><p class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。その嘘のない歩みこそが期待を超え、業界で選ばれる理由という最強のブランドになる。</p></div>
       </div>
-      <div class="progress"><div class="bar" id="valsbar"></div></div>
+      <div class="progress cul-rail"><div class="bar" id="valsbar"></div></div>
     </div>
+   </div>
   </section>
 
   <section class="sec sec--paper career" id="career">
@@ -642,7 +650,7 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     <p class="num-lead" data-reveal data-delay="0.08">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。だから私たちは、食・宿泊産業を支える「人」の採用・就業を支援することで、日本の価値の向上に貢献します。</p>
     <div class="kpi-grid" data-stagger data-observe>
       <div class="kpi"><div class="num">2017</div><div class="lbl">設立（2017年2月）</div></div>
-      <div class="kpi"><div class="num">約150<span class="u">名</span></div><div class="lbl">従業員数</div></div>
+      <div class="kpi"><div class="num"><span class="u pre">約</span>150<span class="u">名</span></div><div class="lbl">従業員数</div></div>
       <div class="kpi"><div class="num">27<span class="u">歳</span></div><div class="lbl">社員平均年齢</div></div>
       <div class="kpi"><div class="num">60<span class="u">%</span></div><div class="lbl">新卒比率</div></div>
       <div class="kpi"><div class="num">5<span class="u">拠点</span></div><div class="lbl">全国の拠点数</div></div>
@@ -751,7 +759,7 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     </table>
     <h3 class="h3" data-reveal style="margin-top:64px">選考の流れ</h3>
     <div class="flow" data-stagger data-observe>
-      <div class="fnode" style="background:#fff;color:#0d0d0e;box-shadow:inset 0 0 0 1px #0d0d0e">エントリー</div>
+      <div class="fnode" style="background:#fff;color:#0d0d0e;box-shadow:inset 0 0 0 1px #000">エントリー</div>
       <div class="fnode" style="background:#d9d9d9;color:#0d0d0e">説明会</div>
       <div class="fnode" style="background:#a8a8a8;color:#fff">書類選考</div>
       <div class="fnode" style="background:#5e5e5e;color:#fff">面接</div>
@@ -896,10 +904,10 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   });
 })();
 
-/* 5) 横送りトラック（バリュー／インタビュー／拠点 共通）
+/* 5) 横送りトラック（インタビュー／拠点 共通）
       ページのスクロールは奪わない。進捗バーと、あるものだけ送りボタンを動かす */
 (function(){
-  var tracks=[].slice.call(document.querySelectorAll('.vals-track, .job-itv, .office-track'));
+  var tracks=[].slice.call(document.querySelectorAll('.job-itv, .office-track'));
   if(!tracks.length) return;
   tracks.forEach(function(tr){
     var wrap=tr.parentElement;
@@ -946,6 +954,37 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     tr.addEventListener('click',function(e){if(moved) e.preventDefault();},true);
     draw();
   });
+})();
+
+/* 5b) カルチャーはスクロール連動の横送り。
+       セクションを sticky で貼り付け、セクション自身の余りの高さを進捗に読み替える。
+       ページのスクロールは奪わず、送りボタンもページャも持たせない。 */
+(function(){
+  var sec=document.getElementById('culture'); if(!sec) return;
+  var sticky=sec.querySelector('.cul-sticky'), tr=document.getElementById('valstrack');
+  var bar=sec.querySelector('.cul-rail .bar');
+  if(!sticky||!tr) return;
+  var travel=0;
+  function measure(){
+    /* 幅が出る前に走らせると height:0 を書き込んでセクションごと潰れる */
+    if(!tr.scrollWidth||!sticky.offsetHeight) return;
+    travel=Math.max(0, tr.scrollWidth-sticky.clientWidth+parseFloat(getComputedStyle(sticky).paddingLeft||0));
+    sec.style.height=(sticky.offsetHeight+travel)+'px';
+    draw();
+  }
+  function draw(){
+    var r=sec.getBoundingClientRect();
+    var total=sec.offsetHeight-sticky.offsetHeight;
+    if(total<=0) return;
+    var st=parseFloat(getComputedStyle(sticky).top)||0;
+    var p=Math.min(1,Math.max(0,(st-r.top)/total));
+    tr.style.transform='translateX('+(-p*travel).toFixed(2)+'px)';
+    if(bar){ var w=24; bar.style.width=w+'%'; bar.style.left=(p*(100-w))+'%'; }
+  }
+  addEventListener('scroll',draw,{passive:true});
+  addEventListener('resize',measure);
+  if(window.ResizeObserver) new ResizeObserver(measure).observe(tr);
+  measure(); addEventListener('load',measure);
 })();
 </script>
 </body>

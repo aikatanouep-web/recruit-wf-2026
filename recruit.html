@@ -51,10 +51,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
 .ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
-  text-align:center;width:100%;height:100%}
-.ph i{font-style:normal;display:block;font-size:13px;font-weight:500;letter-spacing:.14em;line-height:1.6}
-.ph i::after{content:"place holder";display:block;font-size:10px;font-weight:400;
-  letter-spacing:.08em;line-height:1.6}
+  text-align:center;width:100%;height:100%;container-type:inline-size}
+/* Figma 実測。箱が小さいときは組み全体を 0.676 倍に落とす（大 13/10px → 小 8.8/6.8px）。
+   字間は Figma では px 固定なので、段ごとに em に割り戻して持たせる */
+.ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
+.ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
+  letter-spacing:.234em;line-height:1.6}
+@container (min-width:420px){
+  .ph i{font-size:13px}
+  .ph i::after{font-size:10px}
+}
 .ph--dark{background:#232327;color:rgba(255,255,255,.6)}
 
 /* 見出し階層 h1 56 / h2 40 / h3 24 */
@@ -125,10 +131,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    「見えている範囲」の中央に置く。上から114pxだと見えている黒地が
    上34px・下105pxになり、上に寄って見えるため。 */
 .hero-media{position:absolute;top:calc(80px + (700px - 80px - 481px) / 2);
-  right:var(--gutter);z-index:1;width:533px;height:481px}
+  right:var(--gutter);z-index:1;width:clamp(300px,44vw,533px);height:481px}
 .hero-media .ph{background:#383838}
-.hero > h1,.hero > .lead{position:relative;z-index:2}
-.hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.2;margin:0}
+/* コピーは画像の左側に収まる幅までに抑える（窓を縮めても潜り込ませない）*/
+.hero > h1,.hero > .lead{position:relative;z-index:2;
+  max-width:min(580px, calc(100% - clamp(300px,44vw,533px) - 32px))}
+.hero h1{font-weight:700;font-size:56px;letter-spacing:.15em;line-height:1.4;margin:0}
 .hero .lead{font-size:16px;letter-spacing:.08em;line-height:2.3;color:rgba(255,255,255,.92);
   margin:60px 0 0;max-width:580px}
 
@@ -147,7 +155,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 行間 2.1 のぶん（上下に約7pxずつ）が乗るので、箱の余白は 10px にして
    見た目を約24pxに収める。20px のままだと見た目34pxで段落が分断されて見える。 */
 .mv-text p + p{margin-top:10px}
-@media (max-width:860px){.mv-text p + p{margin-top:6px}}
+@media (max-width:860px){
+  .hero{height:auto;padding:130px var(--gutter) 72px}
+  .hero > h1,.hero > .lead{max-width:none}
+  .hero-media{position:static;width:100%;height:auto;aspect-ratio:533/481;margin-top:48px}
+.mv-text p + p{margin-top:6px}}
 
 /* 03 Our Value（大きな白カードを横に送る） */
 /* 縦スクロールに連動して横へ送る（参照サイトの Company と同じ作り）。
@@ -161,7 +173,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .val-rail{margin-top:40px;width:calc(100% - var(--gutter))}
 .vcard-head{display:flex;align-items:center;gap:40px}
 /* ワイヤーの段階では番号を装飾にしない。順番が分かる最小限のラベルに留める。 */
-.vno{font-family:var(--font-en);font-weight:300;font-size:88px;letter-spacing:.02em;line-height:1}
+.vno{font-family:var(--font-en);font-weight:400;font-size:88px;letter-spacing:.02em;line-height:1}
 .vrule{width:1px;align-self:stretch;background:var(--line2)}
 .vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
 .ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
@@ -246,7 +258,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
 .gjob-name{font-family:var(--font-en);font-weight:700;font-size:18px;
   letter-spacing:.08em;line-height:1.4}
 .gjob-cta{display:inline-flex;align-items:center;gap:4px;
-  font-size:13px;letter-spacing:.06em;line-height:1.6;color:rgba(255,255,255,.8)}
+  font-size:12px;letter-spacing:.065em;line-height:1.7;color:rgba(255,255,255,.8)}
 .gates .arw{transition-duration:.2s}
 @media (hover:hover){
   .gjob:hover{background:rgba(255,255,255,.11)}
