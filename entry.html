@@ -209,11 +209,12 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
    最後の応募だけを HERP（別タブ）に渡す想定。 */
 
 /* 求人ヘッダー：帯全体が写真のプレースホルダ。文字は左に載せる（Figma 実測） */
-.jobhead{position:relative;background:#d9d9d9;min-height:620px;
-  padding:183px var(--gutter) 96px}
+.jobhead{position:relative;background:#d9d9d9;min-height:700px;
+  padding:80px var(--gutter) 0;
+  display:flex;flex-direction:column;justify-content:center}
 .jobhead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.6;margin:0;max-width:788px}
-.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:16px 0 0}
-.jobhead .row{display:flex;flex-wrap:wrap;gap:24px;margin-top:60px}
+.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:-8px 0 0}
+.jobhead .row{display:flex;flex-wrap:wrap;gap:24px;margin-top:61px}
 /* 右半分の中央に置くダミー表記。箱は帯そのもの */
 .jobhead-ph{position:absolute;top:calc(50% - 18px);left:75%;transform:translate(-50%,-50%);
   display:flex;flex-direction:column;gap:2px;text-align:center;color:#676767;
@@ -235,10 +236,11 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .jobside .cta{width:100%;margin-top:28px}
 
 /* 記事本文 */
-.rich > * + *{margin-top:22px}
-.rich h3{font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.7;margin:56px 0 0}
+/* 見出しと本文はひと続きに見せ、ブロックとブロックは 60px で切る（Figma 実測） */
+.rich > * + *{margin-top:8px}
+.rich h3{font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.7;margin:60px 0 0}
 .rich h3:first-child{margin-top:0}
-.rich p{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
+.rich p{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40}
 .rich ul{list-style:none;margin:0;padding:0}
 /* 文頭の記号は置かない。頭を本文と揃える */
 .rich li{font-size:14px;letter-spacing:.1em;
@@ -320,7 +322,7 @@ body{padding-bottom:0}
   <!-- ============ 求人ヘッダー ============ -->
   <section class="jobhead">
     <div class="jobhead-ph" aria-hidden="true"><i>VISUAL ASSETS</i></div>
-    <h1 class="h1 line-reveal" data-observe data-delay="0.08"><span class="line"><span>一人の転職に、最後まで付き合うキャリアアドバイザー</span></span></h1>
+    <h1 class="h1 line-reveal" data-observe data-delay="0.08"><span class="line"><span>一人の転職に、最後まで</span></span><span class="line"><span>付き合うキャリアアドバイザー</span></span></h1>
     <p class="jobhead-sub" data-reveal data-delay="0.16">株式会社クオレガ ／ 人材紹介事業部</p>
     <div class="row" data-reveal data-delay="0.24">
       <a class="cta primary lg" href="#" target="_blank" rel="noopener">この求人に応募する<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
@@ -353,28 +355,16 @@ body{padding-bottom:0}
       </div>
 
       <h3 data-reveal>この仕事の魅力</h3>
-      <ul data-stagger data-observe>
-        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
-        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
-        <li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
-      </ul>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
       <h3 data-reveal>キャリアパス</h3>
       <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
       <h3 data-reveal>必須スキル</h3>
-      <ul data-stagger data-observe>
-        <li>テキストが入ります。</li>
-        <li>テキストが入ります。</li>
-        <li>テキストが入ります。</li>
-      </ul>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
       <h3 data-reveal>求める人物像</h3>
-      <ul data-stagger data-observe>
-        <li>テキストが入ります。</li>
-        <li>テキストが入ります。</li>
-        <li>テキストが入ります。</li>
-      </ul>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
       <h3 data-reveal>仕事の雰囲気が分かる記事・動画</h3>
       <div class="linklist" data-stagger data-observe>
