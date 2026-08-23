@@ -291,7 +291,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cont-label{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--caption)}
 .cont h3{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:2px 0 0}
 .cont p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
-.cont.is-more{display:none}
+/* 追加ぶんは器ごと 0fr→1fr で開く。display の切り替えだとカチッと出てしまう */
+.cont-morewrap{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
+.cont-grid.is-open + .cont-morewrap,.cont-morewrap.is-open{grid-template-rows:1fr}
+.cont-more-in{overflow:hidden;min-height:0}
+.cont-grid--more{margin-top:0;padding-top:24px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.cont-morewrap.is-open .cont-grid--more{opacity:1;transform:none;transition-delay:.06s}
 /* カード内の「詳しく見る」と近すぎたので間隔を広げる。
    ボタン自体は主役ではないので、小さな英字＋シェブロンに留める。 */
 .cont-more{display:flex;justify-content:center;margin-top:76px}
@@ -308,7 +316,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .morebtn .chev svg{width:100%;height:100%;display:block;stroke-width:2}
 .morebtn .chev svg *{vector-effect:non-scaling-stroke}
 .morebtn[aria-expanded="true"] .chev{transform:rotate(180deg)}
-.cont-grid.is-open .cont.is-more{display:flex}
 
 /* 09 FAQ */
 /* ============ FAQ ============
@@ -346,11 +353,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-mark::after{width:1.5px;height:14px;transition:height .24s var(--ease-out-expo)}
 .faq-item.is-open .faq-mark::after{height:0}
 
-.faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .7s cubic-bezier(.33,1,.68,1)}
+.faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
 .faq-item.is-open .faq-wrap{grid-template-rows:1fr}
 .faq-a{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .5s cubic-bezier(.33,1,.68,1),transform .6s cubic-bezier(.33,1,.68,1)}
-.faq-item.is-open .faq-a{opacity:1;transform:none;transition-delay:.12s}
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.faq-item.is-open .faq-a{opacity:1;transform:none;transition-delay:.06s}
 .faq-a > div{padding:0 54px 28px 0;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .faq-a p{font-size:14px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0}
 
@@ -648,20 +655,26 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <div><span class="cont-label">Interview</span><h3>社員インタビュー</h3><p>実際に働くメンバーの話。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    </div>
+    <div class="cont-morewrap" id="contmorewrap">
+     <div class="cont-more-in">
+      <div class="cont-grid cont-grid--more">
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Article</span><h3>note</h3><p>事業やカルチャーについての記事。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Movie</span><h3>動画コンテンツ</h3><p>仕事の様子や社内の雰囲気。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="cont is-more"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <article class="cont"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div><span class="cont-label">Message</span><h3>代表メッセージ</h3><p>これから目指す方向について。</p>
         <div style="margin-top:10px"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">詳しく見る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
+      </div>
+     </div>
     </div>
-        <div class="cont-more"><button class="morebtn" type="button" id="contmore" aria-expanded="false"><span class="label">More</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><polyline points="6 9 12 15 18 9"/></svg></span></button></div>
+    <div class="cont-more"><button class="morebtn" type="button" id="contmore" aria-expanded="false"><span class="label">More</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><polyline points="6 9 12 15 18 9"/></svg></span></button></div>
   </section>
 
   <!-- ============ 08 FAQ ============ 聞きづらい質問に正面から。答えが無いものは推測で埋めない -->
@@ -959,7 +972,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   });
 })();
 (function(){ /* もっと見る */
-  var b=document.getElementById('contmore'), g=document.getElementById('contgrid');
+  var b=document.getElementById('contmore'), g=document.getElementById('contmorewrap');
   if(!b||!g) return;
   b.addEventListener('click',function(){
     var open=g.classList.toggle('is-open');

@@ -166,12 +166,12 @@ img{max-width:100%;display:block}
 .navpanel{position:absolute;left:0;right:0;top:80px;background:rgba(251,251,251,.97);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-top:1px solid var(--line);
-  display:grid;grid-template-rows:0fr;transition:grid-template-rows .7s cubic-bezier(.33,1,.68,1)}
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
 .is-navopen .navpanel{grid-template-rows:1fr}
 /* 中身もアコーディオンと同じで、8px 浮かせてから着地させる */
 .navpanel-in{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .5s cubic-bezier(.33,1,.68,1),transform .6s cubic-bezier(.33,1,.68,1)}
-.is-navopen .navpanel-in{opacity:1;transform:none;transition-delay:.12s}
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.is-navopen .navpanel-in{opacity:1;transform:none;transition-delay:.06s}
 .navpanel ul{list-style:none;margin:0;padding:28px var(--gutter) 40px;
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px 32px}
 .navpanel a{display:flex;align-items:baseline;gap:12px;padding:14px 4px;text-decoration:none;color:var(--ink);
@@ -351,12 +351,12 @@ img{max-width:100%;display:block}
 .bene-group.is-open > .bene-cat::after{background-size:16px 1.5px,1.5px 0}
 /* details は閉じると中身が消えるため素の CSS では補間できない。
    ラッパの grid-template-rows を 0fr→1fr で送り、閉じ切ってから open を外す。 */
-.bene-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .7s cubic-bezier(.33,1,.68,1)}
+.bene-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
 .bene-group.is-open .bene-wrap{grid-template-rows:1fr}
 .bene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 40px;padding:0 0 28px;
   overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .5s cubic-bezier(.33,1,.68,1),transform .6s cubic-bezier(.33,1,.68,1)}
-.bene-group.is-open .bene-grid{opacity:1;transform:none;transition-delay:.12s}
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.bene-group.is-open .bene-grid{opacity:1;transform:none;transition-delay:.06s}
 .bene-item h4{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0 0 6px}
 .bene-item p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* 拠点は福利厚生と同じ情報群に見えるよう、同じ余白・角丸・地色で扱う */
