@@ -168,7 +168,10 @@ img{max-width:100%;display:block}
   border-top:1px solid var(--line);
   display:grid;grid-template-rows:0fr;transition:grid-template-rows .7s cubic-bezier(.33,1,.68,1)}
 .is-navopen .navpanel{grid-template-rows:1fr}
-.navpanel-in{overflow:hidden;min-height:0}
+/* 中身もアコーディオンと同じで、8px 浮かせてから着地させる */
+.navpanel-in{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
+  transition:opacity .5s cubic-bezier(.33,1,.68,1),transform .6s cubic-bezier(.33,1,.68,1)}
+.is-navopen .navpanel-in{opacity:1;transform:none;transition-delay:.12s}
 .navpanel ul{list-style:none;margin:0;padding:28px var(--gutter) 40px;
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px 32px}
 .navpanel a{display:flex;align-items:baseline;gap:12px;padding:14px 4px;text-decoration:none;color:var(--ink);
