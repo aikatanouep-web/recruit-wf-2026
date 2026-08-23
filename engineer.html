@@ -51,6 +51,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
 .ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
   letter-spacing:.234em;line-height:1.6}
+/* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
+@container (min-width:340px){
+  .ph i{font-size:11px}
+  .ph i::after{font-size:8.5px}
+}
 @container (min-width:420px){
   .ph i{font-size:13px}
   .ph i::after{font-size:10px}
@@ -104,7 +109,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
-.pagehead{padding:180px var(--gutter) 64px}
+/* 見出し → 40px → KV(1168x350) → 70px → 中央のボタン（Figma 実測） */
+.pagehead{padding:117px var(--gutter) 96px}
+.kvcta{display:flex;justify-content:center;margin-top:70px}
+.kvcta .cta{height:35px;min-width:220px;padding:0 25px;border-radius:17.5px;
+  font-size:13px;letter-spacing:.1em}
 .pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
 
 
@@ -120,12 +129,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   gap:40px;padding:24px 0;font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1.8;
   transition:opacity var(--dur-hover) var(--ease-out-expo)}
 .faq-q::-webkit-details-marker{display:none}
-.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:7px;opacity:.5;
+.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:8px;color:#3a3a40;
   background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
              linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
   transition:background-size .5s var(--ease-out-expo),opacity .4s var(--ease-out-expo)}
-.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0;opacity:1}
-@media (hover:hover){.faq-q:hover::after{opacity:1}}
+.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0}
 .faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease-out-expo)}
 .faq-item.is-open .faq-wrap{grid-template-rows:1fr}
 .faq-a{overflow:hidden;min-height:0;opacity:0;transition:opacity .45s var(--ease-out-expo)}
@@ -163,23 +171,46 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* 2カラム（テキスト＋画像）。左右の入れ替えは .is-flip で */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:0 72px;align-items:center;margin-top:40px}
-.duo.is-flip .duo-text{order:2}
-.duo-media{aspect-ratio:4/3}
 .duo-text p{font-size:14px;letter-spacing:.08em;line-height:2;color:#3a3a40;margin:0}
 .duo-text p + p{margin-top:20px}
-.duo-text .cta{margin-top:32px}
+
+/* プロダクト組織紹介：黒地。左に見出しと本文、右に写真（Figma 547 / 126 / 499） */
+.orgsec{background:var(--ink);color:var(--paper);padding:96px var(--gutter)}
+.orgsec .duo{display:grid;grid-template-columns:547px minmax(0,499px);gap:0 126px;
+  justify-content:space-between;align-items:start}
+.orgsec .h2{color:var(--paper)}
+.orgsec .duo-text{display:flex;flex-direction:column;gap:40px}
+.orgsec .duo-text p{color:#fff}
+.orgsec .duo-media{aspect-ratio:499/254}
+
+/* カルチャーデック：左に写真、右に本文（Figma 550 / 70 / 547） */
+.decksec .duo{display:grid;grid-template-columns:550px minmax(0,547px);gap:0 70px;
+  justify-content:space-between;align-items:start;margin-top:40px}
+.decksec .duo-media{aspect-ratio:550/293}
 
 /* 大きな画像帯 */
 .band{margin-top:40px}
-.band--kv{aspect-ratio:1171/440}
-.band--wide{aspect-ratio:1171/260}
+.band--kv{aspect-ratio:1168/350}
+.band--wide{aspect-ratio:1172/260}
 
 /* 2枚組のサムネイル */
-.thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:40px}
-.thumb{display:flex;flex-direction:column;gap:14px}
-.thumb .ph{aspect-ratio:16/7}
+/* note：2枚ずつ見せて横に流す（Figma 550幅・間隔70） */
+.notesec{background:var(--tone);padding:96px var(--gutter)}
+.thumbs{display:flex;gap:70px;margin-top:32px;overflow-x:auto;
+  scrollbar-width:none;scroll-snap-type:x mandatory}
+.thumbs::-webkit-scrollbar{display:none}
+.thumb{flex:0 0 550px;scroll-snap-align:start;display:flex;flex-direction:column;gap:15px}
+.thumb .ph{aspect-ratio:550/289;background:#fff}
+.thumb-meta{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
 .thumb p{font-size:13px;letter-spacing:.06em;line-height:1.8;color:#3a3a40;margin:0}
+.thumb .cta{height:36px;min-width:117px;padding:0 18px;border-radius:18px;font-size:13px}
+/* 帯の底を1本の罫で締める */
+.sec-rule{height:1px;background:var(--ink);margin-top:60px}
+
+/* 募集要項：箱のあと中央にエントリー */
+.reqsec .band{margin-top:32px}
+.reqcta{display:flex;justify-content:center;margin-top:40px}
+.reqcta .cta{height:47px;min-width:180px;padding:0 24px;border-radius:23.5px;font-size:14px}
 
 /* 担当メンバー */
 .people{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
@@ -233,44 +264,56 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="pagehead">
     <h1 class="h1 line-reveal" data-observe><span class="line"><span>エンジニア採用</span></span></h1>
+    <div class="band band--kv" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    <div class="kvcta" data-reveal><a class="cta" href="casual.html">カジュアル面談を申し込む</a></div>
   </section>
 
-  <section class="sec" style="padding-top:0">
-    <div class="band band--kv" style="margin-top:0" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    <a class="cta" href="casual.html" data-reveal>カジュアル面談を申し込む</a>
-  </section>
-
-  <section class="sec sec--tone">
-    <div class="head-block" data-reveal><h2 class="h2">プロダクト組織紹介</h2></div>
+  <section class="sec orgsec">
     <div class="duo">
-      <div class="duo-text" data-reveal><p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
+      <div class="duo-text" data-reveal>
+        <h2 class="h2">プロダクト組織紹介</h2>
+        <p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+      </div>
       <div class="duo-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec decksec">
     <div class="head-block" data-reveal><h2 class="h2">エンジニアカルチャーデック</h2></div>
-    <div class="duo is-flip">
-      <div class="duo-text" data-reveal><p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
+    <div class="duo">
       <div class="duo-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <div class="duo-text" data-reveal><p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p></div>
     </div>
   </section>
 
-  <section class="sec sec--tone">
+  <section class="sec notesec">
     <div class="head-block" data-reveal><h2 class="h2">note：エンジニアの発信</h2></div>
     <div class="thumbs" data-stagger data-observe>
-      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div><p>メンバー A の更新記事</p></article>
-      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div><p>メンバー B の更新記事</p></article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div>
+        <div class="thumb-meta"><p>メンバー A の更新記事</p>
+          <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      </article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div>
+        <div class="thumb-meta"><p>メンバー B の更新記事</p>
+          <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      </article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div>
+        <div class="thumb-meta"><p>メンバー C の更新記事</p>
+          <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      </article>
+      <article class="thumb"><div class="ph"><i>VISUAL ASSETS</i></div>
+        <div class="thumb-meta"><p>メンバー D の更新記事</p>
+          <a class="cta" href="#" target="_blank" rel="noopener">noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      </article>
     </div>
-    <a class="cta" href="#" target="_blank" rel="noopener" data-reveal>noteへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+    <div class="sec-rule" aria-hidden="true"></div>
   </section>
 
-  <section class="sec">
+  <section class="sec reqsec">
     <div class="head-block" data-reveal><h2 class="h2">募集要項</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+    <div class="reqcta" data-reveal><a class="cta primary" href="entry.html">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
   </section>
-
 
   <footer class="footer">
     <div class="foot-in">

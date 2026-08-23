@@ -57,6 +57,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
 .ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
   letter-spacing:.234em;line-height:1.6}
+/* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
+@container (min-width:340px){
+  .ph i{font-size:11px}
+  .ph i::after{font-size:8.5px}
+}
 @container (min-width:420px){
   .ph i{font-size:13px}
   .ph i::after{font-size:10px}
@@ -187,8 +192,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 03 Merit：FACT / MEANING / BENEFIT */
 /* Merit：6枚とも同じ高さ(298px)に揃え、中身は天地中央。間隔は縦横とも24px */
-.merit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:32px}
-.merit{background:var(--paper);border-radius:12px;padding:0 24px;min-height:298px;
+.merit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:32px}
+.merit{background:var(--paper);border-radius:0;padding:0 24px;min-height:298px;
   display:flex;flex-direction:column;justify-content:center;gap:20px}
 .sec--paper .merit{background:var(--tone)}
 /* 番号は見出しと同じ 20px。太さだけ Regular で落とす（Figma実測）*/
@@ -209,14 +214,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 04 Career：枝分かれ */
 .branch{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
 /* ラベル→見出しは締めて一つの束に、見出し→項目は開けて別の束に見せる */
-.branch-col{background:var(--tone);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:0}
+/* Figma 実測：#f4f4f4・角丸4・padding 20/24。ラベル→見出し4px、見出し→リスト16px */
+.branch-col{background:var(--tone);border-radius:4px;padding:20px 24px;display:flex;flex-direction:column;gap:0}
 .sec--tone .branch-col{background:var(--paper)}
 .branch-en{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
-  line-height:1.6;color:var(--caption);margin:0 0 8px}
-.branch-col h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 18px}
+  line-height:1.6;color:var(--caption);margin:0 0 4px}
+.branch-col h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 16px}
 .branch-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-/* 文頭の記号は置かない。頭を見出しと揃えて、項目の切れ目は行間で見せる */
-.branch-col li{font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
+/* 文頭は 5px の丸ポチ（Figma 実測 #d9d9d9）。行頭から 10px あけて本文 */
+.branch-col li{position:relative;padding-left:15px;
+  font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
+.branch-col li::before{content:"";position:absolute;left:0;top:8.5px;
+  width:5px;height:5px;border-radius:50%;background:#d9d9d9}
 /* 「この先の選択肢」の起点。囲むとボタンに見えるので枠は持たせず、
    いまどの職種の話をしているかをアイコンと文字だけで示す。 */
 .branch-head{display:flex;width:fit-content;align-items:center;gap:7px;margin:0}
@@ -286,9 +295,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* カード内の「詳しく見る」と近すぎたので間隔を広げる。
    ボタン自体は主役ではないので、小さな英字＋シェブロンに留める。 */
 .cont-more{display:flex;justify-content:center;margin-top:76px}
-.morebtn{display:inline-flex;align-items:center;gap:4px;appearance:none;background:none;border:0;
-  cursor:pointer;padding:8px 4px;font-family:var(--font-en);font-weight:700;font-size:13px;
-  letter-spacing:.14em;line-height:1;color:var(--ink)}
+/* 他のセカンダリーボタンと同じ楕円の枠線。開閉は山形の向きで示す */
+.morebtn{display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  appearance:none;background:transparent;border:1px solid var(--ink);border-radius:999px;
+  height:36px;min-width:117px;padding:0 22px;cursor:pointer;
+  font-family:var(--font-en);font-weight:700;font-size:13px;letter-spacing:.14em;
+  line-height:1;color:var(--ink);
+  transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
+@media (hover:hover){.morebtn:hover{background:var(--ink);color:var(--paper)}}
 .morebtn .chev{width:14px;height:14px;display:block;
   transition:transform .45s var(--ease-out-expo)}
 .morebtn .chev svg{width:100%;height:100%;display:block;stroke-width:2}
@@ -325,11 +339,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-q-tx{min-width:0}
 
 /* ＋／− 。開くと縦棒だけが消える */
-.faq-mark{position:relative;width:16px;height:16px;flex:none;color:#3a3a40}
+.faq-mark{position:relative;width:14px;height:14px;flex:none;color:#3a3a40}
 .faq-mark::before,.faq-mark::after{content:"";position:absolute;left:50%;top:50%;
   background:currentColor;border-radius:1px;transform:translate(-50%,-50%)}
-.faq-mark::before{width:16px;height:1.5px}
-.faq-mark::after{width:1.5px;height:16px;transition:height .24s var(--ease-out-expo)}
+.faq-mark::before{width:14px;height:1.5px}
+.faq-mark::after{width:1.5px;height:14px;transition:height .24s var(--ease-out-expo)}
 .faq-item.is-open .faq-mark::after{height:0}
 
 .faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .26s var(--ease-out-expo)}
@@ -516,15 +530,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <p class="eyebrow">Career</p>
       <h2 class="h2">キャリアの広がりと、歩んでいる人</h2>
     </div>
-    <h3 class="h3" data-reveal style="margin-top:40px">身につくもの</h3>
+    <h3 class="h3" data-reveal style="margin-top:70px">身につくもの</h3>
     <div class="skills" data-stagger data-observe>
       <div class="skill"><h4>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
       <div class="skill"><h4>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
       <div class="skill"><h4>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
       <div class="skill"><h4>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
     </div>
-    <h3 class="h3" data-reveal style="margin-top:64px">この先の選択肢</h3>
-    <p class="branch-head" data-reveal><span class="from-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="from">Career Advisor</span></p>
+    <h3 class="h3" data-reveal style="margin-top:70px">この先の選択肢</h3>
     <div class="branch" data-stagger data-observe>
       <div class="branch-col"><span class="branch-en">Player</span><h4>プレイヤーとして深める</h4>
         <ul>
@@ -548,7 +561,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </ul>
       </div>
     </div>
-    <h3 class="h3" data-reveal style="margin-top:64px">活躍しているメンバー</h3>
+    <h3 class="h3" data-reveal style="margin-top:70px">活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
       <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>

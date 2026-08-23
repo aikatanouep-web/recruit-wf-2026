@@ -68,6 +68,11 @@ img{max-width:100%;display:block}
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
 .ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
   letter-spacing:.234em;line-height:1.6}
+/* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
+@container (min-width:340px){
+  .ph i{font-size:11px}
+  .ph i::after{font-size:8.5px}
+}
 @container (min-width:420px){
   .ph i{font-size:13px}
   .ph i::after{font-size:10px}

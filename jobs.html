@@ -51,6 +51,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
 .ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
   letter-spacing:.234em;line-height:1.6}
+/* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
+@container (min-width:340px){
+  .ph i{font-size:11px}
+  .ph i::after{font-size:8.5px}
+}
 @container (min-width:420px){
   .ph i{font-size:13px}
   .ph i::after{font-size:10px}
@@ -177,11 +182,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   gap:75px;padding:0;font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1.8;
   transition:opacity var(--dur-hover) var(--ease-out-expo)}
 .faq-q::-webkit-details-marker{display:none}
-.faq-q::after{content:"";width:17px;height:17px;flex:none;margin-top:6px;color:var(--caption);
-  background:linear-gradient(currentColor,currentColor) center/17px 1.5px no-repeat,
-             linear-gradient(currentColor,currentColor) center/1.5px 17px no-repeat;
+.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:8px;color:#3a3a40;
+  background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
+             linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
   transition:background-size .5s var(--ease-out-expo)}
-.faq-item.is-open > .faq-q::after{background-size:17px 1.5px,1.5px 0}
+.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0}
 .faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease-out-expo)}
 .faq-item.is-open .faq-wrap{grid-template-rows:1fr}
 .faq-a{overflow:hidden;min-height:0;opacity:0;transition:opacity .45s var(--ease-out-expo)}

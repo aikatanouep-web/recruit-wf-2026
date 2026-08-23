@@ -57,6 +57,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
 .ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
   letter-spacing:.234em;line-height:1.6}
+/* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
+@container (min-width:340px){
+  .ph i{font-size:11px}
+  .ph i::after{font-size:8.5px}
+}
 @container (min-width:420px){
   .ph i{font-size:13px}
   .ph i::after{font-size:10px}
@@ -122,15 +127,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 01 FV（黒地） */
 /* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
-   縦に長い画面で下に白が覗く。svh は端末のバーの出入りに追従させるため。 */
+   縦に長い画面で下に白が覗く。
+   コピーも写真も、固定ヘッダー(80px)を除いた黒帯の中央に置く。
+   700px のときに Figma（コピー y235 / 写真 y150）と一致する。 */
 .hero{position:relative;background:var(--ink);color:var(--paper);
-  padding:195px var(--gutter) 0;height:700px}
+  padding:80px var(--gutter) 0;min-height:max(700px,100vh);
+  display:flex;flex-direction:column;justify-content:center}
 /* メインビジュアルは黒地いっぱいではなく、右に寄せた 533×481 の面。
    右端はコピーと同じ内側の余白に揃える。
-   縦位置は、固定ヘッダー(80px)が黒帯に重なるぶんを除いた
-   「見えている範囲」の中央に置く。上から114pxだと見えている黒地が
-   上34px・下105pxになり、上に寄って見えるため。 */
-.hero-media{position:absolute;top:calc(80px + (700px - 80px - 481px) / 2);
+   縦位置はヘッダーを除いた黒帯の中央。40px = 80px の半分。 */
+.hero-media{position:absolute;top:calc(40px + 50%);transform:translateY(-50%);
   right:var(--gutter);z-index:1;width:clamp(300px,44vw,533px);height:481px}
 .hero-media .ph{background:#383838}
 /* コピーは画像の左側に収まる幅までに抑える（窓を縮めても潜り込ませない）*/
