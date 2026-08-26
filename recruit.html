@@ -126,13 +126,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-/* 語間はキャップハイトの約4倍。sales の欧文ナビと同じ間隔に揃える */
-.header-nav{display:flex;gap:40px}
+/* ナビ4項目（カルチャー・募集職種一覧・カジュアル面談・エントリー）を
+   一つの並びとして等間隔に置く。header-nav は display:contents で
+   自身の箱を消し、中の a を header-actions の並びに直接加える */
+.header-actions{display:flex;align-items:center;gap:32px}
+.header-nav{display:contents}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
-.header-cta{display:flex;align-items:center;gap:12px}
 
 /* 01 FV（黒地） */
 /* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
@@ -341,11 +343,11 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <nav class="header-nav">
-      <a href="#value">カルチャー</a>
-      <a href="jobs.html">募集職種一覧</a>
-    </nav>
-    <div class="header-cta">
+    <div class="header-actions">
+      <nav class="header-nav">
+        <a href="#value">カルチャー</a>
+        <a href="jobs.html">募集職種一覧</a>
+      </nav>
       <a class="cta" href="casual.html">カジュアル面談</a>
       <a class="cta primary" href="entry.html">エントリー</a>
     </div>
