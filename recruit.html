@@ -106,13 +106,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
-/* 応募系だけ面のあるボタン（v2.html のヘッダーCTAと同じ組み） */
-.cta{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);border-radius:999px;
+/* 応募系だけ面のあるボタン（v2.html のヘッダーCTA・casual.html の申し込むボタンと同じ組み） */
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1px solid var(--ink);border-radius:999px;
   padding:9px 20px;font-size:12px;letter-spacing:.1em;line-height:1;color:var(--ink);background:transparent;
   white-space:nowrap;cursor:pointer;text-decoration:none;transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
 .cta:hover{background:var(--ink);color:var(--paper)}
 .cta.primary{background:var(--ink);color:var(--paper)}
 .cta.primary:hover{background:transparent;color:var(--ink)}
+.cta.lg{padding:15px 40px;font-size:14px}
 
 /* 追従ヘッダー */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
@@ -226,6 +227,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .casual{background:var(--fill2);padding:88px var(--gutter);margin-top:0}
 .casual h2{font-weight:700;font-size:36px;letter-spacing:.06em;line-height:1.4;margin:0}
 .casual p{font-size:14px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:16px 0 24px}
+.casual-actions{display:flex;align-items:center;gap:32px}
 
 /* 07 Blog */
 .blog-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
@@ -237,6 +239,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 08 Entry（グレー帯） */
 .entry-lead{background:var(--fill);padding:160px var(--gutter)}
 .entry-lead .h2{font-size:44px;letter-spacing:.06em;margin-top:16px}
+.entry-lead .cta{margin-top:40px}
 
 /* 09 採用の入口（黒地） */
 /* ============ 採用導線 ============
@@ -474,7 +477,10 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   <div class="casual" data-reveal id="casual">
     <h2>カジュアル面談</h2>
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
-    <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+    <div class="casual-actions">
+      <a class="cta primary lg" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+    </div>
   </div>
 
   <section class="sec" id="blog">
@@ -522,6 +528,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   <section class="entry-lead" data-reveal>
     <p class="eyebrow">Entry</p>
     <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
+    <a class="cta primary lg" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 
   <footer class="footer">
