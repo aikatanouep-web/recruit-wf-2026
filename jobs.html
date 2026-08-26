@@ -160,7 +160,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 選考フロー */
 .flowsec{padding-top:66px;padding-bottom:70px}
-.flow-row{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:40px}
+.flow-row{display:grid;grid-template-columns:minmax(0,568px);gap:32px;margin-top:40px}
 .flow-card{display:flex;flex-direction:column;gap:32px}
 /* グレーの帯の上なので、ダミー枠は地より明るい紙色で抜く */
 .flow-card .ph{aspect-ratio:569/251;background:var(--paper)}
@@ -292,31 +292,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <div class="joblist is-on" data-list="new" data-stagger data-observe>
         <article class="jobrow">
-          <span class="jobrow-name">CA（キャリアアドバイザー）</span>
+          <span class="jobrow-name">新卒の方は新卒サイトをご覧ください</span>
           <div class="jobrow-actions">
-            <a class="cta primary" href="sales.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta primary" href="entry.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">エンジニア</span>
-          <div class="jobrow-actions">
-            <a class="cta primary" href="engineer.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">デザイナー</span>
-          <div class="jobrow-actions">
-            <a class="cta primary" href="designer.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta" href="v2.html">新卒採用サイト</a>
           </div>
         </article>
     </div>
@@ -355,9 +333,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec sec--tone flowsec">
     <div class="head-block" data-reveal><h2 class="h2">選考フロー</h2></div>
     <div class="flow-row" data-stagger data-observe>
-      <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>VISUAL ASSETS</i></div></div><p class="flow-cap">新卒採用の選考フロー</p></div>
       <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>VISUAL ASSETS</i></div></div><p class="flow-cap">中途採用の選考フロー</p></div>
     </div>
+  </section>
+
+  <section class="undecided">
+    <div>
+      <h2>迷っている方へ</h2>
+      <p>まずは気軽にお話ししませんか？ 応募を決めていなくても構いません。</p>
+    </div>
+    <div class="row"><span class="cta cta--ondark lg">カジュアル面談を申し込む</span></div>
   </section>
 
   <section class="sec">
@@ -380,14 +365,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec sec--tone">
     <div class="head-block" data-reveal><h2 class="h2">ダイレクト入社ボーナス</h2></div>
     <div class="bonus" data-reveal data-delay="0.08"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-  </section>
-
-  <section class="undecided">
-    <div>
-      <h2>迷っている方へ</h2>
-      <p>まずは気軽にお話ししませんか？ 応募を決めていなくても構いません。</p>
-    </div>
-    <div class="row"><span class="cta cta--ondark lg">カジュアル面談を申し込む</span></div>
   </section>
 
   <footer class="footer">
