@@ -199,8 +199,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .vtx{font-size:14px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
 .progress{height:1px;background:rgba(13,13,14,.14);position:relative;width:100%}
 .progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:30%}
-/* Our Value と同じ組みを流用する Culture 用のリード文 */
-.val-statement{font-weight:700;font-size:32px;letter-spacing:.08em;line-height:1.5;margin:0 0 40px}
 
 /* 04 Company（Deck 2枚） */
 .deck-row{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:40px}
@@ -219,9 +217,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* ダミー名。実名を入れると確定情報に見えるので、英字書体の Member A〜E で通す */
 .mem-name{font-family:var(--font-en);font-weight:700;font-size:15px;letter-spacing:.14em;
   line-height:1.5;margin:0}
+.mem-title{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.9;margin:0}
 .mem-meta{font-family:var(--font-en);font-size:12px;letter-spacing:.1em;line-height:1.6;
   color:var(--caption);margin:8px 0 0}
-.mem-tx{font-size:12px;letter-spacing:.04em;line-height:1.9;color:#3a3a40;margin:12px 0 0}
+.mem-more{align-self:flex-start;margin-top:12px}
 
 /* 06 カジュアル面談バナー */
 .casual{background:var(--fill2);padding:88px var(--gutter);margin-top:0}
@@ -348,7 +347,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </svg></a>
     <div class="header-actions">
       <nav class="header-nav">
-        <a href="#value">カルチャー</a>
+        <a href="#culture">カルチャー</a>
         <a href="jobs.html">募集職種一覧</a>
       </nav>
       <a class="cta" href="casual.html">カジュアル面談</a>
@@ -368,7 +367,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
 
   <!-- ============ 02 Mission, Value ============ テキストと画像を交互に組む -->
   <section class="sec" id="mission">
-    <p class="eyebrow" data-reveal>About us</p>
+    <div data-reveal><p class="eyebrow">About us</p><h2 class="h2">私たちについて</h2></div>
     <div class="mv-row" style="margin-top:64px">
       <div class="mv-text" data-reveal>
         <h3>日本の食・宿泊に価値を感じて、<br>海外から日本に。</h3>
@@ -387,7 +386,12 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
   </section>
 
-  <!-- ============ 03 Our Value ============ 大きな白カードを横に送る -->
+  <!-- ============ Culture（About us の子として Our Value / Message をまとめる見出し） ============ -->
+  <section class="sec" id="culture">
+    <div data-reveal><p class="eyebrow">Culture</p><h2 class="h2">カルチャー</h2></div>
+  </section>
+
+  <!-- ============ Our Value（Culture の子要素・大きな白カードを横に送る） ============ -->
   <section class="valsec" id="value">
    <div class="val-sticky">
     <div class="val-head" data-reveal><p class="eyebrow">Our Value</p><h2 class="h2">私たちが大事にしているもの</h2></div>
@@ -404,7 +408,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
    </div>
   </section>
 
-  <!-- ============ 代表メッセージ ============ -->
+  <!-- ============ 代表メッセージ（Culture の子要素） ============ -->
   <section class="sec" id="message">
     <div data-reveal><p class="eyebrow">Message</p><h2 class="h2">代表メッセージ</h2></div>
     <div class="mv-row is-flip" style="margin-top:64px">
@@ -421,54 +425,33 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
   </section>
 
-  <!-- ============ Culture（v2.html の Culture を Our Value と同じ組みで） ============ -->
-  <section class="valsec" id="culture">
-   <div class="val-sticky">
-    <div class="val-head" data-reveal><p class="eyebrow">Culture</p><h2 class="h2">カルチャー</h2></div>
-    <p class="val-statement" data-reveal data-delay="0.1">成長と挑戦を楽しもう</p>
-    <div class="val-track" id="cultrack">
-      <article class="vcard"><div class="vcard-head"><span class="vno">01</span><span class="vrule"></span><div><h3>業界の常識を変える</h3><p class="ven">Market Leader</p></div></div><p class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決策、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求、負を解決し、業界の未来を切り開く。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">02</span><span class="vrule"></span><div><h3>最高のチームで勝つ</h3><p class="ven">Team Focus</p></div></div><p class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">03</span><span class="vrule"></span><div><h3>成果こそがプロの証明</h3><p class="ven">Professional Commitment</p></div></div><p class="vtx">業界のプロとして、圧倒的な当事者意識を持ち成果にこだわる。他責を排し、徹底的な自責で「どうしたらできるか」を建設的に考え、評論家に決してならない。プロセスに満足せず、泥臭く成果にコミットし、本質的な課題解決を通じて、顧客と業界に真の価値を提供し続ける。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">04</span><span class="vrule"></span><div><h3>高速アップデート</h3><p class="ven">Always Beta</p></div></div><p class="vtx">完成はない、常にベータ版であれ。完璧を求め停滞するより、高速で改善を繰り返す。過去のやり方に固執せず、仮説を持ち即実行する。自らをアップデートし続け、必要であれば大胆にピボットする柔軟さを持つ。昨日の自分を軽々と超えるスピード感が、業界を最速で塗り替える原動力となる。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">05</span><span class="vrule"></span><div><h3>自ら課題設定</h3><p class="ven">Issue Driven</p></div></div><p class="vtx">指示を待つのではなく、「自ら主体的に課題を設定し解決する」ことにこだわる。本質的な課題は何かを問い続け、「何を解くか」に意思を込める。鋭い課題設定こそが、最小の力で最大の変革を起こし、業界全体を正しい未来へと最速で導く。解く課題を決めたら周囲を巻き込み、圧倒的なインパクトを出し切る。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">06</span><span class="vrule"></span><div><h3>ファクトで語り仕組みを創る</h3><p class="ven">FactBase, Lead DX</p></div></div><p class="vtx">現場の経験や直感を大切にしながらも、ファクトベースでの意思決定にこだわり、自らAI活用・DX推進し、組織の生産性を高めて、業界の課題解決に貢献する。データを「組織の資産」として蓄積・活用し、再現性ある勝ち筋を導き出す。DXを単なるツール導入と誤解せず、ビジネスオペレーションを作り切り、成果を最大化するため磨き続ける。</p></article>
-      <article class="vcard"><div class="vcard-head"><span class="vno">07</span><span class="vrule"></span><div><h3>ユーザーファーストで信頼を築く</h3><p class="ven">Build Trust</p></div></div><p class="vtx">法令遵守と高い倫理観を基盤に、透明性を追求する。徹底したユーザー目線でステークホルダーに敬意を持ち、感情をコントロールして建設的な関係を築く。泥臭く約束を守り、自ら信頼を積み上げる。その嘘のない歩みこそが期待を超え、業界で選ばれる理由という最強のブランドになる。</p></article>
-    </div>
-    <div class="progress val-rail"><div class="bar"></div></div>
-   </div>
-  </section>
-
-  <section class="sec" id="company" style="padding-top:0">
-    <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
-    <div class="deck-row" data-stagger data-observe>
-      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    </div>
-  </section>
-
   <section class="sec" id="member" style="padding-top:0">
     <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | CA | メンバー</p>
-        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | RA | メンバー</p>
-        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Engineer | メンバー</p>
-        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Designer | メンバー</p>
-        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Sales | メンバー</p>
-        <p class="mem-tx">テキストが入ります。テキストが入ります。</p>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
       </article>
     </div>
     <div class="progress"><div class="bar"></div></div>
@@ -478,27 +461,26 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     <h2>カジュアル面談</h2>
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
     <div class="casual-actions">
-      <a class="cta primary lg" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      <a class="cta primary lg" href="#" target="_blank" rel="noopener">話してみる</a>
       <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
     </div>
   </div>
 
-  <section class="sec" id="blog">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Article</p><h2 class="h2">公式note</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-    <div class="blog-row" data-stagger data-observe>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3>
-        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <h3>保険業界出身だからこそ、飲食ホテル×HRミドルベンチャーの営業で即戦力に</h3>
-        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
-      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3>
-        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
+  <section class="sec" id="company" style="padding-top:0">
+    <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
+    <div class="deck-row" data-stagger data-observe>
+      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
-  <!-- ============ 09 採用の入口 ============ 新卒／中途をここで分岐させる -->
+  <section class="entry-lead" data-reveal>
+    <p class="eyebrow">Entry</p>
+    <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
+    <a class="cta primary lg" href="#" target="_blank" rel="noopener">エントリー</a>
+  </section>
+
+  <!-- ============ 採用の入口（募集要項） ============ 新卒／中途をここで分岐させる -->
   <section class="gates" id="entry">
     <div class="gates-in">
       <a class="gpanel" href="v2.html" data-reveal>
@@ -525,10 +507,19 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
   </section>
 
-  <section class="entry-lead" data-reveal>
-    <p class="eyebrow">Entry</p>
-    <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+  <section class="sec" id="blog">
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Article</p><h2 class="h2">公式note</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+    <div class="blog-row" data-stagger data-observe>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3>
+        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3>保険業界出身だからこそ、飲食ホテル×HRミドルベンチャーの営業で即戦力に</h3>
+        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
+      <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3>
+        <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
+    </div>
   </section>
 
   <footer class="footer">
@@ -680,7 +671,6 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     measure();
   }
   bindHorizontal('value','valtrack');
-  bindHorizontal('culture','cultrack');
 })();
 </script>
 </body>
