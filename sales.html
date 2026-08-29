@@ -125,23 +125,29 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
 
-/* 追従ヘッダー */
+/* 追従ヘッダー — recruit.html と同じ方式。スクロールでヘッダー全体は隠さず、
+   is-compact でロゴとナビを畳み、CTA（カジュアル面談・エントリー）だけを
+   角丸ピルの背景で右上に残す。 */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(255,255,255,.92);
-  transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
-/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
-.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
+  transition:background-color .4s ease}
 .site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.site-header.is-compact{background:transparent}
+.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
+.site-header.is-compact .logo{width:0;opacity:0;pointer-events:none}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between}
-.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
+.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink);overflow:hidden;
+  transition:opacity .3s ease,width .4s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 .footer .logo{width:131px;height:16.87px}
 /* 13px の欧文大文字＋字送り .1em。語の中がゆるいぶん、語間は
    キャップハイトの約4倍(=40px)まで開けないと語の切れ目が読めない。
    リンク群とボタン群は別のまとまりなので、そこは更に離す。 */
-.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px}
+.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;
+  overflow:hidden;max-width:720px;opacity:1;white-space:nowrap;
+  transition:max-width .45s var(--ease-out-expo),opacity .3s ease,padding .45s var(--ease-out-expo)}
+.site-header.is-compact .header-nav{max-width:0;opacity:0;padding-right:0}
 /* 当たり判定を上下に広げる。margin で相殺するのでヘッダーの高さは変わらない。
    下線は ::after の bottom で文字のすぐ下に戻す(padding 16 - 元の 4 = 12px)。 */
 .header-nav a{position:relative;padding:16px 0;margin:-12px 0;font-family:var(--font-disp);
@@ -149,7 +155,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
-.header-cta{display:flex;gap:10px;flex:none}
+/* ピルの padding は常設し、margin で相殺して非スクロール時の位置を変えない。
+   is-compact では背景と影だけを点ける（ボタンの位置・サイズは不変）。 */
+.header-cta{display:flex;align-items:center;gap:10px;flex:none;
+  margin:-12px -20px -12px 0;padding:12px 20px;border-radius:999px;background:transparent;
+  box-shadow:0 8px 24px rgba(13,13,14,0);
+  transition:background-color .3s ease,box-shadow .3s ease}
+.site-header.is-compact .header-cta{background:rgba(251,250,248,.96);
+  box-shadow:0 8px 24px rgba(13,13,14,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-cta .cta{padding:9px 18px;font-size:12px}
 
 /* セクション */
@@ -835,14 +848,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   setTimeout(sweep,1200);
   sweep();
 })();
-(function(){ /* 追従ヘッダー */
-  var h=document.getElementById('hdr'); if(!h) return; var last=0;
+(function(){ /* 追従ヘッダー — カジュアル面談・エントリーのCTAだけを常時表示に残す */
+  var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
-    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
-    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
-    last=y;},{passive:true});
+    h.classList.toggle('is-compact',y>240);
+  },{passive:true});
 })();
 /* FAQ のアコーディオンと Contents の畳みは 2026-08-29 の Figma 差し替えで廃止（常時表示） */
 </script>
