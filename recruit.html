@@ -120,26 +120,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transition:background-color .4s ease}
 .site-header.is-scrolled{background:rgba(251,250,248,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
-  display:flex;align-items:center;justify-content:space-between;
-  transition:height .4s var(--ease-out-expo)}
+  display:flex;align-items:center;justify-content:space-between}
 .logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink);
   opacity:1;transition:opacity .3s ease,width .4s var(--ease-out-expo),margin .4s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 /* is-compact では、ロゴと常時表示ナビ（カルチャー・募集職種一覧）を隠し、
    常に追従させたい4項目（新卒採用・中途採用・カジュアル面談・エントリー）だけを
-   帯状の背景ではなく、要素を囲む角丸の背景として右上に残す */
+   帯状の背景ではなく、要素を囲む角丸の背景として右上に残す。
+   header-actions 自体の padding／border-radius はスクロール前後で常に同じにして、
+   背景色と影だけを切り替える（ボタンの位置・サイズが変わらないように） */
 .site-header.is-compact{background:transparent}
 .site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
-.site-header.is-compact .header-inner{height:auto;padding:20px var(--gutter);justify-content:flex-end}
 .site-header.is-compact .logo{width:0;margin-right:-16px;opacity:0;pointer-events:none}
-/* header-actions に、常時表示のナビ（カルチャー・募集職種一覧）と
-   常に追従させたい項目（新卒採用・中途採用・カジュアル面談・エントリー）を並べる。
-   is-compact のとき前者だけを畳み、後者はそのまま残す */
 .header-actions{display:flex;align-items:center;gap:16px;
-  transition:background-color .3s ease,box-shadow .3s ease,padding .3s var(--ease-out-expo)}
-.site-header.is-compact .header-actions{background:rgba(251,250,248,.96);border-radius:999px;
-  padding:12px 20px;box-shadow:0 8px 24px rgba(13,13,14,.1);
+  padding:12px 20px;border-radius:999px;background:transparent;
+  box-shadow:0 8px 24px rgba(13,13,14,0);
+  transition:background-color .3s ease,box-shadow .3s ease}
+.site-header.is-compact .header-actions{background:rgba(251,250,248,.96);
+  box-shadow:0 8px 24px rgba(13,13,14,.1);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-nav{display:contents}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
