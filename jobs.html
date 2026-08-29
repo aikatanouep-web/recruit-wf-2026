@@ -108,7 +108,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 /* is-compact では、ロゴと常時表示ナビ（カルチャー）を隠し、常に追従させたい
-   項目（募集職種一覧・新卒採用・中途採用・カジュアル面談・エントリー）だけを
+   項目（新卒採用・中途採用・カジュアル面談・エントリー）だけを
    帯状の背景ではなく、要素を囲む角丸の背景として右上に残す */
 .site-header.is-compact{background:transparent}
 .site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
@@ -260,9 +260,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </svg></a>
     <div class="header-actions">
       <nav class="header-nav">
-        <a href="jobs.html" aria-current="page">募集職種一覧</a>
         <a href="v2.html">新卒採用</a>
-        <a href="jobs.html">中途採用</a>
+        <a href="jobs.html" aria-current="page">中途採用</a>
       </nav>
       <a class="cta" href="casual.html">カジュアル面談</a>
       <a class="cta primary" href="entry.html">エントリー</a>
@@ -569,7 +568,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('resize',sweep); addEventListener('load',sweep);
   setTimeout(sweep,1200); sweep();
 })();
-(function(){ /* 追従ヘッダー — 募集職種一覧・新卒採用・中途採用・カジュアル面談・
+(function(){ /* 追従ヘッダー — 新卒採用・中途採用・カジュアル面談・
       エントリーだけを常時表示に残す（recruit.html と同じ仕様） */
   var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
