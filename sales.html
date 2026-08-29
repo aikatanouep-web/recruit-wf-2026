@@ -169,9 +169,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    それぞれの幅を独立させる。 */
 /* FV：黒帯 700px の上に、右へ寄せた 533×458 の面を置く。
    文字は 200px から始め、見出し→本文 24px、本文→ボタン 60px（Figma実測）。 */
-/* 黒は画面の下端まで届かせる。中の組みは Figma の 700px 基準のまま上から積む */
+/* Figma 186:4 実測: FVは 700px 固定（ヘッダー80 + 黒帯620）。100vh追従は廃止 */
 .hero{position:relative;background:#000;color:var(--paper);
-  min-height:max(700px,100vh);padding:240px var(--gutter) 0}
+  height:700px;padding:240px var(--gutter) 0}
 /* 画像は幅を可変にし、コピーは「残り幅」までに抑える。
    固定幅どうしだと、窓を縮めたときに文字が画像の下に潜り込むため。 */
 .hero-media{position:absolute;top:161px;right:var(--gutter);z-index:1;
