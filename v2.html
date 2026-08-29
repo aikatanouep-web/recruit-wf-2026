@@ -133,76 +133,34 @@ img{max-width:100%;display:block}
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
 
-/* ---- 追従ヘッダー（応募CTAを常に連れて回る） ---- */
+/* ---- 追従ヘッダー ----
+   Figma node 176:94（参考: recruit.asuzacgroup.jp/highschool）。
+   帯全体を常時フル表示のまま追従させ、スクロール位置に応じて
+   該当メニューの背景だけがグレーのピルになる（隠す・畳むといった
+   仕掛けは持たない） */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(255,255,255,.92);
   transition:background-color .4s ease}
 .site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
-/* is-compact では、ロゴとMENUを隠し、常に追従させたい2項目
-   （説明会に申し込む・エントリー）だけを角丸の背景で右上に残す
-   （recruit.html と同じ仕様）。header-cta 自体の padding／border-radius は
-   スクロール前後で常に同じにして、背景色と影だけを切り替える
-   （ボタンの位置・サイズが変わらないように） */
-.site-header.is-compact{background:transparent}
-.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
-.site-header.is-compact .logo{width:0;margin-right:-16px;opacity:0;pointer-events:none}
-.site-header.is-compact .navtoggle{display:none}
-.site-header.is-compact .navpanel{display:none}
-.header-cta{padding:12px 20px;border-radius:999px;background:transparent;
-  box-shadow:0 8px 24px rgba(13,13,14,0);
-  transition:background-color .3s ease,box-shadow .3s ease}
-.site-header.is-compact .header-cta{background:rgba(255,255,255,.96);
-  box-shadow:0 8px 24px rgba(13,13,14,.1);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 /* WF ではロゴマーク（3片の図形）を出さず、ロゴタイプのみを置く。
    viewBox をワード部分（x=24.331 幅108.614）に寄せ、マークは描画しない。 */
-.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink);
-  opacity:1;transition:opacity .3s ease,width .4s var(--ease-out-expo),margin .4s var(--ease-out-expo)}
+.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 .footer .logo{width:131px;height:16.87px}
-/* 8項目を並べると読み取れないので、常時見せるのは「今どこか」だけにして、
-   一覧はメニューに畳む。現在地はスクロールに追従して書き換える。 */
-/* ピルの中に番号・ラベル・ハンバーガーを詰めると、隣の応募CTA（同じピル形）と
-   見分けがつかず部品として壊れて見える。ここは素のテキストボタンにして、
-   現在地はパネル側の下線で示す。 */
-.navtoggle{
-  display:inline-flex;align-items:center;gap:12px;margin-left:auto;margin-right:28px;
-  background:none;border:0;padding:6px 0;cursor:pointer;color:var(--ink);
-  font-family:var(--font-disp);font-weight:500;font-size:13px;letter-spacing:.16em;line-height:1;
-}
-.nt-bars{position:relative;width:18px;height:10px;flex:none}
-.nt-bars::before,.nt-bars::after{content:"";position:absolute;left:0;right:0;height:1px;background:currentColor;
-  transition:transform .5s var(--ease-out-expo)}
-.nt-bars::before{top:2px}
-.nt-bars::after{top:7px}
-.is-navopen .nt-bars::before{transform:translateY(2.5px) rotate(45deg)}
-.is-navopen .nt-bars::after{transform:translateY(-2.5px) rotate(-45deg)}
-.navtoggle .nt-word{position:relative}
-.navtoggle .nt-word::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:currentColor;
-  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-out-expo)}
-@media (hover:hover){.navtoggle:hover .nt-word::after{transform:scaleX(1)}}
-.is-navopen .navtoggle .nt-word::after{transform:scaleX(1)}
-
-.navpanel{position:absolute;left:0;right:0;top:80px;background:rgba(251,251,251,.97);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-top:1px solid var(--line);
-  display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
-.is-navopen .navpanel{grid-template-rows:1fr}
-/* 中身もアコーディオンと同じで、8px 浮かせてから着地させる */
-.navpanel-in{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
-.is-navopen .navpanel-in{opacity:1;transform:none;transition-delay:.06s}
-.navpanel ul{list-style:none;margin:0;padding:28px var(--gutter) 40px;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:8px 32px}
-.navpanel a{display:flex;align-items:baseline;gap:12px;padding:14px 4px;text-decoration:none;color:var(--ink);
-  transition:padding-left .55s var(--ease-out-expo)}
-@media (hover:hover){.navpanel a:hover{padding-left:12px}}
-.navpanel .n{font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--caption)}
-.navpanel .ja{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6}
-.navpanel .en{font-family:var(--font-en);font-size:11px;letter-spacing:.14em;color:var(--caption);margin-left:auto}
-.navpanel a.is-current .n,.navpanel a.is-current .en{color:var(--ink)}
-.navpanel a.is-current .ja{text-decoration:underline;text-underline-offset:4px}
+/* ナビとCTAをひとまとまりにして右詰めにする。ナビ内の項目間と同じ28pxで、
+   ナビとCTAの間も詰める（Figma: nav left470 → cta1 left1062 の間隔と同じ） */
+.header-group{display:flex;align-items:center;gap:28px}
+.header-cta{display:flex;gap:12px}
+.header-cta .cta{padding:9px 20px;font-size:12px}
+/* 職種紹介・カルチャー・キャリア・数字で見る・働く環境・募集要項の6項目を
+   常時フルで並べる。現在地はテキスト下線ではなく、グレーのピル背景で示す */
+.header-nav{display:flex;align-items:center;gap:28px}
+.header-nav a{font-family:var(--font-en);font-weight:500;font-size:13px;letter-spacing:.16em;line-height:1;
+  color:var(--ink);text-decoration:none;text-align:center;white-space:nowrap;
+  padding:0;border-radius:999px;background:transparent;
+  transition:background-color .3s var(--ease-out-expo),padding .3s var(--ease-out-expo)}
+.header-nav a.is-current{padding:8px 16px;background:#d9d9d9}
 .header-cta{display:flex;gap:12px}
 .header-cta .cta{padding:9px 20px;font-size:12px}
 
@@ -223,14 +181,12 @@ img{max-width:100%;display:block}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 
-/* ---- 02 プロダクト（カード横並び。詳細は各LPに任せる） ---- */
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
-/* グレー面の上のカードは白で抜く。罫線は使わず面の差だけで持たせる */
-.prod{background:#fff;border:0;border-radius:12px;padding:32px;
-  display:flex;flex-direction:column;gap:8px;min-height:212px}
-.sec--paper .prod{background:var(--tone);border-color:transparent}
-.prod-name{font-family:var(--font-en);font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.5}
-.prod-sub{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
+/* ---- 02 事業への想い（キービジュアルと職種紹介の間の宣言文）
+   キービジュアルと同じ黒地で続ける ---- */
+.pledge{background:#000;color:var(--paper)}
+.pledge-in{max-width:504px;margin-left:auto;display:flex;flex-direction:column;align-items:flex-end}
+.pledge-tx{align-self:stretch;text-align:left;font-size:20px;letter-spacing:.052em;line-height:2.1;color:var(--paper);margin:0}
+.pledge-more{margin-top:24px;color:var(--paper)}
 .prod .tlink{margin-top:auto;font-size:13px}
 .prod .tlink .circ{width:18px;height:18px}
 
@@ -342,7 +298,7 @@ img{max-width:100%;display:block}
 .tr-group p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 
 /* ---- 06 数字 ---- */
-.num-lead{font-size:16px;letter-spacing:.08em;line-height:1.9;color:#3a3a40;margin:24px 0 0;max-width:780px}
+.num-lead{font-size:16px;letter-spacing:.08em;line-height:1.9;color:#3a3a40;margin:0;max-width:780px}
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:40px 24px;margin-top:40px}
 .kpi{text-align:center}
 .kpi .num{font-family:var(--font-en);font-weight:700;font-size:36px;letter-spacing:.02em;line-height:1.1}
@@ -476,29 +432,21 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="navpanel">
-      <span class="nt-word">MENU</span>
-      <span class="nt-bars" aria-hidden="true"></span>
-    </button>
-    <div class="header-cta">
-      <span class="cta">説明会に申し込む</span>
-      <span class="cta primary">エントリー</span>
+    <div class="header-group">
+      <nav class="header-nav">
+        <a href="#job" data-sec="job">職種紹介</a>
+        <a href="#culture" data-sec="culture">カルチャー</a>
+        <a href="#career" data-sec="career">キャリア</a>
+        <a href="#number" data-sec="number">数字で見る</a>
+        <a href="#env" data-sec="env">働く環境</a>
+        <a href="#recruit" data-sec="recruit">募集要項</a>
+      </nav>
+      <div class="header-cta">
+        <span class="cta">説明会に申し込む</span>
+        <span class="cta primary">エントリー</span>
+      </div>
     </div>
   </div>
-  <nav class="navpanel" id="navpanel">
-    <div class="navpanel-in">
-      <ul>
-        <li><a href="#business" data-sec="business"><span class="n">01</span><span class="ja">事業とプロダクト</span><span class="en">Business</span></a></li>
-        <li><a href="#job" data-sec="job"><span class="n">02</span><span class="ja">職種紹介</span><span class="en">Job</span></a></li>
-        <li><a href="#culture" data-sec="culture"><span class="n">03</span><span class="ja">カルチャー</span><span class="en">Culture</span></a></li>
-        <li><a href="#career" data-sec="career"><span class="n">04</span><span class="ja">キャリア</span><span class="en">Career</span></a></li>
-        <li><a href="#number" data-sec="number"><span class="n">05</span><span class="ja">数字で見るクオレガ</span><span class="en">Number</span></a></li>
-        <li><a href="#env" data-sec="env"><span class="n">06</span><span class="ja">働く環境</span><span class="en">Environment</span></a></li>
-        <li><a href="#deck" data-sec="deck"><span class="n">07</span><span class="ja">資料・動画</span><span class="en">Deck</span></a></li>
-        <li><a href="#recruit" data-sec="recruit"><span class="n">08</span><span class="ja">募集要項</span><span class="en">Recruitment</span></a></li>
-      </ul>
-    </div>
-  </nav>
 </header>
 
 <div class="stage">
@@ -511,21 +459,16 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
         <span class="line"><span>魅せろ個性</span></span>
         <span class="line"><span>変化を恐れるな</span></span>
       </h1>
-      <p class="sub" data-reveal data-delay="0.5">私たちは、食・宿泊産業を支える「人」の採用と就業を支援しています。</p>
     </div>
   </section>
 
-  <!-- ============ 02 事業とプロダクト ============
-       詳細は各LPで見られるため、名前・一行概要・LPへのCTAだけに絞る -->
-  <section class="sec sec--tone" id="business">
-    <div class="head-block" data-reveal>
-      <p class="eyebrow">Business</p>
-      <h2 class="h2">事業とプロダクト</h2>
-    </div>
-    <div class="prod-grid" data-stagger data-observe>
-      <article class="prod"><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="tlink tlink--ext" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
-      <article class="prod"><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--ext" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
-      <article class="prod"><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="tlink tlink--ext" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
+  <!-- ============ 02 事業への想い ============
+       Figma node 175:86。事業紹介の代わりに、なぜこの事業をやるかという
+       宣言文だけを置く（詳細は職種紹介以降に譲る） -->
+  <section class="sec pledge" data-reveal>
+    <div class="pledge-in">
+      <p class="pledge-tx">安定が謳われるこの時代に、変化・激動の波に乗る<br>勇気ある人物を探しています。<br>飲食・宿泊業界は今、インバウンド需要の急増により<br>かつてないほどの活気に満ちています。<br><br>古くから続き、未だ成長し続ける<br>飲食・宿泊業界のパワーは底知れない。<br>この激動の世界で、共に歩み、共に成長し、<br>そして共に次の時代を築き上げていきませんか？</p>
+      <a class="tlink pledge-more" href="#job"><span class="label">事業詳細はこちら</span><span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
     </div>
   </section>
 
@@ -672,37 +615,33 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     </div>
   </section>
 
-  <!-- ============ 06 数字 ============
-       Vision セクションを畳んだので、会社の立ち位置の一文はここに統合した -->
-  <section class="sec sec--tone" id="number">
-    <div class="head-block" data-reveal>
-      <p class="eyebrow">Number</p>
-      <h2 class="h2">数字で見るクオレガ</h2>
-    </div>
-    <p class="num-lead" data-reveal data-delay="0.08">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。だから私たちは、食・宿泊産業を支える「人」の採用・就業を支援することで、日本の価値の向上に貢献します。</p>
-    <div class="kpi-grid" data-stagger data-observe>
-      <div class="kpi"><div class="num">2017</div><div class="lbl">設立（2017年2月）</div></div>
-      <div class="kpi"><div class="num"><span class="u pre">約</span>150<span class="u">名</span></div><div class="lbl">従業員数</div></div>
-      <div class="kpi"><div class="num">27<span class="u">歳</span></div><div class="lbl">社員平均年齢</div></div>
-      <div class="kpi"><div class="num">60<span class="u">%</span></div><div class="lbl">新卒比率</div></div>
-      <div class="kpi"><div class="num">5<span class="u">拠点</span></div><div class="lbl">全国の拠点数</div></div>
-      <div class="kpi"><div class="num">40,000<span class="u">名超</span></div><div class="lbl">年間の転職支援数</div></div>
-      <div class="kpi"><div class="num">11:11</div><div class="lbl">エンジニア：デザイナー</div></div>
-      <div class="kpi"><div class="num">57:43</div><div class="lbl">従業員男女比</div></div>
-      <div class="kpi"><div class="num">62.5<span class="u">%</span></div><div class="lbl">女性管理職比率</div></div>
-      <div class="kpi"><div class="num">67<span class="u">%</span></div><div class="lbl">有給取得率</div></div>
-    </div>
-  </section>
-
-  <!-- ============ 07 働く環境 ============
+  <!-- ============ 06 働く環境 ============
        福利厚生と拠点をひとつの情報群として扱う。拠点だけを黒地の
-       独立セクションにすると優先度が実態より高く見えるため統合した -->
-  <section class="sec sec--paper" id="env">
+       独立セクションにすると優先度が実態より高く見えるため統合した。
+       Vision セクションを畳んだ際の会社の立ち位置の一文（数字で見るクオレガ）も
+       ここにまとめている -->
+  <section class="sec sec--paper">
     <div class="head-block" data-reveal>
       <p class="eyebrow">Environment</p>
       <h2 class="h2">働く環境</h2>
     </div>
-    <div class="env-block" style="margin-top:40px">
+    <div class="env-block" id="number" style="margin-top:40px">
+      <h3 class="h3" data-reveal>数字で見るクオレガ</h3>
+      <p class="num-lead" data-reveal data-delay="0.08">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。だから私たちは、食・宿泊産業を支える「人」の採用・就業を支援することで、日本の価値の向上に貢献します。</p>
+      <div class="kpi-grid" data-stagger data-observe>
+        <div class="kpi"><div class="num">2017</div><div class="lbl">設立（2017年2月）</div></div>
+        <div class="kpi"><div class="num"><span class="u pre">約</span>150<span class="u">名</span></div><div class="lbl">従業員数</div></div>
+        <div class="kpi"><div class="num">27<span class="u">歳</span></div><div class="lbl">社員平均年齢</div></div>
+        <div class="kpi"><div class="num">60<span class="u">%</span></div><div class="lbl">新卒比率</div></div>
+        <div class="kpi"><div class="num">5<span class="u">拠点</span></div><div class="lbl">全国の拠点数</div></div>
+        <div class="kpi"><div class="num">40,000<span class="u">名超</span></div><div class="lbl">年間の転職支援数</div></div>
+        <div class="kpi"><div class="num">11:11</div><div class="lbl">エンジニア：デザイナー</div></div>
+        <div class="kpi"><div class="num">57:43</div><div class="lbl">従業員男女比</div></div>
+        <div class="kpi"><div class="num">62.5<span class="u">%</span></div><div class="lbl">女性管理職比率</div></div>
+        <div class="kpi"><div class="num">67<span class="u">%</span></div><div class="lbl">有給取得率</div></div>
+      </div>
+    </div>
+    <div class="env-block" id="env">
       <h3 class="h3" data-reveal>福利厚生</h3>
       <details class="bene-group is-open" open>
         <summary class="bene-cat">働きやすい環境づくり</summary>
@@ -756,23 +695,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
     </div>
   </section>
 
-  <section class="sec sec--tone" id="deck">
-    <div class="head-block" data-reveal>
-      <p class="eyebrow">Deck</p>
-      <h2 class="h2">資料・動画</h2>
-    </div>
-    <div class="deck-row" data-stagger data-observe>
-      <article class="deck-card">
-        <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <div><span class="deck-label">Document</span><h3>Company Deck</h3><p>事業の全体像、これから向かう先、働く人のことまで。クオレガを一通り知るための資料です。</p></div>
-      </article>
-      <article class="deck-card">
-        <div class="deck-thumb" data-observe><span class="deck-play" aria-hidden="true"></span><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <div><span class="deck-label">Movie</span><h3>28卒 1日密着</h3><p>新卒社員の出社から退社までを、そのまま追いかけました。</p></div>
-      </article>
-    </div>
-  </section>
-
   <section class="sec sec--paper recruit" id="recruit">
     <div class="head-block" data-reveal>
       <p class="eyebrow">Recruitment</p>
@@ -798,6 +720,23 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
       <div class="fnode" style="background:#0d0d0e;color:#fff">内定</div>
     </div>
     <p class="flow-note" data-reveal>書類選考では、履歴書と職務経歴書をご提出いただきます。面接はオンラインまたは対面で、1〜3回実施します。<br>各ステップの日程はご都合に合わせて調整しますので、選考の途中でも気になることがあれば人事までお気軽にご相談ください。</p>
+  </section>
+
+  <section class="sec sec--tone" id="deck">
+    <div class="head-block" data-reveal>
+      <p class="eyebrow">Deck</p>
+      <h2 class="h2">資料・動画</h2>
+    </div>
+    <div class="deck-row" data-stagger data-observe>
+      <article class="deck-card">
+        <div class="deck-thumb" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <div><span class="deck-label">Document</span><h3>Company Deck</h3><p>事業の全体像、これから向かう先、働く人のことまで。クオレガを一通り知るための資料です。</p></div>
+      </article>
+      <article class="deck-card">
+        <div class="deck-thumb" data-observe><span class="deck-play" aria-hidden="true"></span><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <div><span class="deck-label">Movie</span><h3>28卒 1日密着</h3><p>新卒社員の出社から退社までを、そのまま追いかけました。</p></div>
+      </article>
+    </div>
   </section>
 
   <section class="joinus">
@@ -873,33 +812,19 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   sweep();
 })();
 
-/* 2) 追従ヘッダー — 説明会に申し込む・エントリーだけを常時表示に残す */
+/* 2) 追従ヘッダー — 帯全体を常時フル表示のまま追従させる。
+      スクロール量に応じた背景の薄い変化だけを付ける */
 (function(){
   var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){
-    var y=Math.max(0,scrollY);
-    h.classList.toggle('is-scrolled',y>8);
-    h.classList.toggle('is-compact',y>240);
+    h.classList.toggle('is-scrolled',Math.max(0,scrollY)>8);
   },{passive:true});
 })();
 
-/* 3) グロナビ — 一覧はメニューに畳み、現在地だけを常時出す */
+/* 3) グロナビ — 表示中のエリアに対応するメニューの背景をグレーにする */
 (function(){
-  var hd=document.getElementById('hdr'), tg=document.getElementById('navtoggle');
-  if(!hd||!tg) return;
-  var links=[].slice.call(document.querySelectorAll('.navpanel a[data-sec]'));
-  function close(){ hd.classList.remove('is-navopen'); tg.setAttribute('aria-expanded','false'); }
-  tg.addEventListener('click',function(){
-    var open=hd.classList.toggle('is-navopen');
-    tg.setAttribute('aria-expanded', open?'true':'false');
-  });
-  links.forEach(function(a){ a.addEventListener('click',close); });
-  document.addEventListener('click',function(e){
-    if(!hd.contains(e.target)) close();
-  });
-  addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
-
-  /* 現在地：セクションの上端が画面上部を越えた最後のものを採る */
+  var links=[].slice.call(document.querySelectorAll('.header-nav a[data-sec]'));
+  if(!links.length) return;
   var secs=links.map(function(a){ return document.getElementById(a.dataset.sec); }).filter(Boolean);
   function spy(){
     var y=scrollY+120, cur=0;
