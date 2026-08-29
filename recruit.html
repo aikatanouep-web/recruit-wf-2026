@@ -117,25 +117,39 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 追従ヘッダー */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
-  transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
-/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
-.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
+  transition:background-color .4s ease}
 .site-header.is-scrolled{background:rgba(251,250,248,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
-  display:flex;align-items:center;justify-content:space-between}
-.logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink)}
+  display:flex;align-items:center;justify-content:space-between;
+  transition:height .4s var(--ease-out-expo)}
+.logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink);
+  opacity:1;transition:opacity .3s ease,width .4s var(--ease-out-expo),margin .4s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-/* ナビ4項目（カルチャー・募集職種一覧・カジュアル面談・エントリー）を
-   一つの並びとして等間隔に置く。header-nav は display:contents で
-   自身の箱を消し、中の a を header-actions の並びに直接加える */
-.header-actions{display:flex;align-items:center;gap:16px}
+/* is-compact では、ロゴと常時表示ナビ（カルチャー・募集職種一覧）を隠し、
+   常に追従させたい4項目（新卒採用・中途採用・カジュアル面談・エントリー）だけを
+   帯状の背景ではなく、要素を囲む角丸の背景として右上に残す */
+.site-header.is-compact{background:transparent}
+.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
+.site-header.is-compact .header-inner{height:auto;padding:20px var(--gutter);justify-content:flex-end}
+.site-header.is-compact .logo{width:0;margin-right:-16px;opacity:0;pointer-events:none}
+/* header-actions に、常時表示のナビ（カルチャー・募集職種一覧）と
+   常に追従させたい項目（新卒採用・中途採用・カジュアル面談・エントリー）を並べる。
+   is-compact のとき前者だけを畳み、後者はそのまま残す */
+.header-actions{display:flex;align-items:center;gap:16px;
+  transition:background-color .3s ease,box-shadow .3s ease,padding .3s var(--ease-out-expo)}
+.site-header.is-compact .header-actions{background:rgba(251,250,248,.96);border-radius:999px;
+  padding:12px 20px;box-shadow:0 8px 24px rgba(13,13,14,.1);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-nav{display:contents}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+.header-nav--sub{display:flex;align-items:center;gap:16px;overflow:hidden;
+  max-width:260px;opacity:1;transition:max-width .45s var(--ease-out-expo),opacity .3s ease}
+.header-nav--sub a{flex:none;white-space:nowrap}
+.site-header.is-compact .header-nav--sub{max-width:0;opacity:0}
 
 /* 01 FV（黒地） */
 /* ファーストビューは画面の高さぶんを黒で埋める。内容ぶんの高さだけだと
@@ -185,18 +199,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    セクション自身の高さぶんで送るので、ページのスクロールは奪わない。 */
 .valsec{position:relative;background:var(--paper)}
 .val-sticky{position:sticky;top:0;height:100vh;min-height:760px;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:center;padding-left:var(--gutter)}
+  display:flex;flex-direction:column;justify-content:flex-start;padding-left:var(--gutter)}
 .val-head{flex:none;margin-bottom:40px}
-.val-track{display:flex;gap:40px;will-change:transform}
-.vcard{flex:0 0 756px;background:var(--card);padding:56px;display:flex;flex-direction:column;gap:32px}
+.val-track{display:flex;gap:32px;will-change:transform}
+/* v2.html「カルチャー」の横送りカードと同じ組み（459×min352・padding40） */
+.vcard{flex:0 0 459px;background:var(--card);padding:40px;min-height:352px;display:flex;flex-direction:column;gap:32px}
 .val-rail{margin-top:40px;width:calc(100% - var(--gutter))}
-.vcard-head{display:flex;align-items:center;gap:40px}
-/* ワイヤーの段階では番号を装飾にしない。順番が分かる最小限のラベルに留める。 */
-.vno{font-family:var(--font-en);font-weight:400;font-size:88px;letter-spacing:.02em;line-height:1}
-.vrule{width:1px;align-self:stretch;background:var(--line2)}
-.vcard h3{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
-.ven{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:12px 0 0}
-.vtx{font-size:14px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
+.vcard-head{display:flex;align-items:center;gap:17px}
+.vno{font-family:var(--font-en);font-weight:700;font-size:20px;letter-spacing:.12em;line-height:.96;color:var(--caption)}
+.vrule{width:1px;align-self:stretch;background:var(--ink);opacity:.85}
+.vcard h3{font-weight:700;font-size:20px;letter-spacing:.08em;line-height:1.5;margin:0}
+.ven{font-family:var(--font-en);font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1;color:var(--ink);margin:8px 0 0}
+.vtx{font-size:13px;letter-spacing:.06em;line-height:2.1;color:#3a3a40;margin:0}
 .progress{height:1px;background:rgba(13,13,14,.14);position:relative;width:100%}
 .progress .bar{position:absolute;left:0;top:0;height:1px;background:var(--ink);width:30%}
 
@@ -228,12 +242,62 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .casual p{font-size:14px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:16px 0 24px}
 .casual-actions{display:flex;align-items:center;gap:32px}
 
+/* 06.5 数字で見るクオレガ / 働く環境（v2.html と同じ組み） */
+.sec--tone{background:var(--tone)}
+.sec--paper{background:var(--paper)}
+.sec--white{background:#fff}
+.num-lead{font-size:16px;letter-spacing:.08em;line-height:1.9;color:#3a3a40;margin:24px 0 0;max-width:780px}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:40px 24px;margin-top:40px}
+.kpi{text-align:center}
+.kpi .num{font-family:var(--font-en);font-weight:700;font-size:36px;letter-spacing:.02em;line-height:1.1}
+.kpi .num .u{font-size:20px;letter-spacing:.036em;margin-left:2px}
+.kpi .num .u.pre{margin-left:0;margin-right:2px}
+.kpi .lbl{font-size:12px;letter-spacing:.1em;line-height:1.6;color:var(--caption);margin-top:10px}
+
+.env-block{margin-top:40px}
+.env-block + .env-block{margin-top:56px}
+.env-block .h3{margin:0 0 24px}
+.bene-group{display:block;border-bottom:1px solid var(--line)}
+.bene-cat{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  gap:32px;min-height:76px;padding:0 40px 0 16px;margin:0 -16px;
+  font-weight:500;font-size:16px;letter-spacing:.06em;line-height:1.8;color:var(--ink);
+  transition:background-color .24s var(--ease-out-expo)}
+@media (hover:hover){.bene-cat:hover{background:rgba(13,13,14,.03)}}
+.bene-group.is-open > .bene-cat{background:rgba(13,13,14,.02)}
+.bene-cat::-webkit-details-marker{display:none}
+.bene-cat::after{content:"";width:16px;height:16px;flex:none;color:#3a3a40;
+  background:linear-gradient(currentColor,currentColor) center/16px 1.5px no-repeat,
+             linear-gradient(currentColor,currentColor) center/1.5px 16px no-repeat;
+  transition:background-size .24s var(--ease-out-expo)}
+.bene-group.is-open > .bene-cat::after{background-size:16px 1.5px,1.5px 0}
+.bene-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
+.bene-group.is-open .bene-wrap{grid-template-rows:1fr}
+.bene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 40px;padding:0 0 28px;
+  overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.bene-group.is-open .bene-grid{opacity:1;transform:none;transition-delay:.06s}
+.bene-item h4{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0 0 6px}
+.bene-item p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
+.office-track{display:flex;gap:32px;overflow-x:auto;scrollbar-width:none;padding-bottom:20px;
+  scroll-snap-type:x proximity;cursor:grab}
+.office-track:active{cursor:grabbing}
+.office-track::-webkit-scrollbar{display:none}
+.office-card{flex:0 0 280px;scroll-snap-align:start;display:flex;flex-direction:column;gap:12px}
+.office-card .ph{aspect-ratio:16/9}
+.office-city{font-family:var(--font-en);font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.5}
+.office-sub{font-weight:500;font-size:13px;letter-spacing:.06em;line-height:1.6;color:#3a3a40}
+.office-addr{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption)}
+
 /* 07 Blog */
 .blog-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
 .blog{display:flex;flex-direction:column;gap:20px}
 .blog .ph{aspect-ratio:16/10}
 .blog h3{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.9;margin:0}
 .blog-more{align-self:flex-start}
+/* note記事一覧への誘導バナー。画像1枚（note-banner.png）をそのままリンクにする */
+.noteb{display:block;margin-top:56px;line-height:0;transition:opacity .3s ease}
+.noteb img{width:100%;height:auto;display:block}
+@media (hover:hover){.noteb:hover{opacity:.85}}
 
 /* 08 Entry（グレー帯） */
 .entry-lead{background:var(--fill);padding:160px var(--gutter)}
@@ -346,9 +410,13 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
       </g>
     </svg></a>
     <div class="header-actions">
-      <nav class="header-nav">
+      <nav class="header-nav header-nav--sub">
         <a href="#culture">カルチャー</a>
         <a href="jobs.html">募集職種一覧</a>
+      </nav>
+      <nav class="header-nav">
+        <a href="v2.html">新卒採用</a>
+        <a href="jobs.html">中途採用</a>
       </nav>
       <a class="cta" href="casual.html">カジュアル面談</a>
       <a class="cta primary" href="entry.html">エントリー</a>
@@ -387,14 +455,14 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   </section>
 
   <!-- ============ Culture（About us の子として Our Value / Message をまとめる見出し） ============ -->
-  <section class="sec" id="culture">
+  <section class="sec" id="culture" style="padding-bottom:64px">
     <div data-reveal><p class="eyebrow">Culture</p><h2 class="h2">カルチャー</h2></div>
   </section>
 
   <!-- ============ Our Value（Culture の子要素・大きな白カードを横に送る） ============ -->
   <section class="valsec" id="value">
    <div class="val-sticky">
-    <div class="val-head" data-reveal><p class="eyebrow">Our Value</p><h2 class="h2">私たちが大事にしているもの</h2></div>
+    <div class="val-head" data-reveal><h2 class="h2" style="font-size:32px">私たちが大事にしているもの</h2></div>
     <div class="val-track" id="valtrack">
       <article class="vcard"><div class="vcard-head"><span class="vno">01</span><span class="vrule"></span><div><h3>業界の常識を変える</h3><p class="ven">Market Leader</p></div></div><p class="vtx">マーケットリーダーとして、業界のスタンダードを創る側であり続ける。顧客の単なる御用聞きではなく、プロとして本質的な課題解決、理想像を提示する。業界を誰よりも理解し、業界の構造的課題に真っ向から挑み、あらゆる領域でNo.1を追求し、負を解決し、業界の未来を切り開く。</p></article>
       <article class="vcard"><div class="vcard-head"><span class="vno">02</span><span class="vrule"></span><div><h3>最高のチームで勝つ</h3><p class="ven">Team Focus</p></div></div><p class="vtx">自分の達成は当然、チーム全員の達成にこだわる。仲間の成果に対して賞賛を惜しまず、自らモメンタムを創り出し、仲間の成功を自分のこととして喜び、失敗の責任を分かち合う。お互いへの敬意を基盤に、違和感を放置せず厳しく指摘し合う。</p></article>
@@ -410,7 +478,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
 
   <!-- ============ 代表メッセージ（Culture の子要素） ============ -->
   <section class="sec" id="message">
-    <div data-reveal><p class="eyebrow">Message</p><h2 class="h2">代表メッセージ</h2></div>
+    <div data-reveal><h2 class="h2" style="font-size:32px">代表メッセージ</h2></div>
     <div class="mv-row is-flip" style="margin-top:64px">
       <div class="mv-text" data-reveal>
         <p>インバウンドの回復により、食産業・宿泊業への需要が高まっています。しかし、業界の慢性的な人材不足や採用難は揺るがない課題となっているのが現状です。</p>
@@ -426,32 +494,32 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+    <div class="sec-head" data-reveal><div><p class="eyebrow">Member</p><h2 class="h2">メンバー</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">メンバーをもっと知る</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     <div class="mem-track" id="memtrack">
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | CA | メンバー</p>
-        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | RA | メンバー</p>
-        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Engineer | メンバー</p>
-        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Designer | メンバー</p>
-        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </article>
       <article class="mem"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3 class="mem-title">記事タイトルが入ります。記事タイトルが入ります。</h3>
         <p class="mem-meta">2020年入社 | Sales | メンバー</p>
-        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span></a>
+        <a class="more mem-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
       </article>
     </div>
     <div class="progress"><div class="bar"></div></div>
@@ -462,9 +530,82 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     <p>まずはメンバーと話してみませんか？<br>仕事のことや会社のことなんでも聞いてください。</p>
     <div class="casual-actions">
       <a class="cta primary lg" href="#" target="_blank" rel="noopener">話してみる</a>
-      <a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      <a class="more" href="#"><span class="label">カジュアル面談とは</span><span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
     </div>
   </div>
+
+  <section class="sec sec--white" id="number">
+    <div data-reveal><p class="eyebrow">Number</p><h2 class="h2">数字で見るクオレガ</h2></div>
+    <p class="num-lead" data-reveal data-delay="0.08">日本の食・宿泊産業が元気であれば、日本は世界で高い価値を発揮できる。だから私たちは、食・宿泊産業を支える「人」の採用・就業を支援することで、日本の価値の向上に貢献します。</p>
+    <div class="kpi-grid" data-stagger data-observe>
+      <div class="kpi"><div class="num">2017</div><div class="lbl">設立（2017年2月）</div></div>
+      <div class="kpi"><div class="num"><span class="u pre">約</span>150<span class="u">名</span></div><div class="lbl">従業員数</div></div>
+      <div class="kpi"><div class="num">27<span class="u">歳</span></div><div class="lbl">社員平均年齢</div></div>
+      <div class="kpi"><div class="num">60<span class="u">%</span></div><div class="lbl">新卒比率</div></div>
+      <div class="kpi"><div class="num">5<span class="u">拠点</span></div><div class="lbl">全国の拠点数</div></div>
+      <div class="kpi"><div class="num">40,000<span class="u">名超</span></div><div class="lbl">年間の転職支援数</div></div>
+      <div class="kpi"><div class="num">11:11</div><div class="lbl">エンジニア：デザイナー</div></div>
+      <div class="kpi"><div class="num">57:43</div><div class="lbl">従業員男女比</div></div>
+      <div class="kpi"><div class="num">62.5<span class="u">%</span></div><div class="lbl">女性管理職比率</div></div>
+      <div class="kpi"><div class="num">67<span class="u">%</span></div><div class="lbl">有給取得率</div></div>
+    </div>
+  </section>
+
+  <section class="sec sec--paper" id="env">
+    <div data-reveal><p class="eyebrow">Environment</p><h2 class="h2">働く環境</h2></div>
+    <div class="env-block">
+      <h3 class="h3" data-reveal>福利厚生</h3>
+      <details class="bene-group is-open" open>
+        <summary class="bene-cat">働きやすい環境づくり</summary>
+        <div class="bene-wrap"><div class="bene-grid">
+          <div class="bene-item"><h4>機材支給</h4><p>職種に応じて、業務で使用するPCやスマートフォンを支給します。モニターの支給もあり、デュアルモニターで作業可能です。</p></div>
+          <div class="bene-item"><h4>社内ドリンク制度</h4><p>社内に常備してある自動販売機・ドリンクの中から好きなものを無料で利用することが可能です。</p></div>
+          <div class="bene-item"><h4>住宅手当</h4><p>業務集中のための環境構築サポートとして配属先の近くにお住まいの方に上限5.5万円を支給しています。</p></div>
+          <div class="bene-item"><h4>交通費全額支給</h4><p>会社から自宅までかかる交通機関の運賃を全額支給しています。（公共交通機関利用の場合）</p></div>
+          <div class="bene-item"><h4>納会（会社負担）</h4><p>メンバーとの交流を深めることを目的に、全社イベントや部署・チームごとに年に複数回実施しています。</p></div>
+          <div class="bene-item"><h4>書籍購入</h4><p>開発に関わる書籍の購入支援を行なっており、技術書や専門書を会社負担で購入できる制度を設けています。（社内規定あり）</p></div>
+        </div></div>
+      </details>
+      <details class="bene-group">
+        <summary class="bene-cat">集中のための健康づくり</summary>
+        <div class="bene-wrap"><div class="bene-grid">
+          <div class="bene-item"><h4>健康診断</h4><p>年に1回、社員全員が健康診断を受けることができます。受診費用は全額会社が負担します。</p></div>
+          <div class="bene-item"><h4>インフルエンザ予防接種</h4><p>年に一度、インフルエンザの予防接種を社内で実施しています。</p></div>
+          <div class="bene-item"><h4>がん検診</h4><p>がん検診を補助します。女性は子宮頸がんなど、男性は前立腺の検査を実施します。（年齢条件あり）</p></div>
+        </div></div>
+      </details>
+      <details class="bene-group">
+        <summary class="bene-cat">ファミリー向けサポート</summary>
+        <div class="bene-wrap"><div class="bene-grid">
+          <div class="bene-item"><h4>育児/産前・産後休暇</h4><p>出産や育児の際に安心して取得できる育児休暇制度を提供しています。男女問わず取得しており復帰率は66.6%です。</p></div>
+          <div class="bene-item"><h4>ファミリー制度</h4><p>社員の子供が小学校を卒業するまでの間、年に1回、特別休暇を付与しています。</p></div>
+          <div class="bene-item"><h4>時短社員制度</h4><p>育児や介護などのライフステージに応じて、社員が働く時間を調整できるようになっています。</p></div>
+          <div class="bene-item"><h4>慶弔見舞金</h4><p>従業員やそのご家族に慶事や不幸があった際に支給される慶弔見舞金を設けています。</p></div>
+          <div class="bene-item"><h4>退職金制度</h4><p>確定積立年金制度により、自分で設定した金額で退職金を積み立てることができます。</p></div>
+        </div></div>
+      </details>
+      <details class="bene-group">
+        <summary class="bene-cat">コミュニケーションサポート</summary>
+        <div class="bene-wrap"><div class="bene-grid">
+          <div class="bene-item"><h4>バースデーイベント</h4><p>毎月、誕生日を迎えた社員を祝うイベントを開催しています。バースデープレゼントも支給しています。</p></div>
+          <div class="bene-item"><h4>社員・幹部旅行</h4><p>社員同士のコミュニケーションを深めてより良い関係を築く機会を提供しています。</p></div>
+          <div class="bene-item"><h4>会員制リゾート施設</h4><p>業績が認められた社員に、会員制リゾート施設が利用できる制度があります。</p></div>
+          <div class="bene-item"><h4>スポンサー特典</h4><p>スポーツブランドや飲食店とのスポンサーシップを行なっており、社員に特典を提供しています。</p></div>
+        </div></div>
+      </details>
+    </div>
+    <div class="env-block">
+      <h3 class="h3" data-reveal>拠点</h3>
+      <div class="office-track" id="officetrack">
+        <article class="office-card"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div><div><div class="office-city">TOKYO</div><div class="office-sub">東京本社</div><div class="office-addr">〒105-0004　東京都港区新橋1-10-6 新橋M-SQUARE 11階</div></div></article>
+        <article class="office-card"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div><div><div class="office-city">OSAKA</div><div class="office-sub">関西支社</div><div class="office-addr">〒530-0001　大阪府大阪市北区梅田2-4-9 ブリーゼタワー 17階</div></div></article>
+        <article class="office-card"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div><div><div class="office-city">NAGOYA</div><div class="office-sub">名古屋支社</div><div class="office-addr">〒450-6490　愛知県名古屋市中村区名駅3-28-12 大名古屋ビルヂング 11階</div></div></article>
+        <article class="office-card"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div><div><div class="office-city">FUKUOKA</div><div class="office-sub">福岡支社</div><div class="office-addr">〒810-0001　福岡県福岡市中央区天神1-13-17 福岡天神1丁目ビル 7階</div></div></article>
+        <article class="office-card"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div><div><div class="office-city">SAPPORO</div><div class="office-sub">札幌支社</div><div class="office-addr">〒060-0061　北海道札幌市中央区南1条西5-20 郵政福祉札幌第1ビル 4階</div></div></article>
+      </div>
+      <div class="progress"><div class="bar"></div></div>
+    </div>
+  </section>
 
   <section class="sec" id="company" style="padding-top:0">
     <div data-reveal><p class="eyebrow">Company</p><h2 class="h2">会社紹介</h2></div>
@@ -508,7 +649,7 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   </section>
 
   <section class="sec" id="blog">
-    <div class="sec-head" data-reveal><div><p class="eyebrow">Article</p><h2 class="h2">公式note</h2></div><a class="more" href="#" target="_blank" rel="noopener"><span class="label">More</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+    <div data-reveal><p class="eyebrow">Article</p><h2 class="h2">公式note</h2></div>
     <div class="blog-row" data-stagger data-observe>
       <article class="blog"><div class="media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <h3>HR企業出身が語る、飲食ホテル×HRミドルベンチャーの魅力</h3>
@@ -520,6 +661,9 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         <h3>教育業界出身だからこそ、飲食・ホテル業界のキャリアコンサルティングで即戦力に - 営業・HR業界未経験は関係ない</h3>
         <a class="more blog-more" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></article>
     </div>
+    <a class="noteb" href="#" target="_blank" rel="noopener" data-reveal>
+      <img src="imgs/note-banner.png" alt="クオレガをもっと知る - クオレガ社員の生の声や事業、プロダクトの魅力をお届け（note記事一覧へ）">
+    </a>
   </section>
 
   <footer class="footer">
@@ -584,17 +728,34 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
   setTimeout(sweep,1200);
   sweep();
 })();
-(function(){ /* 追従ヘッダー */
-  var h=document.getElementById('hdr'); if(!h) return; var last=0;
+(function(){ /* 追従ヘッダー — 新卒採用・中途採用・カジュアル面談・エントリーだけを常時表示に残す */
+  var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
-    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
-    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
-    last=y;},{passive:true});
+    h.classList.toggle('is-compact',y>240);
+  },{passive:true});
 })();
-(function(){ /* 横送りトラック（バリュー／メンバー） */
-  var tracks=[].slice.call(document.querySelectorAll('.mem-track'));
+(function(){ /* 福利厚生のアコーディオン — 閉じ切ってから open を外して高さを補間する */
+  document.querySelectorAll('.bene-group').forEach(function(d){
+    var sum=d.querySelector('summary'), wrap=d.querySelector('.bene-wrap');
+    if(!sum||!wrap) return;
+    sum.addEventListener('click',function(e){
+      e.preventDefault();
+      if(d.classList.contains('is-open')){
+        d.classList.remove('is-open');
+        wrap.addEventListener('transitionend',function h(ev){
+          if(ev.propertyName!=='grid-template-rows') return;
+          d.open=false; wrap.removeEventListener('transitionend',h);
+        });
+      } else {
+        d.open=true;
+        requestAnimationFrame(function(){ d.classList.add('is-open'); });
+      }
+    });
+  });
+})();
+(function(){ /* 横送りトラック（バリュー／メンバー／拠点） */
+  var tracks=[].slice.call(document.querySelectorAll('.mem-track, .office-track'));
   tracks.forEach(function(tr){
     var wrap=tr.parentElement, bar=wrap?wrap.querySelector('.progress .bar'):null;
     var nav=tr.id?document.querySelector('[data-nav-for="'+tr.id+'"]'):null;
