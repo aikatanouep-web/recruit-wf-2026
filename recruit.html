@@ -187,6 +187,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    見た目を約24pxに収める。20px のままだと見た目34pxで段落が分断されて見える。 */
 .mv-text p + p{margin-top:10px}
 .msg-sign{margin-top:24px;font-weight:700;color:var(--ink)}
+/* 代表メッセージはキービジュアルと同じ黒地・白文字にする */
+#message{background:var(--ink);color:var(--paper)}
+#message .eyebrow{color:rgba(251,250,248,.6)}
+#message .mv-text p{color:rgba(255,255,255,.85)}
+#message .mv-text .msg-sign{color:var(--paper)}
+#message .mv-media .ph{background:#383838}
 @media (max-width:860px){
   .hero{height:auto;padding:130px var(--gutter) 72px}
   .hero > h1,.hero > .lead{max-width:none}
@@ -410,7 +416,6 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </svg></a>
     <div class="header-actions">
       <nav class="header-nav header-nav--sub">
-        <a href="#culture">カルチャー</a>
         <a href="jobs.html">募集職種一覧</a>
       </nav>
       <nav class="header-nav">
@@ -453,12 +458,29 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
   </section>
 
-  <!-- ============ Culture（About us の子として Our Value / Message をまとめる見出し） ============ -->
-  <section class="sec" id="culture" style="padding-bottom:64px">
-    <div data-reveal><p class="eyebrow">Culture</p><h2 class="h2">カルチャー</h2></div>
+  <!-- ============ 代表メッセージ（About us の子として、私たちについての直下に置く） ============ -->
+  <section class="sec" id="message">
+    <div data-reveal><p class="eyebrow">Message</p><h2 class="h2">代表メッセージ</h2></div>
+    <div class="mv-row is-flip" style="margin-top:64px">
+      <div class="mv-text" data-reveal>
+        <p>インバウンドの回復により、食産業・宿泊業への需要が高まっています。しかし、業界の慢性的な人材不足や採用難は揺るがない課題となっているのが現状です。</p>
+        <p>あらゆる手段を駆使しても尚、企業の採用課題に関する悩みは尽きません。そこで私たちは、これまでの、業界に特化した多岐に渡るメディアによる採用支援経験を駆使し、より便利に、低コストで利用することができる機能を実現しました。</p>
+        <p>それが、「食・宿泊」に関わる企業様の理念採用・運用型を可能にする、飲食業界初の完全成果報酬型採用DXプラットフォーム「FoodsLabo」「HotelsLabo」です。</p>
+        <p>このように、クオレガのパーパスである「日本の価値を上げる」を前提とした事業を、時代のニーズに応じて打ち出しています。だからこそ、成長できるチャンスは多くありますし、自ら手を挙げれば新しい事業に携わることも可能です。</p>
+        <p>そこで欠かせないのが「変化を恐れない」こと。<br>環境の変化に楽しみや面白さを見出しながらバリューを出す、このサイクルができてる人は、スピード感のある自己成長を叶えています。また意欲的で勢いのあるメンバーが多いので、互いに高め合いながら、社外の同年代と圧倒的な差を付けることも出来ます。若いうちに自分の市場価値をどこまで上げられるか、クオレガで試してみてもいいかもしれません。</p>
+        <p>社会人になって誰と何をするか悩んだ時に、「社会や業界に向けて何かしら貢献していきたい」「高い志を持つ人とやりがいを感じながら成長していきたい」と思ったら、是非、仲間となって私たちと一緒に働きましょう！</p>
+        <p class="msg-sign">代表取締役　佐藤 康成</p>
+      </div>
+      <div class="mv-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    </div>
   </section>
 
-  <!-- ============ Our Value（Culture の子要素・大きな白カードを横に送る） ============ -->
+  <!-- ============ Value（7つのバリュー・大きな白カードを横に送る） ============ -->
+  <section class="sec" id="culture" style="padding-bottom:64px">
+    <div data-reveal><p class="eyebrow">Value</p><h2 class="h2">7つのバリュー</h2></div>
+  </section>
+
+  <!-- ============ Our Value（Value の子要素・大きな白カードを横に送る） ============ -->
   <section class="valsec" id="value">
    <div class="val-sticky">
     <div class="val-head" data-reveal><h2 class="h2" style="font-size:32px">私たちが大事にしているもの</h2></div>
@@ -473,23 +495,6 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
     <div class="progress val-rail"><div class="bar"></div></div>
    </div>
-  </section>
-
-  <!-- ============ 代表メッセージ（Culture の子要素） ============ -->
-  <section class="sec" id="message">
-    <div data-reveal><h2 class="h2" style="font-size:32px">代表メッセージ</h2></div>
-    <div class="mv-row is-flip" style="margin-top:64px">
-      <div class="mv-text" data-reveal>
-        <p>インバウンドの回復により、食産業・宿泊業への需要が高まっています。しかし、業界の慢性的な人材不足や採用難は揺るがない課題となっているのが現状です。</p>
-        <p>あらゆる手段を駆使しても尚、企業の採用課題に関する悩みは尽きません。そこで私たちは、これまでの、業界に特化した多岐に渡るメディアによる採用支援経験を駆使し、より便利に、低コストで利用することができる機能を実現しました。</p>
-        <p>それが、「食・宿泊」に関わる企業様の理念採用・運用型を可能にする、飲食業界初の完全成果報酬型採用DXプラットフォーム「FoodsLabo」「HotelsLabo」です。</p>
-        <p>このように、クオレガのパーパスである「日本の価値を上げる」を前提とした事業を、時代のニーズに応じて打ち出しています。だからこそ、成長できるチャンスは多くありますし、自ら手を挙げれば新しい事業に携わることも可能です。</p>
-        <p>そこで欠かせないのが「変化を恐れない」こと。<br>環境の変化に楽しみや面白さを見出しながらバリューを出す、このサイクルができてる人は、スピード感のある自己成長を叶えています。また意欲的で勢いのあるメンバーが多いので、互いに高め合いながら、社外の同年代と圧倒的な差を付けることも出来ます。若いうちに自分の市場価値をどこまで上げられるか、クオレガで試してみてもいいかもしれません。</p>
-        <p>社会人になって誰と何をするか悩んだ時に、「社会や業界に向けて何かしら貢献していきたい」「高い志を持つ人とやりがいを感じながら成長していきたい」と思ったら、是非、仲間となって私たちと一緒に働きましょう！</p>
-        <p class="msg-sign">代表取締役　佐藤 康成</p>
-      </div>
-      <div class="mv-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    </div>
   </section>
 
   <section class="sec" id="member" style="padding-top:0">
@@ -614,12 +619,6 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
     </div>
   </section>
 
-  <section class="entry-lead" data-reveal>
-    <p class="eyebrow">Entry</p>
-    <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener">エントリー</a>
-  </section>
-
   <!-- ============ 採用の入口（募集要項） ============ 新卒／中途をここで分岐させる -->
   <section class="gates" id="entry">
     <div class="gates-in">
@@ -645,6 +644,12 @@ a.gpanel:hover{background:rgba(255,255,255,.07)}
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="entry-lead" data-reveal>
+    <p class="eyebrow">Entry</p>
+    <h2 class="h2">さあ、一緒に日本の価値を上げよう</h2>
+    <a class="cta primary lg" href="#" target="_blank" rel="noopener">エントリー</a>
   </section>
 
   <section class="sec" id="blog">
