@@ -98,21 +98,30 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
 
+/* 追従ヘッダー（recruit.html と同じ仕様） */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,251,251,.92);
-  transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
-/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
-.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
+  transition:background-color .4s ease}
 .site-header.is-scrolled{background:rgba(251,251,251,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
-.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
+.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink);
+  opacity:1;transition:opacity .3s ease,width .4s var(--ease-out-expo),margin .4s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-/* カジュアル面談・エントリーは recruit.html と同じ、面のあるボタンで見せる。
-   ボタンのサイズ・余白も recruit.html のヘッダーと揃える */
-.header-actions{display:flex;align-items:center;gap:16px}
+/* is-compact では、ロゴと常時表示ナビ（カルチャー）を隠し、常に追従させたい
+   項目（募集職種一覧・新卒採用・中途採用・カジュアル面談・エントリー）だけを
+   帯状の背景ではなく、要素を囲む角丸の背景として右上に残す */
+.site-header.is-compact{background:transparent}
+.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
+.site-header.is-compact .logo{width:0;margin-right:-16px;opacity:0;pointer-events:none}
+.header-actions{display:flex;align-items:center;gap:16px;
+  padding:12px 20px;border-radius:999px;background:transparent;
+  box-shadow:0 8px 24px rgba(13,13,14,0);
+  transition:background-color .3s ease,box-shadow .3s ease}
 .header-actions .cta{padding:9px 20px;font-size:12px}
-.header-nav{display:flex;gap:16px}
+.site-header.is-compact .header-actions{background:rgba(251,251,251,.96);
+  box-shadow:0 8px 24px rgba(13,13,14,.1);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.header-nav{display:contents}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
@@ -129,35 +138,47 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .pagehead{padding:176px var(--gutter) 0}
 .pagehead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.5;margin:0}
 
-/* タブ：新卒／中途 */
-/* タブ。文字は 15px、語間は 87px（Figma 実測）。選択中は太さと濃さだけで示し、
-   個別の下線は引かない。段の下に 1px の墨罫を全幅で通して一覧と縁を切る。
-   当たり判定が痩せないよう、ボタン側に左右6pxを持たせて語間から差し引く。 */
-.tabs{display:flex;gap:75px;padding-left:19px;
-  border-bottom:1px solid var(--ink);margin-top:70px}
-.tab{appearance:none;background:none;border:0;cursor:pointer;position:relative;
-  padding:12px 6px 19px;display:inline-flex;align-items:center;justify-content:center;
-  font-family:var(--font-ja);font-weight:500;font-size:15px;letter-spacing:.1em;
-  line-height:1;color:var(--caption)}
-.tab > span{position:relative;display:inline-block}
-.tab.is-on{color:var(--ink);font-weight:700}
-@media (hover:hover){.tab:hover{color:var(--ink)}}
+/* 新卒サイトへのバナー（Figma node 178:330。新卒タブの代わりに置く） */
+.shinsotsu{display:grid;grid-template-columns:675fr 494fr;height:200px;margin-top:56px;
+  color:inherit;text-decoration:none;transition:opacity .3s ease}
+@media (hover:hover){.shinsotsu:hover{opacity:.85}}
+.shinsotsu-text{background:var(--fill2);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:16px;padding:0 32px;text-align:center}
+.shinsotsu-tt{font-weight:700;font-size:24px;letter-spacing:.08em;line-height:1.5;margin:0}
+.shinsotsu-more{display:inline-flex;align-items:center;gap:4px;font-size:12px;letter-spacing:.08em;
+  line-height:1;color:var(--ink);text-decoration:none}
+.shinsotsu-media .ph{background:#d9d9d9}
 
-/* 求人の行 */
-.joblist{margin-top:32px;display:none}
-.joblist.is-on{display:block}
-/* 職種名とボタンだけの行なので、高さを詰めて一覧として読ませる（高さ86px） */
-.jobrow{display:flex;align-items:center;justify-content:space-between;gap:24px;
-  min-height:86px;background:var(--tone);border:0;border-radius:4px;
-  padding:24px 32px}
-.jobrow + .jobrow{margin-top:24px}
-.jobrow-name{min-width:0;font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.6}
-.jobrow-actions{display:flex;gap:24px;flex:none}
+/* 募集職種（カテゴリごとのアコーディオン。Figma node 178:125 の求人一覧） */
+.jobcats{margin-top:70px}
+.jobcats > .jobcat:first-child{border-top:1px solid var(--ink)}
+.jobcat{border-bottom:1px solid var(--ink)}
+.jobcat-q{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  gap:24px;padding:22px 0;font-weight:500;font-size:16px;letter-spacing:.06em;line-height:1.8;color:var(--ink);
+  transition:opacity var(--dur-hover) var(--ease-out-expo)}
+.jobcat-q::-webkit-details-marker{display:none}
+.jobcat-q::after{content:"";width:17px;height:17px;flex:none;color:#3a3a40;
+  background:linear-gradient(currentColor,currentColor) center/17px 1.5px no-repeat,
+             linear-gradient(currentColor,currentColor) center/1.5px 17px no-repeat;
+  transition:background-size .5s var(--ease-out-expo)}
+.jobcat.is-open > .jobcat-q::after{background-size:17px 1.5px,1.5px 0}
+.jobcat-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
+.jobcat.is-open .jobcat-wrap{grid-template-rows:1fr}
+.jobcat-list{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
+  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
+.jobcat.is-open .jobcat-list{opacity:1;transform:none;transition-delay:.06s}
+.jobitem{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:32px 0;border-top:1px solid var(--line)}
+.jobitem-text{display:flex;flex-direction:column;gap:7px;max-width:700px}
+.jobitem-name{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0}
+.jobitem-sub{font-weight:700;font-size:12px;letter-spacing:.08em;line-height:1.6;margin:0}
+.jobitem-desc{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
+.jobitem-actions{display:flex;gap:24px;flex:none}
 /* 2つのボタンは幅を決め打ちして端を揃える（Figma: 求人詳細120 / エントリー134） */
-.jobrow-actions .cta{height:38px;padding:0 21px;border-radius:19px;
+.jobitem-actions .cta{height:38px;padding:0 21px;border-radius:19px;
   justify-content:center;font-size:13px;letter-spacing:.1em}
-.jobrow-actions .cta.primary{min-width:120px}
-.jobrow-actions .cta:not(.primary){min-width:134px}
+.jobitem-actions .cta.primary{min-width:120px}
+.jobitem-actions .cta:not(.primary){min-width:134px}
 
 /* 選考フロー */
 .flowsec{padding-top:66px;padding-bottom:70px}
@@ -166,42 +187,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* グレーの帯の上なので、ダミー枠は地より明るい紙色で抜く */
 .flow-row .ph{background:var(--paper)}
 
-/* FAQ */
-/* FAQ。罫線は項目の下だけに絞り、見出しの直下に線が来ないようにする。
-   ＋は 1px のヘアラインをやめ、アイコン類と同じ 1.5px に。開いたら縦棒だけが
-   消えて − になる。行長は 900px で止めて、＋が文末から離れすぎないようにする。 */
-/* 見出しを左に固定し、本文を右の1本の柱にまとめる（Figma: 211 / 144 / 809） */
-.faqsec-in{display:grid;grid-template-columns:211px minmax(0,809px);gap:0 144px;align-items:start}
-.faqsec-in .head-block{margin:0}
-/* 211px の柱にちょうど収まる見出しなので、字間で溢れて折れないよう保険をかける */
-.faqsec-in .head-block .h2{white-space:nowrap}
-.faq{margin:0}
-/* 罫線は項目と項目の“あいだ”だけ。最後の項目の下には引かない */
-.faq-item + .faq-item{margin-top:40px;padding-top:40px;border-top:1px solid var(--ink)}
-.faq-q{list-style:none;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;
-  gap:75px;padding:0;font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1.8;
-  transition:opacity var(--dur-hover) var(--ease-out-expo)}
-.faq-q::-webkit-details-marker{display:none}
-.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:8px;color:#3a3a40;
-  background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
-             linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
-  transition:background-size .5s var(--ease-out-expo)}
-.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0}
-.faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
-.faq-item.is-open .faq-wrap{grid-template-rows:1fr}
-.faq-a{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
-.faq-item.is-open .faq-a{opacity:1;transform:none;transition-delay:.06s}
-.faq-a p{font-size:14px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0;
-  padding:16px 0 0;max-width:707px}
-
 /* ボーナス案内 */
 .bonus{margin-top:24px;aspect-ratio:1171/220}
 .bonus .ph{background:var(--paper)}
 
 /* 迷っている方へ */
-/* 締めの一言なので左右に振らず、中央に縦へ積む（Figma: 46 / 16 / 24 / 39） */
-.undecided{background:var(--ink);color:var(--paper);padding:46px var(--gutter) 39px;
+/* 締めの一言なので左右に振らず、中央に縦へ積む */
+.undecided{background:var(--ink);color:var(--paper);padding:80px var(--gutter) 70px;
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
 .undecided h2{font-weight:700;font-size:28px;letter-spacing:.1em;line-height:1.6;margin:0}
 .undecided p{font-size:13px;letter-spacing:.08em;line-height:1.9;color:#fff;margin:16px 0 0}
@@ -236,15 +228,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .pagehead{padding:120px var(--gutter) 0}
   .pagehead .h1{font-size:28px}
   .body-tx{font-size:13px}
-  /* 束の間隔をPCより詰める（56px → 36px） */
-  .tabs{margin-top:36px;gap:24px}
-  .tab{min-width:80px;padding:15px 0;font-size:14px}  /* 高さ44px・幅80px。指で押せる大きさを保つ */
-  .joblist{margin-top:20px}
+  .shinsotsu{grid-template-columns:1fr;height:auto}
+  .shinsotsu-media{aspect-ratio:16/9}
+  .jobcats{margin-top:36px}
   /* 職種名とボタンを縦に積む */
-  .jobrow{flex-direction:column;align-items:stretch;gap:14px;min-height:0;padding:18px 20px}
-  .jobrow + .jobrow{margin-top:10px}
-  .jobrow-actions{display:grid;grid-template-columns:1fr;gap:8px}
-  .jobrow-actions .cta{width:100%}
+  .jobitem{flex-direction:column;align-items:stretch;gap:14px}
+  .jobitem-actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .jobitem-actions .cta{width:100%}
 }
 </style>
 </head>
@@ -270,8 +260,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </svg></a>
     <div class="header-actions">
       <nav class="header-nav">
-        <a href="recruit.html">カルチャー</a>
         <a href="jobs.html" aria-current="page">募集職種一覧</a>
+        <a href="v2.html">新卒採用</a>
+        <a href="jobs.html">中途採用</a>
       </nav>
       <a class="cta" href="casual.html">カジュアル面談</a>
       <a class="cta primary" href="entry.html">エントリー</a>
@@ -283,52 +274,225 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="pagehead">
     <h1 class="h1 line-reveal" data-observe><span class="line"><span>募集職種一覧</span></span></h1>
-    <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:32px">新卒採用と中途採用で、それぞれ募集中の職種を掲載しています。求人の詳細・応募は、各職種のページからご確認ください。</p>
+    <p class="body-tx" data-reveal data-delay="0.15" style="margin-top:32px">中途採用の職種を掲載しています。求人の詳細・応募は、各職種のページからご確認ください。</p>
   </section>
 
-  <!-- ============ 求人一覧（新卒／中途のタブ） ============ -->
+  <!-- ============ 求人一覧（新卒サイトへのバナー＋募集職種のアコーディオン） ============ -->
   <section class="sec" style="padding-top:0">
-    <div class="tabs" role="tablist" data-reveal>
-      <button class="tab is-on" role="tab" aria-selected="true" data-tab="new"><span>新卒</span></button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="mid"><span>中途</span></button>
-    </div>
-    <div class="joblist is-on" data-list="new" data-stagger data-observe>
-        <article class="jobrow">
-          <span class="jobrow-name">新卒の方は新卒採用サイトをご覧ください</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="v2.html">新卒採用サイト</a>
+    <a class="shinsotsu" href="v2.html" data-reveal>
+      <div class="shinsotsu-text">
+        <p class="shinsotsu-tt">新卒の方は新卒採用サイトをご覧ください</p>
+        <span class="shinsotsu-more"><span class="label">新卒採用サイトはこちら</span><span class="arw" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></span>
+      </div>
+      <div class="shinsotsu-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    </a>
+
+    <div class="jobcats" data-stagger data-observe>
+      <details class="jobcat is-open" open>
+        <summary class="jobcat-q">採用コンサルタント職</summary>
+        <div class="jobcat-wrap"><div class="jobcat-list">
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">CA（キャリアアドバイザー）</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="sales.html">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
           </div>
-        </article>
-    </div>
-    <div class="joblist" data-list="mid" data-stagger data-observe>
-        <article class="jobrow">
-          <span class="jobrow-name">CA（キャリアアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="sales.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">RA（リクルーティングアドバイザー）</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="entry.html">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
           </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="entry.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">採用コンサルタント職_Cuoport Japan</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
           </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">エンジニア</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="engineer.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">採用コンサルタント職_HotelsLabo</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
           </div>
-        </article>
-        <article class="jobrow">
-          <span class="jobrow-name">デザイナー</span>
-          <div class="jobrow-actions">
-            <a class="cta" href="designer.html">求人詳細</a>
-            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">採用コンサルタント職_リーダー候補</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
           </div>
-        </article>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">採用コンサルタント職_拠点長・マネージャー候補</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">採用コンサルタント職_部長候補</p>
+              <p class="jobitem-sub">飲食ホテル業界の採用課題を解決するリクルーティングコンサルタント・キャリアアドバイザー</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+        </div></div>
+      </details>
+
+      <details class="jobcat">
+        <summary class="jobcat-q">エンジニア職</summary>
+        <div class="jobcat-wrap"><div class="jobcat-list">
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">エンジニア</p>
+              <p class="jobitem-sub">飲食・宿泊業界向け採用DXプラットフォームを支える開発職</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="engineer.html">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">エンジニア_Cuoport Japan</p>
+              <p class="jobitem-sub">飲食・宿泊業界向け採用DXプラットフォームを支える開発職</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+        </div></div>
+      </details>
+
+      <details class="jobcat">
+        <summary class="jobcat-q">マーケター職</summary>
+        <div class="jobcat-wrap"><div class="jobcat-list">
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">マーケター</p>
+              <p class="jobitem-sub">飲食・宿泊業界向け採用DXプラットフォームのマーケティングを担う職種</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">マーケター_Cuoport Japan</p>
+              <p class="jobitem-sub">飲食・宿泊業界向け採用DXプラットフォームのマーケティングを担う職種</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">マーケター_HotelsLabo</p>
+              <p class="jobitem-sub">飲食・宿泊業界向け採用DXプラットフォームのマーケティングを担う職種</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+        </div></div>
+      </details>
+
+      <details class="jobcat">
+        <summary class="jobcat-q">アシスタント職</summary>
+        <div class="jobcat-wrap"><div class="jobcat-list">
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">アシスタント</p>
+              <p class="jobitem-sub">営業・採用コンサルタントを支えるバックオフィス業務全般</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">アシスタント_Cuoport Japan</p>
+              <p class="jobitem-sub">営業・採用コンサルタントを支えるバックオフィス業務全般</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">アシスタント_HotelsLabo</p>
+              <p class="jobitem-sub">営業・採用コンサルタントを支えるバックオフィス業務全般</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+        </div></div>
+      </details>
+
+      <details class="jobcat">
+        <summary class="jobcat-q">プランナー職</summary>
+        <div class="jobcat-wrap"><div class="jobcat-list">
+          <div class="jobitem">
+            <div class="jobitem-text">
+              <p class="jobitem-name">プランナー</p>
+              <p class="jobitem-sub">採用DXプラットフォームの企画・提案を担う職種</p>
+              <p class="jobitem-desc">株式会社クオレガは「食・ホテル旅館業界（インバウンド業界）×HR」に特化したミドルベンチャー企業です。<br>インバウンド（訪日外国人）は、2025年に過去最高の4,268万人を突破し、2030年には6,000万人の外国人が、日本に...</p>
+            </div>
+            <div class="jobitem-actions">
+              <a class="cta" href="#">求人詳細</a>
+              <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
+            </div>
+          </div>
+        </div></div>
+      </details>
     </div>
   </section>
 
@@ -337,34 +501,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="flow-row" data-reveal data-delay="0.08"><div class="ph"><i>VISUAL ASSETS</i></div></div>
   </section>
 
+  <section class="sec sec--tone">
+    <div class="head-block" data-reveal><h2 class="h2">ダイレクト入社ボーナス</h2></div>
+    <div class="bonus" data-reveal data-delay="0.08"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+  </section>
+
   <section class="undecided">
     <div>
       <h2>迷っている方へ</h2>
       <p>まずは気軽にお話ししませんか？ 応募を決めていなくても構いません。</p>
     </div>
-    <div class="row"><span class="cta cta--ondark lg">カジュアル面談を申し込む</span></div>
-  </section>
-
-  <section class="sec">
-   <div class="faqsec-in">
-    <div class="head-block" data-reveal><h2 class="h2">よくある質問</h2></div>
-    <div class="faq">
-      <details class="faq-item"><summary class="faq-q">選考にはどれくらい時間がかかりますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-      <details class="faq-item"><summary class="faq-q">面接は何回ありますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-      <details class="faq-item"><summary class="faq-q">カジュアル面談だけでも参加できますか？</summary>
-        <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div>
-      </details>
-    </div>
-   </div>
-  </section>
-
-  <section class="sec sec--tone">
-    <div class="head-block" data-reveal><h2 class="h2">ダイレクト入社ボーナス</h2></div>
-    <div class="bonus" data-reveal data-delay="0.08"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    <div class="row"><span class="cta cta--ondark lg">カジュアル面談で話してみる</span></div>
   </section>
 
   <footer class="footer">
@@ -422,33 +569,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('resize',sweep); addEventListener('load',sweep);
   setTimeout(sweep,1200); sweep();
 })();
-(function(){ /* 追従ヘッダー */
-  var h=document.getElementById('hdr'); if(!h) return; var last=0;
+(function(){ /* 追従ヘッダー — 募集職種一覧・新卒採用・中途採用・カジュアル面談・
+      エントリーだけを常時表示に残す（recruit.html と同じ仕様） */
+  var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
-    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
-    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
-    last=y;},{passive:true});
+    h.classList.toggle('is-compact',y>240);
+  },{passive:true});
 })();
-(function(){ /* 新卒／中途のタブ */
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  var lists=[].slice.call(document.querySelectorAll('.joblist'));
-  if(!tabs.length) return;
-  tabs.forEach(function(t){
-    t.addEventListener('click',function(){
-      tabs.forEach(function(x){var on=x===t; x.classList.toggle('is-on',on); x.setAttribute('aria-selected',on?'true':'false');});
-      lists.forEach(function(l){
-        var on=l.dataset.list===t.dataset.tab;
-        l.classList.toggle('is-on',on);
-        if(on){ l.classList.remove('is-inview'); requestAnimationFrame(function(){l.classList.add('is-inview');}); }
-      });
-    });
-  });
-})();
-(function(){ /* FAQ：閉じ切ってから open を外して高さを補間 */
-  document.querySelectorAll('.faq-item').forEach(function(d){
-    var s=d.querySelector('summary'), w=d.querySelector('.faq-wrap');
+(function(){ /* 募集職種のアコーディオン — 閉じ切ってから open を外して高さを補間 */
+  document.querySelectorAll('.jobcat').forEach(function(d){
+    var s=d.querySelector('summary'), w=d.querySelector('.jobcat-wrap');
     if(!s||!w) return;
     s.addEventListener('click',function(e){
       e.preventDefault();
