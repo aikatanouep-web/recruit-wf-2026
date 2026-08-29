@@ -90,22 +90,39 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
 
-.site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,251,251,.92);
-  transition:transform .45s var(--ease-out-expo),background-color .4s ease}
-.site-header.is-hidden{transform:translateY(-100%);transition-duration:.6s,.4s;pointer-events:none}
-/* ポインタが乗っている／フォーカスが当たっている間は隠さない。クリックの途中でヘッダーが逃げてリンクが押せない事故を防ぐ */
-.site-header.is-hidden:hover,.site-header.is-hidden:focus-within{transform:none;pointer-events:auto}
-.site-header.is-scrolled{background:rgba(251,251,251,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
-.logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
+/* 追従ヘッダー（recruit.html と全く同じ仕様） */
+.site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:rgba(251,250,248,.92);
+  transition:background-color .4s ease}
+.site-header.is-scrolled{background:rgba(251,250,248,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
+  display:flex;align-items:center;justify-content:space-between}
+.logo{flex:none;display:block;width:133px;height:17.1px;color:var(--ink);
+  opacity:1;transition:opacity .3s ease,width .4s var(--ease-out-expo),margin .4s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-/* 語間はキャップハイトの約4倍。sales の欧文ナビと同じ間隔に揃える */
-.header-nav{display:flex;gap:40px}
+/* is-compact では、ロゴと常時表示ナビ（募集職種一覧）を隠し、
+   常に追従させたい項目（新卒採用・中途採用・カジュアル面談・エントリー）だけを
+   帯状の背景ではなく、要素を囲む角丸の背景として右上に残す */
+.site-header.is-compact{background:transparent}
+.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
+.site-header.is-compact .logo{width:0;margin-right:-16px;opacity:0;pointer-events:none}
+.header-actions{display:flex;align-items:center;gap:16px;
+  padding:12px 20px;border-radius:999px;background:transparent;
+  box-shadow:0 8px 24px rgba(13,13,14,0);
+  transition:background-color .3s ease,box-shadow .3s ease}
+.header-actions .cta{padding:9px 20px;font-size:12px}
+.site-header.is-compact .header-actions{background:rgba(251,250,248,.96);
+  box-shadow:0 8px 24px rgba(13,13,14,.1);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.header-nav{display:contents}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+.header-nav--sub{display:flex;align-items:center;gap:16px;overflow:hidden;
+  max-width:260px;opacity:1;transition:max-width .45s var(--ease-out-expo),opacity .3s ease}
+.header-nav--sub a{flex:none;white-space:nowrap}
+.site-header.is-compact .header-nav--sub{max-width:0;opacity:0}
 
 .sec{padding:96px var(--gutter)}
 .sec--tone{background:var(--tone)}
@@ -125,8 +142,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .hero-cta{margin-top:70px}
 .hero-media{align-self:start;height:445px}
 .hero-media .ph{background:#383838}
-/* 黒地の上のボタンは白で抜く（Figma 127x36 / r18） */
-.hero-cta{height:36px;padding:0 25px;border-radius:18px;font-size:13px;letter-spacing:.1em;
+/* 黒地の上のボタンは白で抜く。サイズは jobs.html の
+   「カジュアル面談で話してみる」（.cta.lg）と揃える */
+.hero-cta{padding:15px 40px;font-size:14px;letter-spacing:.1em;
   background:#fff;border-color:var(--ink);color:var(--ink)}
 
 
@@ -208,18 +226,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .thumb p{font-size:13px;letter-spacing:.06em;line-height:1.8;color:#3a3a40;margin:0}
 
 /* 担当メンバー */
-/* 3枚を段の中央に置くが、カードの中身は左揃え（Figma 実測） */
-.people-wrap{padding:40px 96px;margin-top:40px}
-.people{display:flex;justify-content:center;gap:120px}
-.person{flex:0 0 239px;display:flex;flex-direction:column;align-items:flex-start;gap:20px}
-.person-txt{display:flex;flex-direction:column;gap:14px}
-.person .ph{aspect-ratio:239/180}
-.person-media{width:239px}
-.person-name{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.6;margin:0}
-.person-msg{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
-.person-body{display:flex;flex-direction:column;gap:32px;align-items:flex-start}
-.person-links{display:flex;gap:24px;margin:0}
-.person-links .cta{height:33px;padding:0 18px;border-radius:16.5px;font-size:12px;letter-spacing:.1em}
+/* 3枚を等幅グリッドで並べ、カード内は左揃え・縦積みにする */
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.person{display:flex;flex-direction:column;align-items:stretch}
+.person .ph{aspect-ratio:239/135}
+.person-name{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.6;margin:20px 0 0}
+.person-msg{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:8px 0 0}
+/* 「記事を読む」は recruit.html のメンバーエリアと同じデザイン（.more） */
+.more{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-en);font-weight:500;font-size:16px;
+  letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;cursor:pointer;flex:none}
+.person-note{margin-top:12px}
+.person-cta{margin-top:16px;width:100%;height:44px;border-radius:22px;font-size:13px;letter-spacing:.06em}
 
 /* 2列のテキスト */
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 80px;margin-top:40px}
@@ -250,12 +267,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <nav class="header-nav">
-      <a href="recruit.html">カルチャー</a>
-      <a href="jobs.html">募集職種一覧</a>
-      <a href="casual.html">カジュアル面談</a>
-      <a href="entry.html">エントリー</a>
-    </nav>
+    <div class="header-actions">
+      <nav class="header-nav header-nav--sub">
+        <a href="jobs.html">募集職種一覧</a>
+      </nav>
+      <nav class="header-nav">
+        <a href="v2.html">新卒採用</a>
+        <a href="jobs.html">中途採用</a>
+      </nav>
+      <a class="cta" href="casual.html">カジュアル面談</a>
+      <a class="cta primary" href="entry.html">エントリー</a>
+    </div>
   </div>
 </header>
 
@@ -266,7 +288,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <div class="hero-copy">
         <h1 class="h1 line-reveal" data-observe><span class="line"><span>カジュアル面談</span></span></h1>
         <p data-reveal data-delay="0.12">テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-        <a class="cta hero-cta" href="#" target="_blank" rel="noopener" data-reveal data-delay="0.2">申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+        <a class="cta hero-cta" href="#" target="_blank" rel="noopener" data-reveal data-delay="0.2">話してみる</a>
       </div>
       <div class="hero-media" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
@@ -281,46 +303,34 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="sec">
     <div class="head-block" data-reveal><h2 class="h2">担当メンバー</h2></div>
-    <div class="people-wrap">
     <div class="people" data-stagger data-observe>
-      <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <div class="person-body">
-          <div class="person-txt"><p class="person-name">メンバー A</p>
-        <p class="person-msg">一言メッセージが入ります。</p>
-        </div>
-          <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-        </div>
+      <article class="person">
+        <div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <p class="person-name">メンバー A</p>
+        <p class="person-msg">メッセージが入ります。メッセージが入ります。メッセージが入ります。メッセージが入ります。</p>
+        <a class="more person-note" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+        <a class="cta person-cta" href="#" target="_blank" rel="noopener">メンバーAと話してみる</a>
       </article>
-      <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <div class="person-body">
-          <div class="person-txt"><p class="person-name">メンバー B</p>
-        <p class="person-msg">一言メッセージが入ります。</p>
-        </div>
-          <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-        </div>
+      <article class="person">
+        <div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <p class="person-name">メンバー B</p>
+        <p class="person-msg">メッセージが入ります。メッセージが入ります。メッセージが入ります。メッセージが入ります。</p>
+        <a class="more person-note" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+        <a class="cta person-cta" href="#" target="_blank" rel="noopener">メンバーBと話してみる</a>
       </article>
-      <article class="person"><div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-        <div class="person-body">
-          <div class="person-txt"><p class="person-name">メンバー C</p>
-        <p class="person-msg">一言メッセージが入ります。</p>
-        </div>
-          <div class="person-links">
-          <a class="cta" href="#" target="_blank" rel="noopener">note<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-          <a class="cta" href="#" target="_blank" rel="noopener">プロフィール<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
-        </div>
+      <article class="person">
+        <div class="person-media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <p class="person-name">メンバー C</p>
+        <p class="person-msg">メッセージが入ります。メッセージが入ります。メッセージが入ります。メッセージが入ります。</p>
+        <a class="more person-note" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+        <a class="cta person-cta" href="#" target="_blank" rel="noopener">メンバーCと話してみる</a>
       </article>
-    </div>
     </div>
   </section>
 
   <section class="sec applysec">
     <div class="head-block" data-reveal><h2 class="h2">申込・日程調整</h2></div>
     <div class="band band--wide" data-observe><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    <a class="cta primary lg" href="#" target="_blank" rel="noopener" data-reveal>申し込む<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
   </section>
 
 
@@ -378,14 +388,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('resize',sweep); addEventListener('load',sweep);
   setTimeout(sweep,1200); sweep();
 })();
-(function(){
-  var h=document.getElementById('hdr'); if(!h) return; var last=0;
+(function(){ /* 追従ヘッダー — 新卒採用・中途採用・カジュアル面談・エントリーだけを常時表示に残す */
+  var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    var overHeader=h.matches(':hover')||h.contains(document.activeElement);
-    if(y>last+6&&y>240&&!overHeader) h.classList.add('is-hidden');
-    else if(y<last-2||y<=240) h.classList.remove('is-hidden');
-    last=y;},{passive:true});
+    h.classList.toggle('is-compact',y>240);
+  },{passive:true});
 })();
 </script>
 </body>
