@@ -108,8 +108,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
-/* 語間はキャップハイトの約4倍。sales の欧文ナビと同じ間隔に揃える */
-.header-nav{display:flex;gap:40px}
+/* カジュアル面談・エントリーは recruit.html と同じ、面のあるボタンで見せる。
+   ボタンのサイズ・余白も recruit.html のヘッダーと揃える */
+.header-actions{display:flex;align-items:center;gap:16px}
+.header-actions .cta{padding:9px 20px;font-size:12px}
+.header-nav{display:flex;gap:16px}
 .header-nav a{position:relative;font-size:13px;letter-spacing:.08em;line-height:1;padding:16px 0;margin:-12px 0;color:var(--ink);text-decoration:none}
 .header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
@@ -146,10 +149,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 職種名とボタンだけの行なので、高さを詰めて一覧として読ませる（高さ86px） */
 .jobrow{display:flex;align-items:center;justify-content:space-between;gap:24px;
   min-height:86px;background:var(--tone);border:0;border-radius:4px;
-  padding:24px 32px;
-  transition:border-color .5s var(--ease-out-expo),transform .5s var(--ease-out-expo)}
+  padding:24px 32px}
 .jobrow + .jobrow{margin-top:24px}
-@media (hover:hover){.jobrow:hover{background:#ededed;transform:translateY(-2px)}}
 .jobrow-name{min-width:0;font-weight:700;font-size:16px;letter-spacing:.08em;line-height:1.6}
 .jobrow-actions{display:flex;gap:24px;flex:none}
 /* 2つのボタンは幅を決め打ちして端を揃える（Figma: 求人詳細120 / エントリー134） */
@@ -160,11 +161,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 選考フロー */
 .flowsec{padding-top:66px;padding-bottom:70px}
-.flow-row{display:grid;grid-template-columns:minmax(0,568px);gap:32px;margin-top:40px}
-.flow-card{display:flex;flex-direction:column;gap:32px}
+/* 「ダイレクト入社ボーナス」の VISUAL ASSETS と同じサイズ（1171×220）に揃える */
+.flow-row{margin-top:40px;aspect-ratio:1171/220}
 /* グレーの帯の上なので、ダミー枠は地より明るい紙色で抜く */
-.flow-card .ph{aspect-ratio:569/251;background:var(--paper)}
-.flow-cap{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.6;margin:0}
+.flow-row .ph{background:var(--paper)}
 
 /* FAQ */
 /* FAQ。罫線は項目の下だけに絞り、見出しの直下に線が来ないようにする。
@@ -268,12 +268,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <nav class="header-nav">
-      <a href="recruit.html">カルチャー</a>
-      <a href="jobs.html" aria-current="page">募集職種一覧</a>
-      <a href="casual.html">カジュアル面談</a>
-      <a href="entry.html">エントリー</a>
-    </nav>
+    <div class="header-actions">
+      <nav class="header-nav">
+        <a href="recruit.html">カルチャー</a>
+        <a href="jobs.html" aria-current="page">募集職種一覧</a>
+      </nav>
+      <a class="cta" href="casual.html">カジュアル面談</a>
+      <a class="cta primary" href="entry.html">エントリー</a>
+    </div>
   </div>
 </header>
 
@@ -302,29 +304,29 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <article class="jobrow">
           <span class="jobrow-name">CA（キャリアアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta primary" href="sales.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta" href="sales.html">求人詳細</a>
+            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">RA（リクルーティングアドバイザー）</span>
           <div class="jobrow-actions">
-            <a class="cta primary" href="entry.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta" href="entry.html">求人詳細</a>
+            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">エンジニア</span>
           <div class="jobrow-actions">
-            <a class="cta primary" href="engineer.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta" href="engineer.html">求人詳細</a>
+            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
           </div>
         </article>
         <article class="jobrow">
           <span class="jobrow-name">デザイナー</span>
           <div class="jobrow-actions">
-            <a class="cta primary" href="designer.html">求人詳細</a>
-            <a class="cta" href="#" target="_blank" rel="noopener">エントリー<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+            <a class="cta" href="designer.html">求人詳細</a>
+            <a class="cta primary" href="#" target="_blank" rel="noopener">エントリー</a>
           </div>
         </article>
     </div>
@@ -332,9 +334,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <section class="sec sec--tone flowsec">
     <div class="head-block" data-reveal><h2 class="h2">選考フロー</h2></div>
-    <div class="flow-row" data-stagger data-observe>
-      <div class="flow-card"><div class="ph-wrap"><div class="ph"><i>VISUAL ASSETS</i></div></div><p class="flow-cap">中途採用の選考フロー</p></div>
-    </div>
+    <div class="flow-row" data-reveal data-delay="0.08"><div class="ph"><i>VISUAL ASSETS</i></div></div>
   </section>
 
   <section class="undecided">
