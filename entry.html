@@ -158,28 +158,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .flow-card .ph{aspect-ratio:16/7}
 .flow-cap{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.6;margin:0}
 
-/* FAQ */
-/* FAQ。罫線は項目の下だけに絞り、見出しの直下に線が来ないようにする。
-   ＋は 1px のヘアラインをやめ、アイコン類と同じ 1.5px に。開いたら縦棒だけが
-   消えて − になる。行長は 900px で止めて、＋が文末から離れすぎないようにする。 */
-.faq{margin-top:36px;max-width:760px}
-.faq-item{border-bottom:1px solid var(--line)}
-.faq-q{list-style:none;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;
-  gap:40px;padding:24px 0;font-weight:700;font-size:16px;letter-spacing:.06em;line-height:1.8;
-  transition:opacity var(--dur-hover) var(--ease-out-expo)}
-.faq-q::-webkit-details-marker{display:none}
-.faq-q::after{content:"";width:14px;height:14px;flex:none;margin-top:8px;color:#3a3a40;
-  background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
-             linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
-  transition:background-size .5s var(--ease-out-expo),opacity .4s var(--ease-out-expo)}
-.faq-item.is-open > .faq-q::after{background-size:14px 1.5px,1.5px 0}
-.faq-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.33,1,.68,1)}
-.faq-item.is-open .faq-wrap{grid-template-rows:1fr}
-.faq-a{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);
-  transition:opacity .3s cubic-bezier(.33,1,.68,1),transform .38s cubic-bezier(.33,1,.68,1)}
-.faq-item.is-open .faq-a{opacity:1;transform:none;transition-delay:.06s}
-.faq-a p{font-size:14px;letter-spacing:.06em;line-height:2;color:#3a3a40;margin:0;padding:0 54px 28px 0}
-
 /* ボーナス案内 */
 .bonus{margin-top:40px;aspect-ratio:1171/220}
 
@@ -230,7 +208,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   padding:80px var(--gutter) 0;
   display:flex;flex-direction:column;justify-content:center}
 .jobhead .h1{font-weight:700;font-size:40px;letter-spacing:.1em;line-height:1.6;margin:0;max-width:788px}
-.jobhead-sub{font-size:14px;letter-spacing:.1em;line-height:1.9;color:var(--caption);margin:-8px 0 0}
 .jobhead .row{display:flex;flex-wrap:wrap;gap:24px;margin-top:61px}
 /* 右半分の中央に置くダミー表記。箱は帯そのもの */
 .jobhead-ph{position:absolute;top:calc(50% - 18px);left:75%;transform:translate(-50%,-50%);
@@ -263,8 +240,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
 .rich li{font-size:14px;letter-spacing:.1em;
   line-height:2;color:#3a3a40}
 .rich li + li{margin-top:8px}
-.sec-label{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.2em;
-  line-height:1.6;color:var(--caption);margin:0 0 14px}
 
 /* 業務の流れ：番号は装飾せず、順番が分かるだけの大きさに留める */
 .steps{margin-top:24px;border-top:1px solid var(--line)}
@@ -274,6 +249,13 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   line-height:2;color:var(--caption)}
 .step-tx{font-size:14px;letter-spacing:.1em;line-height:2;margin:0}
 
+/* 選考の流れ：v2.html と同じ円＋連結線。連結線の左右インセットは円の半径に合わせる */
+.flow{position:relative;display:flex;justify-content:space-between;align-items:center;
+  width:100%;margin:40px auto 0}
+.flow::before{content:"";position:absolute;top:50%;left:54px;right:54px;height:1px;background:var(--line)}
+.fnode{position:relative;z-index:1;width:108px;height:108px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;text-align:center;font-size:12px;letter-spacing:.04em;line-height:1.4}
+
 /* 関連リンク */
 .linklist{margin-top:24px;border-top:1px solid var(--line)}
 .linkrow{display:flex;align-items:center;justify-content:space-between;gap:24px;
@@ -281,8 +263,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   transition:padding-left var(--dur-hover) var(--ease-out-expo)}
 @media (hover:hover){.linkrow:hover{padding-left:8px}}
 .linkrow-name{font-size:14px;letter-spacing:.1em;line-height:1.8}
-.linkrow-kind{font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.16em;
-  color:var(--caption);flex:none}
 .linkrow .right{display:inline-flex;align-items:center;gap:10px;flex:none}
 
 /* 追従の応募バー。画面下に出しっぱなしにせず、本文に入ってから出す */
@@ -293,7 +273,6 @@ table.spec .note{font-size:13px;line-height:1.9;color:var(--caption)}
   transform:translateY(101%);transition:transform .6s var(--ease-out-expo)}
 .applybar.is-on{transform:none}
 .applybar-name{font-size:14px;font-weight:700;letter-spacing:.08em;line-height:1.5}
-.applybar-meta{font-size:12px;letter-spacing:.1em;line-height:1.6;color:rgba(255,255,255,.62);margin:3px 0 0}
 .applybar .row{display:flex;gap:12px;flex:none}
 body{padding-bottom:0}
 
@@ -345,10 +324,9 @@ body{padding-bottom:0}
   <section class="jobhead">
     <div class="jobhead-ph" aria-hidden="true"><i>VISUAL ASSETS</i></div>
     <h1 class="h1 line-reveal" data-observe data-delay="0.08"><span class="line"><span>一人の転職に、最後まで</span></span><span class="line"><span>付き合うキャリアアドバイザー</span></span></h1>
-    <p class="jobhead-sub" data-reveal data-delay="0.16">株式会社クオレガ ／ 人材紹介事業部</p>
     <div class="row" data-reveal data-delay="0.24">
-      <a class="cta primary lg" href="#" target="_blank" rel="noopener">この求人に応募する</a>
-      <a class="cta lg" href="casual.html">まずはカジュアル面談</a>
+      <a class="cta primary lg" href="#" target="_blank" rel="noopener">エントリー</a>
+      <a class="cta lg" href="casual.html">カジュアル面談で話してみる</a>
     </div>
   </section>
 
@@ -357,7 +335,6 @@ body{padding-bottom:0}
     <div class="jobbody-main rich">
 
       <div data-reveal>
-        <p class="sec-label">Overview</p>
         <h3 style="margin-top:0">仕事概要</h3>
       </div>
       <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
@@ -365,6 +342,15 @@ body{padding-bottom:0}
 
       <h3 data-reveal>キャリアアドバイザーの役割</h3>
       <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>この仕事の魅力</h3>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>キャリアパス</h3>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+      <h3 data-reveal>求める人物像</h3>
+      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
 
       <h3 data-reveal>業務全体の流れ</h3>
       <p data-reveal>お一人の求職者さまが入社されるまでに、担当者が関わる業務の流れです。</p>
@@ -376,34 +362,21 @@ body{padding-bottom:0}
         <div class="step"><span class="step-no">05</span><p class="step-tx">入社までのフォロー</p></div>
       </div>
 
-      <h3 data-reveal>この仕事の魅力</h3>
-      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-
-      <h3 data-reveal>キャリアパス</h3>
-      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-
-      <h3 data-reveal>必須スキル</h3>
-      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-
-      <h3 data-reveal>求める人物像</h3>
-      <p data-reveal>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
-
       <h3 data-reveal>仕事の雰囲気が分かる記事・動画</h3>
       <div class="linklist" data-stagger data-observe>
         <a class="linkrow" href="#" target="_blank" rel="noopener">
           <span class="linkrow-name">キャリアアドバイザー特設ページ</span>
-          <span class="right"><span class="linkrow-kind">Site</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
+          <span class="right"><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
         <a class="linkrow" href="#" target="_blank" rel="noopener">
           <span class="linkrow-name">社員インタビュー</span>
-          <span class="right"><span class="linkrow-kind">Note</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
+          <span class="right"><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
         <a class="linkrow" href="#" target="_blank" rel="noopener">
           <span class="linkrow-name">会社紹介資料</span>
-          <span class="right"><span class="linkrow-kind">Deck</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
+          <span class="right"><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
       </div>
 
       <!-- ============ 応募概要 ============ -->
       <div data-reveal style="margin-top:72px">
-        <p class="sec-label">Requirements</p>
         <h3 style="margin-top:0">応募概要</h3>
       </div>
       <table class="spec">
@@ -414,11 +387,11 @@ body{padding-bottom:0}
         <tr><th>休日・休暇</th><td>年間休日120日／週休2日制（土日）、祝日<br><span class="note">休暇制度：有給休暇・GW休暇・夏季休暇・年末年始休暇・慶弔休暇・産前・産後休暇・育児休暇・永年勤続表彰休暇・ファミリー制度休暇</span></td></tr>
         <tr><th>各種保険</th><td>社会保険完備（雇用・労災・健康・厚生年金）</td></tr>
         <tr><th>各種待遇</th><td>昇給年4回（3ヶ月ごとの査定）<br>業績賞与年2回（夏・冬）</td></tr>
+        <tr><th>必須スキル</th><td>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</td></tr>
       </table>
 
       <!-- ============ 企業情報 ============ -->
       <div data-reveal style="margin-top:72px">
-        <p class="sec-label">Company</p>
         <h3 style="margin-top:0">企業情報</h3>
       </div>
       <table class="spec">
@@ -430,32 +403,19 @@ body{padding-bottom:0}
         <tr><th>事業内容</th><td>人材紹介事業／求人メディア事業／ITソリューション事業</td></tr>
       </table>
 
-      <!-- ============ 選考フロー ============ -->
+      <!-- ============ 選考フロー ============
+           v2.html の「選考の流れ」（円＋連結線）と同じ見せ方。
+           entry.html は本文カラムが v2.html より狭いため、円のサイズを詰めている -->
       <div data-reveal style="margin-top:72px">
-        <p class="sec-label">Process</p>
         <h3 style="margin-top:0">選考の流れ</h3>
       </div>
-      <div class="steps" data-stagger data-observe>
-        <div class="step"><span class="step-no">01</span><p class="step-tx">エントリー</p></div>
-        <div class="step"><span class="step-no">02</span><p class="step-tx">書類選考</p></div>
-        <div class="step"><span class="step-no">03</span><p class="step-tx">面接（1〜3回）</p></div>
-        <div class="step"><span class="step-no">04</span><p class="step-tx">内定</p></div>
+      <div class="flow" data-stagger data-observe>
+        <div class="fnode" style="background:#fff;color:#0d0d0e;box-shadow:inset 0 0 0 1px #000">エントリー</div>
+        <div class="fnode" style="background:#a8a8a8;color:#fff">書類選考</div>
+        <div class="fnode" style="background:#5e5e5e;color:#fff">面接<br>（1〜3回）</div>
+        <div class="fnode" style="background:#0d0d0e;color:#fff">内定</div>
       </div>
       <p data-reveal style="margin-top:24px">各ステップの日程はご都合に合わせて調整します。選考の途中でも、気になることがあれば人事までお気軽にご相談ください。</p>
-
-      <!-- ============ FAQ ============ -->
-      <div data-reveal style="margin-top:72px">
-        <p class="sec-label">FAQ</p>
-        <h3 style="margin-top:0">応募にあたって、よくある質問</h3>
-      </div>
-      <div class="faq">
-        <details class="faq-item"><summary class="faq-q">選考にはどれくらい時間がかかりますか？</summary>
-          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
-        <details class="faq-item"><summary class="faq-q">現職中でも応募できますか？</summary>
-          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
-        <details class="faq-item"><summary class="faq-q">カジュアル面談だけでも参加できますか？</summary>
-          <div class="faq-wrap"><div class="faq-a"><p>テキストが入ります。</p></div></div></details>
-      </div>
     </div>
 
     <!-- ============ サイドの概要カード ============ -->
@@ -465,7 +425,7 @@ body{padding-bottom:0}
       <div class="item"><dl><dt>Location</dt><dd>東京都港区新橋1-10-6<br>新橋M-SQUARE 11階</dd></dl></div>
       <div class="item"><dl><dt>Hours</dt><dd>9:00〜18:00</dd></dl></div>
       <div class="item"><dl><dt>Holidays</dt><dd>年間休日120日／週休2日制（土日）、祝日</dd></dl></div>
-      <a class="cta primary" href="#" target="_blank" rel="noopener">この求人に応募する</a>
+      <a class="cta primary lg" href="#" target="_blank" rel="noopener">エントリー</a>
     </aside>
   </div>
 
@@ -476,7 +436,7 @@ body{padding-bottom:0}
       <p>まずは気軽にお話ししませんか？ 応募を決めていなくても構いません。</p>
     </div>
     <div class="row">
-      <a class="cta cta--ondark lg" href="casual.html">カジュアル面談を申し込む</a>
+      <a class="cta cta--ondark lg" href="casual.html">カジュアル面談で話してみる</a>
       <a class="cta cta--ondark primary lg" href="jobs.html">ほかの職種を見る</a>
     </div>
   </section>
@@ -517,11 +477,10 @@ body{padding-bottom:0}
 <div class="applybar" id="applybar">
   <div>
     <p class="applybar-name">一人の転職に、最後まで付き合うキャリアアドバイザー</p>
-    <p class="applybar-meta">中途採用 ／ キャリアアドバイザー ／ 東京・新橋</p>
   </div>
   <div class="row">
     <a class="cta cta--ondark" href="casual.html">カジュアル面談</a>
-    <a class="cta cta--ondark primary" href="#" target="_blank" rel="noopener">応募する</a>
+    <a class="cta cta--ondark primary" href="#" target="_blank" rel="noopener">エントリー</a>
   </div>
 </div>
 
@@ -568,21 +527,6 @@ body{padding-bottom:0}
         l.classList.toggle('is-on',on);
         if(on){ l.classList.remove('is-inview'); requestAnimationFrame(function(){l.classList.add('is-inview');}); }
       });
-    });
-  });
-})();
-(function(){ /* FAQ：閉じ切ってから open を外して高さを補間 */
-  document.querySelectorAll('.faq-item').forEach(function(d){
-    var s=d.querySelector('summary'), w=d.querySelector('.faq-wrap');
-    if(!s||!w) return;
-    s.addEventListener('click',function(e){
-      e.preventDefault();
-      if(d.classList.contains('is-open')){
-        d.classList.remove('is-open');
-        w.addEventListener('transitionend',function h(ev){
-          if(ev.propertyName!=='grid-template-rows') return;
-          d.open=false; w.removeEventListener('transitionend',h);});
-      } else { d.open=true; requestAnimationFrame(function(){d.classList.add('is-open');}); }
     });
   });
 })();
