@@ -129,8 +129,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* ---- ファーストビュー（Figma 実測：黒帯 620px・写真 533x445・本文 547） ---- */
 /* ヘッダー(80px)がかぶさるので上は 168px。黒帯は Figma の 700px 分を確保しつつ、
    画面が高いときは下端まで伸ばす */
+/* Figma 19:2 実測: FVの黒帯は y80..700 の 620px（＋固定ヘッダー80＝計700）。
+   100vh 追従にすると縦長の画面で下に黒の余白が伸びるため高さを固定する。 */
 .hero{background:#000;color:var(--paper);
-  padding:168px var(--gutter) 87px;min-height:max(700px,100vh);
+  padding:168px var(--gutter) 87px;height:700px;
   display:flex;flex-direction:column;justify-content:flex-start}
 .hero-in{display:grid;grid-template-columns:547px minmax(0,533px);gap:0 75px;
   align-items:center;justify-content:space-between;min-height:445px}

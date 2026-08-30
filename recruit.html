@@ -203,8 +203,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 縦スクロールに連動して横へ送る（参照サイトの Company と同じ作り）。
    セクション自身の高さぶんで送るので、ページのスクロールは奪わない。 */
 .valsec{position:relative;background:var(--paper)}
-.val-sticky{position:sticky;top:0;height:100vh;min-height:760px;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:flex-start;padding-left:var(--gutter)}
+/* sticky の箱は中身（見出し＋カード＋レール ≒490px）の高さだけにする。
+   100vh を与えるとカードの下に画面の高さぶんの死に余白ができ、
+   画面が縦に長いほど空いてしまう。縦位置は画面中央（50vh - 中身の半分）に
+   置いて上下の空きを均等にし、固定ヘッダーに潜らないよう下限96pxで留める。 */
+.val-sticky{position:sticky;top:max(96px,calc(50vh - 245px));overflow:hidden;
+  display:flex;flex-direction:column;padding-left:var(--gutter)}
 .val-head{flex:none;margin-bottom:40px}
 .val-track{display:flex;gap:32px;will-change:transform}
 /* v2.html「カルチャー」の横送りカードと同じ組み（459×min352・padding40） */
