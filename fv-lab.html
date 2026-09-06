@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<meta name="robots" content="noindex, nofollow">
+<title>セールス特設 FV 検証（A/B/C × フルブリード/700px枠）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Lato:wght@400;500;700&display=swap">
+<style>
+/* sales.html と同じトークン。--accent はコーポレートのロゴマークから採った
+   エメラルドブルー(#00A9AD)。FV のアクセントとしてだけ使う。 */
+:root{
+  --ink:#0d0d0e; --paper:#fbfbfb; --tone:#f4f4f4;
+  --accent:#00A9AD;
+  --page:1440px; --pad:clamp(20px,9.3vw,134px);
+  --gutter:max(var(--pad), calc((100% - var(--page)) / 2 + var(--pad)));
+  --font-ja:YakuHanJP,"Noto Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+  --font-en:"Lato",sans-serif; --font-disp:"Chillax","Lato",sans-serif;
+  --ease-out-expo:cubic-bezier(.16,1,.3,1); --ease-in-out-circ:cubic-bezier(.85,0,.15,1);
+  --dur-hover:.7s;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja);
+  font-size:14px;line-height:2;letter-spacing:.1em}
+
+/* ============ ヘッダー（sales.html と同じ） ============ */
+.site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:transparent;transition:background-color .4s ease}
+.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.header-inner{width:100%;height:80px;padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between}
+.logo{flex:none;display:block;width:109px;height:14.021px;color:#fff;overflow:hidden}
+.logo .lg{display:block;width:100%;height:100%}
+.logo .lg-mark{display:none}
+.site-header.is-scrolled .logo{color:var(--ink)}
+.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;white-space:nowrap}
+.header-nav a{position:relative;padding:16px 0;margin:-12px 0;font-family:var(--font-disp);
+  font-weight:500;font-size:13px;letter-spacing:.1em;line-height:1;color:#fff;text-decoration:none}
+.site-header.is-scrolled .header-nav a{color:var(--ink)}
+.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
+@media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
+.header-cta{display:flex;align-items:center;gap:10px;flex:none}
+.cta{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);border-radius:999px;
+  padding:10px 24px;font-size:13px;letter-spacing:.1em;line-height:1;color:var(--ink);background:transparent;
+  white-space:nowrap;cursor:pointer;
+  transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
+.header-cta .cta{padding:9px 18px;font-size:12px;border-color:#fff;color:#fff}
+.header-cta .cta:hover{background:#fff;color:var(--ink)}
+.header-cta .cta.primary{background:#fff;color:var(--ink)}
+.header-cta .cta.primary:hover{background:transparent;color:#fff}
+.site-header.is-scrolled .header-cta .cta{border-color:var(--ink);color:var(--ink)}
+.site-header.is-scrolled .header-cta .cta:hover{background:var(--ink);color:#fff}
+.site-header.is-scrolled .header-cta .cta.primary{background:var(--ink);color:#fff}
+.site-header.is-scrolled .header-cta .cta.primary:hover{background:transparent;color:var(--ink)}
+
+/* ============ あたり写真 ============ */
+/* 実写が入るまでのダミー。切り替わり・ワイプの向きが読めるように
+   5枚を別トーンにし、通し番号を出しておく。 */
+.pho{position:absolute;inset:0;overflow:hidden;background:#2a2f34}
+.pho::before{content:"";position:absolute;inset:0;background:var(--g);transform:scale(1.02)}
+.pho::after{content:attr(data-n);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:var(--font-en);font-size:11px;font-weight:500;letter-spacing:.24em;
+  color:rgba(255,255,255,.66);white-space:nowrap}
+.p1{--g:linear-gradient(135deg,#2f3b42,#5d6f78 55%,#8fa2a8)}
+.p2{--g:linear-gradient(140deg,#3a3340,#6b5f70 60%,#a2949e)}
+.p3{--g:linear-gradient(125deg,#22333b,#3f5c63 55%,#7fa3a5)}
+.p4{--g:linear-gradient(150deg,#41382e,#7a6a55 60%,#b3a189)}
+.p5{--g:linear-gradient(130deg,#2b3550,#4f6389 58%,#8fa3c4)}
+
+/* ============ FV 共通の骨格 ============ */
+/* 3案とも markup は同じで、.hero-media の中身だけ差し替える。
+   フレーム（フルブリード / 700px枠）は body の data-frame で切る。 */
+.hero{position:relative;background:#000;color:var(--paper);overflow:hidden}
+.hero-copy{position:relative;z-index:3;
+  transform:translateY(calc(var(--sp,0) * -48px));
+  opacity:calc(1 - var(--sp,0) * 1.25)}
+.hero-media{position:absolute;overflow:hidden;z-index:1}
+.hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0;color:#fff}
+.hero .fv-eyebrow{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:0 0 8px}
+.hero .row{display:flex;gap:24px;margin-top:40px;flex-wrap:wrap}
+.hero .cta{height:35px;padding:0 25px;font-size:13px;border-color:#fff;border-width:2px;color:#fff}
+.hero .cta:hover{background:#fff;color:var(--ink)}
+.hero .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
+.hero .cta.primary:hover{background:transparent;color:#fff}
+
+/* --- 700px枠：現行 Figma 186:4 の骨格をそのまま --- */
+body[data-frame="box"] .hero{height:700px;padding:240px var(--gutter) 0}
+body[data-frame="box"] .hero-media{top:161px;right:var(--gutter);
+  width:clamp(300px,44vw,533px);height:458px}
+body[data-frame="box"] .hero-copy{max-width:min(639px,calc(100% - clamp(300px,44vw,533px) - 32px))}
+
+/* --- フルブリード：写真/映像が地になり、コピーを重ねる --- */
+body[data-frame="full"] .hero{height:100vh;min-height:660px;padding:0 var(--gutter);
+  display:flex;align-items:center}
+body[data-frame="full"] .hero-media{inset:0}
+/* 写真の上でも見出しが読めるように左から暗い膜をかける。
+   全面を均一に暗くすると写真が死ぬので、左だけ濃くする。 */
+body[data-frame="full"] .hero::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(95deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.42) 46%,rgba(0,0,0,.06) 100%)}
+body[data-frame="full"] .hero-copy{max-width:660px}
+
+/* 案の出し分け */
+.vv{position:absolute;inset:0}
+body[data-v="a"] .vv--b,body[data-v="a"] .vv--c,
+body[data-v="b"] .vv--a,body[data-v="b"] .vv--c,
+body[data-v="c"] .vv--a,body[data-v="c"] .vv--b{display:none}
+
+/* ============ A：フルブリード映像＋斜めワイプ ============ */
+/* 映像は clip-path の4点を動かして「斜めの辺が左から右へ抜ける」形で開く。
+   点の数を変えないので transition が効く。 */
+.a-media{position:absolute;inset:0;clip-path:polygon(-23% 100%, -23% 100%, -1% 0%, -1% 0%)}
+.is-play .a-media{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%);
+  transition:clip-path 1.5s var(--ease-in-out-circ) .25s}
+/* 開いたあとも映像はゆっくり動かし続ける（実写差し替え後は動画側の動きに任せ、
+   この ken-burns は切ってよい）。--py はスクロール量から JS が入れる。 */
+.a-inner{position:absolute;inset:-6%;transform:translateY(var(--py,0px));will-change:transform}
+.a-inner .pho{animation:kb 22s var(--ease-in-out-circ) infinite alternate}
+@keyframes kb{from{transform:scale(1) translate(0,0)}to{transform:scale(1.1) translate(-2%,-1.5%)}}
+/* 先行して走るエメラルドの斜線。映像の開き際より少し前を通り、
+   通過後は消える（線を残すと装飾として居座ってしまう）。 */
+.a-slash{position:absolute;top:-20%;bottom:-20%;width:120px;z-index:2;left:-20%;
+  background:linear-gradient(90deg,rgba(0,169,173,0) 0%,var(--accent) 55%,rgba(255,255,255,.9) 100%);
+  transform:skewX(-12.4deg);opacity:0;filter:blur(.5px)}
+.is-play .a-slash{animation:slash 1.75s var(--ease-in-out-circ) .18s both}
+@keyframes slash{
+  0%{left:-20%;opacity:0}
+  12%{opacity:1}
+  78%{opacity:1}
+  100%{left:112%;opacity:0}
+}
+.a-tag{position:absolute;left:0;bottom:0;z-index:3;padding:6px 12px;background:rgba(0,169,173,.9);
+  color:#fff;font-family:var(--font-en);font-size:10px;letter-spacing:.2em}
+
+/* ============ B：スラッシュ帯の写真スライドショー ============ */
+/* コーポレート FV と同じ「合同な平行四辺形2枚＋斜めの白い隙間」。
+   2枚は同じ傾きなので、間の隙間そのものが斜めになる。 */
+.b-wrap{position:absolute;inset:0}
+/* スクロール追従は .sl-wrap、登場アニメは .slice と、動かす層を分ける。
+   1つの要素に両方の transform を持たせると上書きし合うため。
+   --sp は FV を1画面ぶんスクロールする間に 0→1 になる値（JSが入れる）。 */
+.sl-wrap{position:absolute;inset:0;
+  transform:translate(calc(var(--sp,0) * var(--dx,0) * 1%), calc(var(--sp,0) * var(--dy,0) * 1%));
+  will-change:transform}
+.sw-a{--dx:-11;--dy:-7}
+.sw-b{--dx:11;--dy:7}
+body[data-split="off"] .sl-wrap{transform:none}
+.slice{position:absolute;inset:0;overflow:hidden;
+  transform:translateY(16%);opacity:0;
+  transition:transform 1.6s var(--ease-out-expo),opacity 1.1s ease}
+.slice.sl-a{clip-path:polygon(-28% 0, 46% 0, 26% 100%, -48% 100%)}
+.slice.sl-b{clip-path:polygon(50% 0, 124% 0, 104% 100%, 30% 100%)}
+.is-play .slice{transform:none;opacity:1}
+.is-play .sl-a{transition-delay:.15s}
+.is-play .sl-b{transition-delay:.34s}
+/* 各帯の中に写真を重ね、入ってくる1枚を斜めワイプで乗せる。 */
+.ly{position:absolute;inset:0;clip-path:polygon(-23% 100%, -23% 100%, -1% 0%, -1% 0%)}
+.ly.is-on{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%);
+  transition:clip-path 1.5s var(--ease-in-out-circ)}
+.ly.is-under{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%);transition:none}
+/* 片側ムービー。右の帯だけ動画にし、左の帯は写真のワイプを残す。
+   両方動かすと視線の置き場がなくなるので、動くのは片側だけにする。 */
+.ly--vid{z-index:4}
+.b-inner{position:absolute;inset:-8%}
+.b-inner .pho{animation:kb 22s var(--ease-in-out-circ) infinite alternate}
+.b-tag{position:absolute;right:14px;bottom:14px;padding:5px 11px;background:rgba(0,169,173,.9);
+  color:#fff;font-family:var(--font-en);font-size:10px;letter-spacing:.2em}
+body[data-media="photo"] .ly--vid{display:none}
+body[data-media="hybrid"] .sl-b .ly:not(.ly--vid){display:none}
+
+/* ============ C：ポートレート・グリッドが追従 ============ */
+/* 列ごとにスクロール速度を変え、さらにカーソル位置で全体を微妙に振る。
+   --sy はスクロール量、--mx/--my はカーソル（JS が入れる）。 */
+.c-grid{position:absolute;inset:-14% 0;display:grid;gap:18px;padding:0 24px;
+  grid-template-columns:repeat(5,1fr);
+  transform:translate3d(calc(var(--mx,0) * -14px), calc(var(--my,0) * -10px), 0);
+  transition:transform .9s var(--ease-out-expo)}
+.c-col{display:flex;flex-direction:column;gap:18px;
+  transform:translateY(calc(var(--sy,0px) * var(--k)));will-change:transform}
+.c-col:nth-child(1){--k:.10}
+.c-col:nth-child(2){--k:.26;margin-top:-64px}
+.c-col:nth-child(3){--k:.05}
+.c-col:nth-child(4){--k:.32;margin-top:-104px}
+.c-col:nth-child(5){--k:.16;margin-top:-32px}
+.c-cell{position:relative;flex:none;height:var(--h,260px);overflow:hidden;
+  opacity:0;transform:translateY(48px);
+  transition:opacity .9s ease,transform 1.1s var(--ease-out-expo)}
+.is-play .c-cell{opacity:1;transform:none}
+.c-col:nth-child(1) .c-cell{transition-delay:.05s}
+.c-col:nth-child(2) .c-cell{transition-delay:.14s}
+.c-col:nth-child(3) .c-cell{transition-delay:.23s}
+.c-col:nth-child(4) .c-cell{transition-delay:.32s}
+.c-col:nth-child(5) .c-cell{transition-delay:.41s}
+/* 枠版では 533px に5列は細すぎるので3列に落とす */
+body[data-frame="box"] .c-grid{grid-template-columns:repeat(3,1fr);gap:12px;padding:0 12px}
+body[data-frame="box"] .c-col:nth-child(n+4){display:none}
+body[data-frame="box"] .c-cell{--h:180px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition-duration:.01ms !important}
+  .a-media,.ly{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%) !important}
+  .slice{transform:none !important;opacity:1 !important}
+  .c-cell{opacity:1 !important;transform:none !important}
+}
+
+/* 下端の SCROLL 表示。線が上から下へ落ちるのを繰り返す。
+   スクロールが始まったら --sp に応じて消す。 */
+.scroll-cue{position:absolute;left:var(--gutter);bottom:40px;z-index:3;display:none;
+  align-items:center;gap:14px;font-family:var(--font-en);font-size:10px;font-weight:500;
+  letter-spacing:.28em;color:rgba(255,255,255,.72);
+  opacity:calc(1 - var(--sp,0) * 2.4)}
+body[data-frame="full"] .scroll-cue{display:flex}
+.scroll-cue .bar{position:relative;width:1px;height:48px;background:rgba(255,255,255,.24);overflow:hidden}
+.scroll-cue .bar::after{content:"";position:absolute;left:0;width:1px;height:18px;background:#fff;
+  animation:cue 2.4s var(--ease-in-out-circ) infinite}
+@keyframes cue{0%{top:-18px}60%,100%{top:48px}}
+
+/* ============ 検証用のUI（本番には持ち込まない） ============ */
+.lab{position:fixed;left:0;right:0;bottom:0;z-index:200;display:flex;align-items:center;gap:24px;
+  padding:14px 24px;background:rgba(13,13,14,.92);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);color:#fff;font-size:12px;letter-spacing:.08em}
+.lab .grp{display:flex;align-items:center;gap:8px}
+.lab .lbl{font-family:var(--font-en);font-size:10px;letter-spacing:.2em;color:rgba(255,255,255,.5)}
+.lab button{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;
+  border-radius:999px;padding:7px 16px;font-family:inherit;font-size:12px;letter-spacing:.06em;
+  cursor:pointer;transition:background-color .3s ease,border-color .3s ease,color .3s ease}
+.lab button:hover{border-color:#fff}
+.lab button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.lab .note{margin-left:auto;max-width:620px;line-height:1.7;color:rgba(255,255,255,.72);
+  font-size:11px;letter-spacing:.04em}
+.lab .note b{color:#fff;font-weight:500}
+/* FV の下に置く比較用のダミー。スクロール時の追従を見るためだけの帯。 */
+.after{padding:120px var(--gutter) 220px;background:var(--paper)}
+.after h2{font-family:var(--font-disp);font-weight:500;font-size:13px;letter-spacing:.2em;margin:0 0 16px}
+.after p{margin:0;max-width:640px;color:#606070}
+</style>
+</head>
+<body data-v="b" data-frame="full" data-split="on" data-media="hybrid">
+
+<header class="site-header" id="hdr">
+  <div class="header-inner">
+    <a class="logo" href="#"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+      <g class="lg-mark">
+        <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
+        <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
+        <path d="M6.58129 2.66135L0 14.0195H4.20897L10.7097 2.66135H6.58129Z" fill="currentColor"/>
+      </g>
+      <g class="lg-word" transform="translate(24.331 0)">
+        <path d="M95.9128 13.7364L99.4773 2.15996C99.9383 0.69844 101.139 -0.00387387 102.402 -0.00387387C103.666 -0.00387387 104.886 0.696478 105.347 2.15996L108.911 13.7364H105.928L105.147 10.9722L99.6794 10.9918L98.8986 13.7364H95.9147H95.9128ZM101.981 3.02314L100.439 8.37092H104.384L102.861 3.02314C102.781 2.7426 102.661 2.62294 102.42 2.62294C102.2 2.62294 102.059 2.7426 101.979 3.02314H101.981Z" fill="currentColor"/>
+        <path d="M75.1397 13.7408H67.889C66.0273 13.7408 65.3053 12.7795 65.3053 11.2376V2.78626C65.3053 1.24431 66.0273 0.263423 67.889 0.263423H75.0181V2.88631H68.2284V5.68968H74.5963V8.31257H68.2284V11.1159H75.1377V13.7388L75.1397 13.7408Z" fill="currentColor"/>
+        <path d="M54.5807 0.263423V11.0375H60.8702V13.7408H54.2414C52.3796 13.7408 51.6577 12.7795 51.6577 11.2376V0.263423H54.5807Z" fill="currentColor"/>
+        <path d="M40.0687 13.9989C36.0824 13.9989 33.0593 10.9955 33.0593 7.00916C33.0593 3.02284 36.0843 0.0193693 40.0687 0.0193693C44.053 0.0193693 47.0977 3.04442 47.0977 7.00916C47.0977 10.9739 44.053 13.9989 40.0687 13.9989ZM40.0687 11.2348C42.311 11.2348 44.0746 9.39271 44.0746 7.00916C44.0746 4.62561 42.3326 2.7835 40.0687 2.7835C37.8048 2.7835 36.0628 4.62561 36.0628 7.00916C36.0628 9.39271 37.8244 11.2348 40.0687 11.2348Z" fill="currentColor"/>
+        <path d="M22.8117 13.9625C18.7861 13.9625 16.944 11.6397 16.944 7.75346V0.263423H19.869V7.69461C19.869 10.037 20.8303 11.1787 22.8136 11.1787C24.797 11.1787 25.7582 10.037 25.7582 7.69461V0.263423H28.6813V7.75346C28.6813 11.6397 26.8196 13.9625 22.8136 13.9625H22.8117Z" fill="currentColor"/>
+        <path d="M7.12509 14.0188C3.19959 14.0188 0.135303 10.9153 0.135303 7.00941C0.135303 3.10352 3.19959 0 7.12509 0C9.46744 0 11.7117 1.2418 12.7122 3.34482L10.3287 4.68667C9.66754 3.5253 8.62584 2.78375 7.00346 2.78375C4.76116 2.78375 3.13877 4.567 3.13877 7.00941C3.13877 9.45181 4.74154 11.2351 7.00346 11.2351C8.62584 11.2351 9.70678 10.4935 10.3287 9.33214L12.7122 10.674C11.7117 12.777 9.46744 14.0188 7.12509 14.0188Z" fill="currentColor"/>
+        <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
+      </g>
+    </svg></a>
+    <nav class="header-nav">
+      <a href="#">MERIT</a><a href="#">CAREER</a><a href="#">COMPANY</a>
+      <a href="#">CONTENTS</a><a href="#">FAQ</a>
+    </nav>
+    <div class="header-cta">
+      <span class="cta">カジュアル面談</span>
+      <span class="cta primary">エントリー</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-copy">
+    <p class="fv-eyebrow">セールス採用特設ページ</p>
+    <h1>人のキャリアを動かす経験が、<br>自分のキャリアを広げる。</h1>
+    <div class="row">
+      <span class="cta">カジュアル面談を申し込む</span>
+      <span class="cta primary">エントリー</span>
+    </div>
+  </div>
+
+  <div class="hero-media" aria-hidden="true">
+
+    <!-- ===== A：フルブリード映像＋斜めワイプ ===== -->
+    <div class="vv vv--a">
+      <div class="a-media">
+        <div class="a-inner">
+          <!-- 実写の動画はここに差し替え：
+               <video src="imgs/fv-sales.mp4" poster="imgs/fv-sales.jpg"
+                      autoplay muted loop playsinline
+                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video> -->
+          <div class="pho p1" data-n="MOVIE — place holder"></div>
+        </div>
+      </div>
+      <div class="a-slash"></div>
+      <span class="a-tag">MOVIE</span>
+    </div>
+
+    <!-- ===== B：スラッシュ帯の写真スライドショー ===== -->
+    <div class="vv vv--b">
+      <div class="b-wrap">
+       <div class="sl-wrap sw-a"><div class="slice sl-a">
+          <div class="ly is-on"><div class="pho p1" data-n="PHOTO 01"></div></div>
+          <div class="ly"><div class="pho p2" data-n="PHOTO 02"></div></div>
+          <div class="ly"><div class="pho p3" data-n="PHOTO 03"></div></div>
+          <div class="ly"><div class="pho p4" data-n="PHOTO 04"></div></div>
+          <div class="ly"><div class="pho p5" data-n="PHOTO 05"></div></div>
+        </div></div>
+       <div class="sl-wrap sw-b"><div class="slice sl-b">
+          <div class="ly ly--vid is-on">
+            <div class="b-inner">
+              <!-- 実写の動画はここに差し替え：
+                   <video src="imgs/fv-sales.mp4" poster="imgs/fv-sales.jpg"
+                          autoplay muted loop playsinline
+                          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video> -->
+              <div class="pho p3" data-n="MOVIE — place holder"></div>
+            </div>
+            <span class="b-tag">MOVIE</span>
+          </div>
+          <div class="ly is-on"><div class="pho p3" data-n="PHOTO 03"></div></div>
+          <div class="ly"><div class="pho p4" data-n="PHOTO 04"></div></div>
+          <div class="ly"><div class="pho p5" data-n="PHOTO 05"></div></div>
+          <div class="ly"><div class="pho p1" data-n="PHOTO 01"></div></div>
+          <div class="ly"><div class="pho p2" data-n="PHOTO 02"></div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ===== C：ポートレート・グリッドが追従 ===== -->
+    <div class="vv vv--c">
+      <div class="c-grid">
+        <div class="c-col">
+          <div class="c-cell" style="--h:300px"><div class="pho p1" data-n="PORTRAIT 01"></div></div>
+          <div class="c-cell" style="--h:220px"><div class="pho p4" data-n="PORTRAIT 06"></div></div>
+          <div class="c-cell" style="--h:280px"><div class="pho p2" data-n="PORTRAIT 11"></div></div>
+        </div>
+        <div class="c-col">
+          <div class="c-cell" style="--h:230px"><div class="pho p2" data-n="PORTRAIT 02"></div></div>
+          <div class="c-cell" style="--h:320px"><div class="pho p5" data-n="PORTRAIT 07"></div></div>
+          <div class="c-cell" style="--h:240px"><div class="pho p3" data-n="PORTRAIT 12"></div></div>
+        </div>
+        <div class="c-col">
+          <div class="c-cell" style="--h:300px"><div class="pho p3" data-n="PORTRAIT 03"></div></div>
+          <div class="c-cell" style="--h:260px"><div class="pho p1" data-n="PORTRAIT 08"></div></div>
+          <div class="c-cell" style="--h:300px"><div class="pho p4" data-n="PORTRAIT 13"></div></div>
+        </div>
+        <div class="c-col">
+          <div class="c-cell" style="--h:260px"><div class="pho p4" data-n="PORTRAIT 04"></div></div>
+          <div class="c-cell" style="--h:300px"><div class="pho p2" data-n="PORTRAIT 09"></div></div>
+          <div class="c-cell" style="--h:230px"><div class="pho p5" data-n="PORTRAIT 14"></div></div>
+        </div>
+        <div class="c-col">
+          <div class="c-cell" style="--h:280px"><div class="pho p5" data-n="PORTRAIT 05"></div></div>
+          <div class="c-cell" style="--h:240px"><div class="pho p3" data-n="PORTRAIT 10"></div></div>
+          <div class="c-cell" style="--h:300px"><div class="pho p1" data-n="PORTRAIT 15"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true"><span>SCROLL</span><span class="bar"></span></div>
+</section>
+
+<section class="after">
+  <h2>SCROLL</h2>
+  <p>FV の下にスクロールしたときの抜け方・ヘッダーの切り替わりを見るためのダミー帯です。実際のページでは Message セクションが入ります。</p>
+</section>
+
+<div class="lab">
+  <div class="grp">
+    <span class="lbl">FV</span>
+    <button data-set="v" data-val="a" aria-pressed="false">A 映像＋斜めワイプ</button>
+    <button data-set="v" data-val="b" aria-pressed="true">B スラッシュ帯</button>
+    <button data-set="v" data-val="c" aria-pressed="false">C グリッド追従</button>
+  </div>
+  <div class="grp">
+    <span class="lbl">FRAME</span>
+    <button data-set="frame" data-val="full" aria-pressed="true">フルブリード</button>
+    <button data-set="frame" data-val="box" aria-pressed="false">700px枠</button>
+  </div>
+  <div class="grp">
+    <span class="lbl">MEDIA</span>
+    <button data-set="media" data-val="hybrid" aria-pressed="true">片側ムービー</button>
+    <button data-set="media" data-val="photo" aria-pressed="false">写真のみ</button>
+  </div>
+  <div class="grp">
+    <span class="lbl">SPLIT</span>
+    <button data-set="split" data-val="on" aria-pressed="true">スクロール分割 ON</button>
+    <button data-set="split" data-val="off" aria-pressed="false">OFF</button>
+  </div>
+  <div class="grp"><button id="replay">&#8635; 再生</button></div>
+  <p class="note" id="note"></p>
+</div>
+
+<script>
+(function(){
+  var body=document.body, hero=document.getElementById('hero'), note=document.getElementById('note');
+  var NOTES={
+    a:'<b>A</b> ロード時にエメラルドの斜線が左から右へ抜け、その軌跡から映像が開く。以降は映像がゆっくり動き、スクロールで軽くパララックス。<b>／要る素材：</b>15〜20秒ループの動画1本（＋ポスター静止画）。',
+    b:'<b>B</b> 合同な平行四辺形2枚＋斜めの白い隙間。帯が下から立ち上がり、スクロールで2枚が斜めに割れて次のセクションへ抜ける。<b>MEDIA</b> で「右帯＝動画／左帯＝写真ワイプ」と「写真のみ」を比較できる。<b>／要る素材：</b>写真5点前後（＋ハイブリッドなら動画1本）。',
+    c:'<b>C</b> 列ごとにスクロール速度が違い、カーソル位置で全体が微妙に視差移動する。<b>／要る素材：</b>人物写真12〜15点（縦位置中心）。'
+  };
+  function play(){
+    hero.classList.remove('is-play');
+    void hero.offsetWidth;              /* 再生し直すためにリフローを挟む */
+    hero.classList.add('is-play');
+  }
+  function sync(){ note.innerHTML=NOTES[body.dataset.v]; play(); }
+  [].forEach.call(document.querySelectorAll('.lab button[data-set]'),function(b){
+    b.addEventListener('click',function(){
+      var k=b.dataset.set;
+      body.dataset[k]=b.dataset.val;
+      [].forEach.call(document.querySelectorAll('.lab button[data-set="'+k+'"]'),function(o){
+        o.setAttribute('aria-pressed', String(o===b));
+      });
+      sync();
+    });
+  });
+  document.getElementById('replay').addEventListener('click',play);
+
+  /* B：斜めワイプのスライドショー。帯ごとに独立して回す。 */
+  [].forEach.call(document.querySelectorAll('.slice'),function(sl,si){
+    var ly=[].slice.call(sl.querySelectorAll('.ly')), i=0;
+    setInterval(function(){
+      if(body.dataset.v!=='b') return;
+      /* 右帯が動画のときは、その帯のスライドショーは回さない */
+      if(body.dataset.media==='hybrid' && sl.classList.contains('sl-b')) return;
+      var prev=ly[i]; i=(i+1)%ly.length; var next=ly[i];
+      /* 出ていく側は開いたまま下に敷いて待たせる。閉じさせると
+         次の1枚がめくれる前に地の黒が覗く。 */
+      prev.classList.remove('is-on'); prev.classList.add('is-under');
+      next.classList.remove('is-under');
+      void next.offsetWidth;
+      next.classList.add('is-on');
+      ly.forEach(function(e,n){ e.style.zIndex = (n===i)?3:(e.classList.contains('is-under')?2:1); });
+    }, 5600 + si*320);   /* 2枚の帯をわずかにずらし、同時に切り替わらないようにする */
+  });
+
+  /* A と C のスクロール／カーソル追従 */
+  var grid=document.querySelector('.c-grid'), inner=document.querySelector('.a-inner'), ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var y=Math.max(0,window.scrollY);
+      /* FV の高さぶんスクロールする間に 0→1。帯が割れる速さの基準。 */
+      var sp=Math.min(1, y / Math.max(1, hero.offsetHeight));
+      hero.style.setProperty('--sp', sp.toFixed(4));
+      if(grid) grid.style.setProperty('--sy', y+'px');
+      if(inner) inner.style.setProperty('--py', (y*0.22)+'px');
+    });
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('mousemove',function(e){
+    if(!grid) return;
+    grid.style.setProperty('--mx', ((e.clientX/innerWidth)*2-1).toFixed(3));
+    grid.style.setProperty('--my', ((e.clientY/innerHeight)*2-1).toFixed(3));
+  },{passive:true});
+
+  var h=document.getElementById('hdr');
+  addEventListener('scroll',function(){ h.classList.toggle('is-scrolled', scrollY>8); },{passive:true});
+
+  sync();
+})();
+</script>
+</body>
+</html>
