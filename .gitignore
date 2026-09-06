@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# エディタ / IDE
+.vscode/
+.idea/
+*.swp
+
+# ログ・一時ファイル
+*.log
+.cache/
