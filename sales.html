@@ -263,27 +263,32 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .site-header--ondark .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
 .site-header--ondark .cta.primary:hover{background:transparent;color:#fff}
 
-/* TOPに戻る。コーポレートと同じ 64px・角丸4px の四角。明るい面では黒地に
-   白矢印、暗い面ではすりガラス。ホバーでアクセントが左から満ちる。 */
-.to-top{position:fixed;z-index:90;right:max(24px,calc(50vw - 720px + 40px));bottom:40px;
-  width:64px;height:64px;border:1px solid transparent;border-radius:14px;background:var(--paper);color:var(--ink);
-  display:inline-flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate;
-  cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;
-  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo),
-    background-color .3s ease,color .3s ease,border-color .3s ease}
+/* TOPに戻る。面を持たせず、縦組みのラベルと1本の線だけで作る。
+   FV 左下の SCROLL 表示と対になり、ページの始まりと終わりで同じ語彙になる。 */
+.to-top{position:fixed;z-index:90;right:max(24px,calc(50vw - 720px + 40px));bottom:48px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  border:0;padding:0;background:none;color:var(--ink);cursor:pointer;
+  font-family:var(--font-label);font-weight:400;font-size:10px;letter-spacing:.28em;line-height:1;
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo),color .3s ease}
 .to-top.is-on{opacity:1;transform:none;pointer-events:auto}
-.to-top::after{content:"";position:absolute;inset:0;z-index:0;background:var(--accent);
-  transform:scaleX(0);transform-origin:left center;transition:transform .4s cubic-bezier(.16,.5,.25,1)}
-.to-top svg{position:relative;z-index:1;width:20px;height:20px;display:block}
-/* 暗い帯の上ではすりガラス。後ろの内容がうっすら透ける */
-/* 明るい面では影で浮かせ、暗い面ではすりガラスにして背後を透かす */
-.to-top{box-shadow:0 6px 24px rgba(13,13,14,.14)}
-.to-top.is-inverted{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);
-  color:#fff;box-shadow:none;
-  backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
+.to-top .tt-ar{width:12px;height:12px;display:block;
+  transition:transform .5s var(--ease-out-expo)}
+.to-top .tt-lb{writing-mode:vertical-rl;text-orientation:mixed}
+/* 線の中をエメラルドが下から上へ走る。矢印も同じ向きに少し動かして、
+   線と矢印がひとつの動きに見えるようにする。 */
+.to-top .tt-bar{position:relative;width:1px;height:56px;background:rgba(13,13,14,.2);overflow:hidden}
+.to-top .tt-bar::after{content:"";position:absolute;left:0;bottom:-20px;width:1px;height:20px;
+  background:var(--accent);transition:bottom .55s var(--ease-out-expo)}
+/* 暗い帯の上では白に反転させる */
+.to-top.is-inverted{color:#fff}
+.to-top.is-inverted .tt-bar{background:rgba(255,255,255,.28)}
 @media (hover:hover){
-  .to-top:hover{color:#fff;border-color:transparent}
-  .to-top:hover::after{transform:scaleX(1)}
+  .to-top:hover .tt-bar::after{bottom:56px}
+  .to-top:hover .tt-ar{transform:translateY(-4px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .to-top .tt-bar::after{transition:none}
 }
 
 /* セクション */
@@ -1410,7 +1415,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 </footer>
 
 <button class="to-top" id="totop" type="button" aria-label="ページ上部へ戻る">
-  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17V3M4 9l6-6 6 6"/></svg>
+  <svg class="tt-ar" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10V2M2.5 5.5L6 2l3.5 3.5"/></svg>
+  <span class="tt-lb">TO TOP</span>
+  <span class="tt-bar"></span>
 </button>
 
 <script>
