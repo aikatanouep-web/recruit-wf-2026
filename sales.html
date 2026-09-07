@@ -149,40 +149,33 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ext svg *{vector-effect:non-scaling-stroke}
 @media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
 
-/* 大きめの導線ボタン。枠線のピルの中に、濃い角丸のバッジで矢印を入れる。
-   ホバーではバッジの位置から塗りがピル全体へ広がり、文字が白へ反転する。
-   「押すとどこかへ行く」ことを、色ではなく動きで示す。 */
-.btn{position:relative;display:inline-flex;align-items:center;gap:28px;isolation:isolate;
-  height:76px;padding:0 20px 0 40px;border:2px solid var(--ink);border-radius:999px;
-  background:transparent;color:var(--ink);text-decoration:none;cursor:pointer;
-  font-weight:700;font-size:19px;letter-spacing:.08em;line-height:1;white-space:nowrap;
-  transition:color .5s var(--ease-out-expo),border-color .5s var(--ease-out-expo)}
-/* 塗りはバッジのある右端を起点に広がる */
-.btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:999px;background:var(--ink);
-  transform:scaleX(0);transform-origin:right center;
-  transition:transform .55s var(--ease-in-out-circ)}
+/* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
+   ・枠は2px・角丸100px、内側の余白は .75em 2em
+   ・ラベルは 20px / weight 500。バッジは 2.8em × 1.4em の横長スタジアム
+   ・ホバーで動くのは矢印だけ */
+.btn{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:15px 20px 15px 40px;
+  border:2px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);
+  text-decoration:none;cursor:pointer;
+  font-weight:500;font-size:20px;letter-spacing:.06em;line-height:1.2;white-space:nowrap}
+/* バッジは横長。円にすると矢印だけが浮いて、ラベルとの関係が切れる。
+   反応は矢印の入れ替えだけにする。面まで一緒に動かすと、素早く
+   カーソルを往復させたときに塗りと矢印がずれて雑に見える。 */
 .btn-badge{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;
-  width:56px;height:36px;border-radius:999px;background:var(--ink);color:#fff;overflow:hidden;
-  transition:background-color .5s var(--ease-out-expo),color .5s var(--ease-out-expo)}
-.btn-badge svg{position:absolute;width:14px;height:14px;display:block;
-  transition:transform .55s var(--ease-out-expo)}
-/* 2本目は左下で待機し、1本目が右上へ抜けた分だけ入れ替わる */
-.btn-badge svg + svg{transform:translate(-18px,18px)}
+  width:56px;height:28px;border-radius:999px;background:var(--ink);color:#fff;overflow:hidden}
+/* inset:0 と margin:auto で中央に置く。これが無いと絶対配置の基準が
+   左上になり、待機中の2枚目がバッジの角からはみ出して見える */
+.btn-badge svg{position:absolute;inset:0;margin:auto;width:13px;height:13px;
+  transition:transform .5s var(--ease-out-expo)}
+/* 2枚目は左下で待機し、1枚目が右上へ抜けた分だけ入れ替わる */
+.btn-badge svg + svg{transform:translate(-20px,20px)}
 @media (hover:hover){
-  .btn:hover{color:var(--paper)}
-  .btn:hover::before{transform:scaleX(1)}
-  .btn:hover .btn-badge{background:var(--paper);color:var(--ink)}
-  .btn:hover .btn-badge svg{transform:translate(18px,-18px);transition-duration:.4s}
-  .btn:hover .btn-badge svg + svg{transform:translate(0,0);transition-duration:.4s}
+  .btn:hover .btn-badge svg{transform:translate(20px,-20px);transition-duration:.38s}
+  .btn:hover .btn-badge svg + svg{transform:translate(0,0);transition-duration:.38s}
 }
 /* 黒地の上では白の枠線・白バッジで反転させる */
 .btn--ondark{border-color:var(--paper);color:var(--paper)}
-.btn--ondark::before{background:var(--paper)}
 .btn--ondark .btn-badge{background:var(--paper);color:var(--ink)}
-@media (hover:hover){
-  .btn--ondark:hover{color:var(--ink)}
-  .btn--ondark:hover .btn-badge{background:var(--ink);color:var(--paper)}
-}
 
 /* 追従ヘッダー。導線がテキストボタン2本だけになったので、ロゴとナビを畳む
    is-compact は廃止した。スクロール後は必ず地色を持たせる（透過のままだと
@@ -714,21 +707,26 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 08 FAQ：コーポレートの News と同じ行リスト。左に通し番号、
    本文は「質問（太）＋回答」の2段、行間は罫線で区切る。
    開閉は持たず、ホバーで行の下辺にインクの線を引くだけにする。 */
-.faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:64px}
-.faq-cat + .faq-cat{margin-top:96px}
-.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 40px}
-.faq-list{display:flex;flex-direction:column;gap:48px}
+.faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
+.faq-cat + .faq-cat{margin-top:56px}
+/* カテゴリ見出しは設問の束をまとめる印。設問より一段大きければ足りるので、
+   22px から落として上下も詰める。 */
+.faq-cat-ttl{font-weight:700;font-size:17px;letter-spacing:.1em;line-height:1.6;margin:0 0 20px}
+.faq-list{display:flex;flex-direction:column;gap:20px}
 /* News の行と同じ骨格：番号列 85px ＋ gap 60px ＋ 本文 */
-.faq-qa{position:relative;display:flex;align-items:flex-start;gap:60px;padding:0 0 32px}
-.faq-no{width:85px;flex:none;font-family:var(--font-label);font-weight:400;line-height:1}
-.faq-no .k{display:block;font-size:14px;letter-spacing:.7px;color:var(--caption)}
-.faq-no .n{display:block;margin-top:8px;font-size:20px;letter-spacing:2px}
-.faq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-.faq-qa .q{font-weight:700;font-size:14px;letter-spacing:1.4px;line-height:1.5;color:var(--ink);margin:0}
-.faq-qa .a{font-size:14px;letter-spacing:1.4px;line-height:1.8;color:#3a3a40;margin:0}
+/* 番号の列と本文の間は 60 → 36px。番号は2〜3文字しかないので、
+   85px も取ると本文までの距離だけが空いて読みにくい。 */
+.faq-qa{position:relative;display:flex;align-items:flex-start;gap:36px;padding:0 0 20px}
+.faq-no{width:52px;flex:none;font-family:var(--font-label);font-weight:400;line-height:1;
+  display:flex;align-items:baseline;gap:4px;padding-top:2px}
+.faq-no .k{font-size:11px;letter-spacing:.7px;color:var(--caption)}
+.faq-no .n{font-size:16px;letter-spacing:1.4px}
+.faq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.faq-qa .q{font-weight:700;font-size:14px;letter-spacing:1px;line-height:1.5;color:var(--ink);margin:0}
+.faq-qa .a{font-size:13px;letter-spacing:1px;line-height:1.75;color:#3a3a40;margin:0}
 /* 行の右端に矢印を置き、ニュースと同じ挙動にする。
    矢印は窓の中で右へ抜け、複製が左から入り直す。本文はわずかに右へ動く。 */
-.faq-arw{position:relative;width:40px;height:40px;flex:none;margin-left:auto;
+.faq-arw{position:relative;width:32px;height:32px;flex:none;margin-left:auto;
   display:inline-flex;align-items:center;justify-content:center;overflow:hidden;color:var(--ink)}
 .faq-arw svg{position:absolute;width:14px;height:12px;
   transition:transform .7s var(--ease-out-expo)}
@@ -769,9 +767,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    その下に著作権表示を右端へ。高さは 60+30+20+17+60 = 187px。 */
 /* 09 最後の導線。ページの締めなので、余白を大きく取って
    コピーとボタン2つだけを置く。 */
-.endcta{background:var(--paper);padding:200px var(--gutter) 180px;text-align:center}
-.endcta h2{font-weight:700;font-size:36px;letter-spacing:.06em;line-height:1.5;margin:0}
-.endcta .row{display:flex;justify-content:center;gap:32px;margin-top:64px;flex-wrap:wrap}
+.endcta{background:var(--paper);padding:140px var(--gutter) 130px;text-align:center}
+/* 欧文の大きな一文で締める。参考サイトに合わせ、書体は表示用（Unbounded）
+   ではなく素の欧文を使い、太らせずに大きさだけで見せる。
+   大文字と小文字の混植も参考どおり。要になる語だけ大文字にし、
+   つなぎの語は小文字のままにして、文として読めるようにする。 */
+.endcta .stmt{font-family:var(--font-en);font-weight:400;font-size:56px;letter-spacing:0;
+  line-height:1.24;margin:0;color:var(--ink)}
+.endcta .row{display:flex;justify-content:center;gap:40px;margin-top:56px;flex-wrap:wrap}
 
 /* 10 フッター。黒地で締める。上段はロゴと導線、下段は権利表記と規程類。 */
 .footer{background:var(--ink);color:var(--paper);padding:80px var(--gutter) 0}
@@ -1375,7 +1378,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
   <!-- ============ 09 最後の導線 ============ カジュアル面談と新卒エントリーの2本だけ -->
   <section class="endcta">
-    <h2 data-words data-observe>次のキャリアの話を、<br>ここから始めませんか</h2>
+    <p class="stmt" data-words data-observe>MOVING SOMEONE&rsquo;S CAREER<br>expands YOUR OWN</p>
     <div class="row" data-reveal data-delay="0.15">
       <a class="btn " href="#"><span class="btn-label">カジュアル面談</span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></a>
       <a class="btn " href="#"><span class="btn-label">新卒エントリー</span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></a>
@@ -1438,14 +1441,26 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   var SPLIT=/([^\s。、・（）「」／]+[。、・）」／]?|\s+)/g;
   [].forEach.call(document.querySelectorAll('[data-words]'),function(el){
     if(el.querySelector('.wd')) return;
-    var parts=(el.textContent||'').match(SPLIT); if(!parts) return;
-    el.textContent=''; var n=0;
-    parts.forEach(function(w){
-      if(/^\s+$/.test(w)){ el.appendChild(document.createTextNode(w)); return; }
-      var sp=document.createElement('span');
-      sp.className='wd'; sp.style.setProperty('--i',n++); sp.textContent=w;
-      el.appendChild(sp);
-    });
+    var n=0;
+    /* textContent で丸ごと取り出して組み直すと、<br> や入れ子の要素が消える。
+       子ノードをたどり、テキストだけを語に割って差し替える。 */
+    (function walk(node){
+      [].slice.call(node.childNodes).forEach(function(c){
+        if(c.nodeType===3){
+          var parts=(c.nodeValue||'').match(SPLIT); if(!parts) return;
+          var frag=document.createDocumentFragment();
+          parts.forEach(function(w){
+            if(/^\s+$/.test(w)){ frag.appendChild(document.createTextNode(w)); return; }
+            var sp=document.createElement('span');
+            sp.className='wd'; sp.style.setProperty('--i',n++); sp.textContent=w;
+            frag.appendChild(sp);
+          });
+          node.replaceChild(frag,c);
+        } else if(c.nodeType===1 && c.tagName!=='BR'){
+          walk(c);
+        }
+      });
+    })(el);
   });
 })();
 (function(){ /* reveal */
