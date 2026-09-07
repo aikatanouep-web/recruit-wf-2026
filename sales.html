@@ -436,10 +436,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-word::after{content:attr(data-text);position:absolute;inset:0;
   background:linear-gradient(90deg,rgba(90,90,94,0) 0%,rgba(255,255,255,.92) 46%,
     var(--accent) 56%,rgba(90,90,94,0) 100%);
-  background-size:220% 100%;background-position:210% 0;
+  /* no-repeat は必須。既定の repeat のままだと帯がタイルされ、
+     位置を動かしても常に別の帯が文字の上に居座って白へ抜けない。 */
+  background-repeat:no-repeat;background-size:220% 100%;background-position:210% 0;
   -webkit-background-clip:text;background-clip:text;color:transparent;pointer-events:none}
 .mrt-title.is-inview .mrt-word::after{animation:mrtSweep 1.7s cubic-bezier(.54,0,0,.99) .25s both}
-@keyframes mrtSweep{from{background-position:210% 0}to{background-position:-110% 0}}
+/* 光帯が通り過ぎたあとは、グレーに戻さず白のまま残す。
+   色の変化は帯が抜けるのに合わせて後半だけで起こす（頭から白くすると、
+   光が走る前に明るくなってしまい、帯が通ったことが分からない）。 */
+.mrt-title.is-inview .mrt-word{animation:mrtLit 1.7s cubic-bezier(.54,0,0,.99) .25s both}
+@keyframes mrtLit{0%,45%{color:#5a5a5e}100%{color:#fff}}
+@keyframes mrtSweep{
+  0%{background-position:210% 0;opacity:1}
+  85%{opacity:1}
+  100%{background-position:-110% 0;opacity:0}
+}
 .mrt-stack{position:relative}
 /* 見出し(120+64)の40px下に粘着させる */
 .mrt-card{position:sticky;top:224px;z-index:2;display:flex;
@@ -454,11 +465,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-ph{flex:1 1 auto;position:relative}
 /* 黒地の上のグレー面。明るい灰のままだとカードから浮く */
 .mrt-ph .ph{background:#232326;color:#7b7b80}
-/* 黒地のカードに合わせて FACT / MEANING / BENEFIT の札を反転させる */
-.mrt-card .fmb-k{background:rgba(255,255,255,.12);color:rgba(255,255,255,.72)}
-.mrt-card .fmb-v{color:rgba(255,255,255,.8)}
-.mrt-card .fmb-row.is-benefit .fmb-k{background:var(--accent);color:#fff}
-.mrt-card .fmb-row.is-benefit .fmb-v{color:#fff}
+/* FACT / MEANING / BENEFIT の3段。ラベルは枠線のピルにする。
+   塗りの札は面が重くなるうえ、3つ縦に並ぶと色の帯に見えてしまう。 */
+.fmb-row{display:grid;grid-template-columns:104px minmax(0,1fr);gap:0 28px;align-items:start}
+.fmb-k{display:inline-flex;align-items:center;justify-content:center;
+  height:26px;padding:0 14px;border:1px solid rgba(255,255,255,.42);border-radius:999px;background:none;
+  font-family:var(--font-label);font-weight:400;font-size:10px;letter-spacing:1.8px;line-height:1;
+  text-transform:uppercase;color:rgba(255,255,255,.78)}
+.fmb-v{margin:0;padding-top:3px;font-size:13px;letter-spacing:.06em;line-height:1.9;
+  color:rgba(255,255,255,.8)}
+/* 3段の終着点なので、BENEFIT だけ線と文字をアクセント色にする。
+   FACT / MEANING を淡いまま残さないと、どこが結論か分からなくなる。 */
+.fmb-row.is-benefit .fmb-k{border-color:var(--accent);color:var(--accent)}
+.fmb-row.is-benefit .fmb-v{color:#fff}
 
 /* 03b 職種別の魅力：写真をやめ、円の囲みの中に抽象的な背景を置く。
    Merit から続けて黒地にし、「働く魅力」をひとつの黒い章としてまとめる。 */
@@ -466,66 +485,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    セクション間ほど空けない（180pxでは離れすぎて別の面に見える）。 */
 .appeal{background:var(--ink);color:var(--paper);padding:96px var(--gutter) 180px}
 .appeal .h3{color:var(--paper);text-align:center}
-.appeal .h3 + .orbs{margin-top:64px}
+.appeal .h3 + .picks{margin-top:64px}
 .appeal .h3--gap{margin-top:140px}
-/* 円は少しずつ重ねて並べる。重なりが「つながっている」印象をつくる */
-.orbs{display:flex;justify-content:center}
-.orb{position:relative;width:340px;flex:none}
-.orb + .orb{margin-left:-63px}
-/* ホバーで満ちる塗り。上方がわずかに明るいダークティールのラジアル */
-.orb::before{content:"";position:absolute;top:0;left:0;width:340px;height:340px;border-radius:50%;
-  background:radial-gradient(46% 42% at 32% 26%,rgba(0,169,173,.5),rgba(0,169,173,0) 70%),
-             radial-gradient(60% 60% at 70% 78%,rgba(0,169,173,.22),rgba(13,13,14,0) 72%),
-             radial-gradient(80% 80% at 50% 50%,rgba(28,52,54,.9),rgba(13,13,14,.9));
-  opacity:0;transform:scale(.96);
-  transition:opacity .7s var(--ease-out-expo),transform .7s var(--ease-out-expo)}
-/* 円周の線。スクロールインで上から時計回りに描かれる */
-.orb .ring{position:relative;display:block;width:340px;height:340px;
-  transition:transform .7s var(--ease-out-expo)}
-.orb .ring circle{fill:none;stroke:rgba(255,255,255,.28);stroke-width:1;
-  stroke-dasharray:1065;stroke-dashoffset:1065;transform:rotate(-90deg);transform-origin:center;
-  transition:stroke-dashoffset 1.4s var(--ease-out-expo),stroke .5s ease}
-.orbs.is-inview .orb:nth-child(1) circle{stroke-dashoffset:0}
-.orbs.is-inview .orb:nth-child(2) circle{stroke-dashoffset:0;transition-delay:.12s}
-.orbs.is-inview .orb:nth-child(3) circle{stroke-dashoffset:0;transition-delay:.24s}
-/* 円の中の抽象イメージ。写真の代わりなので、主張させず地に沈める */
-.orb .deco{position:absolute;top:0;left:0;width:340px;height:340px;pointer-events:none;
-  opacity:.28;transition:opacity .7s var(--ease-out-expo)}
-.orb .deco .arc path{fill:none;stroke:rgba(255,255,255,.5);stroke-width:1}
-.orb .deco .dot circle{fill:var(--accent)}
-/* 3要素は全円で同じ基準線に揃える（英字84 / 見出しは円の中央 / 矢印272） */
-.orb .in{position:absolute;inset:0 0 auto 0;height:340px;text-align:center}
-.orb .en{position:absolute;top:84px;left:0;right:0;font-family:var(--font-label);font-weight:400;
-  font-size:11px;letter-spacing:2.2px;line-height:1.6;text-transform:uppercase;color:rgba(255,255,255,.6)}
-.orb .en b{font-weight:400;color:var(--accent)}
-.orb .in h4{position:absolute;top:170px;left:0;right:0;transform:translateY(-50%);margin:0;padding:0 56px;
-  font-weight:700;font-size:18px;letter-spacing:1.8px;line-height:1.7;color:#fff}
-/* 矢印は窓の中でスワップする（1本目が右へ抜け、2本目が左から入る） */
-.orb .go{position:absolute;top:272px;left:50%;transform:translateX(-50%);display:block;
-  width:14px;height:9px;overflow:hidden;color:rgba(255,255,255,.7);transition:color .5s var(--ease-out-expo)}
-.orb .go svg{display:block;width:14px;height:9px;transition:transform .55s var(--ease-out-expo)}
-.orb .go svg + svg{position:absolute;top:0;left:0;transform:translateX(calc(-100% - 8px))}
-.orb .cap{list-style:none;margin:24px auto 0;padding:0;max-width:250px;
-  display:flex;flex-direction:column;gap:8px;text-align:left}
-.orb .cap li{position:relative;padding-left:14px;font-size:13px;letter-spacing:.7px;line-height:1.7;
-  color:rgba(255,255,255,.45);transition:color .5s var(--ease-out-expo)}
-.orb .cap li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;
-  background:rgba(255,255,255,.3)}
-@media (hover:hover){
-  .orb:hover{z-index:1}
-  .orb:hover::before{opacity:1;transform:scale(1.05)}
-  .orb:hover .ring{transform:scale(1.05)}
-  /* 塗りが満ちたら輪郭線は消す（線と塗りが二重にならないように） */
-  .orb:hover .ring circle{stroke:rgba(255,255,255,0)}
-  .orb:hover .deco{opacity:.5}
-  .orb:hover .go{color:var(--accent)}
-  .orb:hover .go svg:first-child{transform:translateX(calc(100% + 8px))}
-  .orb:hover .go svg + svg{transform:translateX(0)}
-  .orb:hover .cap li{color:rgba(255,255,255,.72)}
-}
-@media (prefers-reduced-motion:reduce){
-  .orb .ring circle{stroke-dashoffset:0 !important}
-}
+/* 色面のカードは「この先の選択肢」と同じ .pick を使う。
+   同じ性質の情報なので、別の見た目を作らず部品を共有する。 */
+.appeal .picks + .h3--gap{margin-top:140px}
 
 
 /* セクション内の小見出し。上は前のかたまりと切るために大きく、
@@ -588,21 +552,36 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   font-family:var(--font-label);font-weight:400;font-size:11px;letter-spacing:1.6px;line-height:1;
   text-transform:uppercase}
 .pick-h{margin:24px 0 0;font-weight:700;font-size:20px;letter-spacing:.06em;line-height:1.5}
-.pick-list{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;flex:1}
+.pick-list{list-style:none;margin:20px 0 32px;padding:0;display:flex;flex-direction:column;gap:12px;flex:1}
 .pick-list li{position:relative;padding-left:16px;font-size:13px;letter-spacing:.04em;line-height:1.8;
   color:rgba(255,255,255,.86)}
 .pick-list li::before{content:"";position:absolute;left:0;top:10px;width:5px;height:5px;border-radius:50%;
   background:rgba(255,255,255,.6)}
-.pick-more{display:inline-flex;align-items:center;gap:14px;margin-top:32px;
-  font-size:13px;letter-spacing:.08em;line-height:1}
-/* 白丸の中で矢印が右へ進む */
-.pick-go{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;
-  border-radius:50%;background:#fff;color:var(--ink);overflow:hidden}
-.pick-go svg{width:16px;height:16px;transition:transform .55s var(--ease-out-expo)}
+/* 「詳しく見る」。recruit.garage.co.jp の p-card__more と同じ作り。
+   ・下線は常時は出さない。カードにホバーしたときだけ、左から幅いっぱいへ引く
+     （background-size だけを動かす。position を左に寄せてから伸ばすので、
+      線が左端を起点に伸びる）
+   ・丸は 32px の塗り。矢印は入れ替えず、丸ごと 1.1 倍にふくらむだけ
+   ・反応の起点はボタンではなくカード全体 */
+.gbtn{display:inline-flex;align-items:center;gap:10px;align-self:flex-end;
+  font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1;
+  color:inherit;text-decoration:none;cursor:pointer}
+.gbtn .lb{display:inline;padding-bottom:.005em;
+  background-image:linear-gradient(90deg,currentColor,currentColor);
+  background-repeat:no-repeat;
+  background-position:var(--ul-pos,100% 100%);
+  background-size:var(--ul-size,0 1px);
+  transition:background-size .35s cubic-bezier(.215,.61,.355,1)}
+.gbtn .circ{display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;
+  transition:transform .2s ease-in-out}
+.gbtn .circ svg{width:12px;height:12px;display:block}
 @media (hover:hover){
-  .pick:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(13,13,14,.18)}
-  .pick:hover .pick-go svg{transform:translateX(4px)}
+  .pick:hover .gbtn,.gbtn:hover{--ul-pos:0 100%;--ul-size:100% 1px}
+  .pick:hover .gbtn .circ,.gbtn:hover .circ{transform:scale(1.1)}
 }
+/* 色面の上では、丸を白地・黒矢印に反転させる */
+.pick .gbtn .circ{background:#fff;color:var(--ink)}
 
 .member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 /* 画像 → 見出し → 人物 → 変化 → リンク。同じ間隔で並べると全部が
@@ -621,17 +600,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   line-height:1.6;margin:18px 0 0}
 .m-meta{font-size:12px;letter-spacing:.08em;line-height:1.7;color:var(--caption);margin:5px 0 0}
 /* 変化の束。罫線ではなく面で囲って、カードの中で一段沈ませる */
-/* Before → Now：灰色の箱をやめ、上下の細い罫だけで挟む。
-   矢印は線を引くグラフィックにして、スクロールインで左から伸ばす。 */
-.m-change{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);align-items:center;
-  gap:0;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.m-k{font-family:var(--font-label);font-weight:400;font-size:10px;letter-spacing:.16em;line-height:1;
+/* Before → Now：ラベルは FACT/MEANING と同じ枠線のピルに揃える。
+   到達点である Now だけを濃く太くして、視線が右で止まるようにする。 */
+.m-change{display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr);align-items:center;
+  gap:0;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.m-k{display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;
+  border:1px solid rgba(13,13,14,.24);border-radius:999px;
+  font-family:var(--font-label);font-weight:400;font-size:9px;letter-spacing:1.6px;line-height:1;
   text-transform:uppercase;color:var(--caption);margin:0}
-.m-v{font-size:13px;letter-spacing:.04em;line-height:1.7;margin:8px 0 0}
-.m-arrow{position:relative;display:block;width:64px;height:12px;color:var(--accent)}
+.m-v{font-size:13px;letter-spacing:.04em;line-height:1.7;margin:10px 0 0;color:var(--caption)}
+/* 右側（Now）は到達点。ラベルも本文もアクセント側に寄せる */
+.m-col--now .m-k{border-color:var(--accent);color:var(--accent)}
+.m-col--now .m-v{color:var(--ink);font-weight:700}
+.m-arrow{position:relative;display:block;width:72px;height:12px;color:var(--accent)}
 .m-arrow svg{width:100%;height:100%;display:block;overflow:visible}
 /* 軸を左から引き、引き終わりに合わせて矢じりを出す */
-.m-arrow .ax{stroke-dasharray:44;stroke-dashoffset:44;
+.m-arrow .ax{stroke-dasharray:52;stroke-dashoffset:52;
   transition:stroke-dashoffset 1s var(--ease-out-expo)}
 .m-arrow .hd{opacity:0;transform:translateX(-6px);transform-origin:right center;
   transition:opacity .4s ease .55s,transform .5s var(--ease-out-expo) .55s}
@@ -644,13 +628,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    上下80px、見出し→本文16px、本文→ボタン24px */
 /* 05 中間CTA：FVの斜めモチーフをここで一度だけ再利用する。
    ページ後半で「FVと同じ面に戻ってきた」と分かる目印になる。 */
-.midcta{position:relative;background:var(--ink);color:var(--paper);
+/* 背景は写真。黒を重ねて沈めたうえで文字を乗せる。仮素材なので
+   imgs/fv/04-team.jpg を当てている（オフィスの実写に差し替える前提）。 */
+.midcta{position:relative;background:var(--ink) url("imgs/fv/04-team.jpg") center/cover no-repeat;
+  color:var(--paper);
   padding:120px var(--gutter);display:flex;align-items:center;justify-content:space-between;
   gap:56px;flex-wrap:wrap;overflow:hidden}
-/* 斜めの帯。地よりわずかに明るいだけにして、文字の邪魔をさせない */
-.midcta::before{content:"";position:absolute;top:-20%;bottom:-20%;right:-6%;width:46%;
-  background:linear-gradient(120deg,rgba(255,255,255,.05),rgba(255,255,255,0) 70%);
-  transform:skewX(-12.4deg)}
+/* 写真の上に膜を敷く。左を濃く、右をやや抜いて写真を残す */
+.midcta::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(95deg,rgba(13,13,14,.92) 0%,rgba(13,13,14,.78) 46%,rgba(13,13,14,.6) 100%)}
 /* エメラルドの細い斜線を1本だけ通す */
 .midcta::after{content:"";position:absolute;top:-20%;bottom:-20%;right:32%;width:2px;
   background:linear-gradient(180deg,rgba(0,169,173,0),var(--accent) 45%,rgba(0,169,173,0));
@@ -662,26 +648,28 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .midcta .row{display:flex;gap:24px;flex:none}
 
 /* 07 Company */
-.co-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:40px}
-/* Company / プロダクト：白い面に細い枠。ホバーで上辺にアクセントの罫が
-   左から伸び、面がわずかに浮く。色を足さずに反応だけで区別する。 */
-.co{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;
-  padding:32px;display:flex;flex-direction:column;gap:12px;overflow:hidden;
-  transition:transform .6s var(--ease-out-expo),box-shadow .6s var(--ease-out-expo)}
-.co::before,.prod::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--accent);
-  transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease-out-expo)}
+.co-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 48px;margin-top:40px}
+/* Company / プロダクト：囲みの枠をやめる。四辺を線で囲うと、どれも同じ
+   大きさの箱が並ぶだけの画面になる（いわゆる「枠だけのカード」）。
+   上辺の1本だけを残し、余白で区切りを作る。 */
+.co{position:relative;background:none;border:0;border-radius:0;padding:32px 0 0;
+  display:flex;flex-direction:column;gap:14px}
+.co::before,.prod::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:var(--line2)}
+/* ホバーでは上辺の罫がアクセント色に置き換わりながら左から引き直される */
+.co::after,.prod::after{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .6s var(--ease-out-expo)}
+.co h3,.prod .prod-name{transition:transform .6s var(--ease-out-expo)}
 @media (hover:hover){
-  .co:hover,.prod:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(13,13,14,.08)}
-  .co:hover::before,.prod:hover::before{transform:scaleX(1)}
+  .co:hover::after,.prod:hover::after{transform:scaleX(1)}
+  .co:hover h3,.prod:hover .prod-name{transform:translateX(4px)}
 }
-.sec--tone .co{background:var(--paper)}
 .co h3{font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.6;margin:0}
 .co p{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
-.prod-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.prod{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;
-  padding:28px 24px;display:flex;flex-direction:column;gap:8px;overflow:hidden;
-  transition:transform .6s var(--ease-out-expo),box-shadow .6s var(--ease-out-expo)}
-.sec--tone .prod{background:var(--paper)}
+.prod-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+.prod{position:relative;background:none;border:0;border-radius:0;padding:32px 0 0;
+  display:flex;flex-direction:column;gap:10px}
 .prod-name{font-family:var(--font-label);font-weight:400;font-size:18px;letter-spacing:.1em;line-height:1.5}
 .prod-sub{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 .prod .tlink{margin-top:auto;padding-top:12px}
@@ -738,11 +726,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
 .faq-qa .q{font-weight:700;font-size:14px;letter-spacing:1.4px;line-height:1.5;color:var(--ink);margin:0}
 .faq-qa .a{font-size:14px;letter-spacing:1.4px;line-height:1.8;color:#3a3a40;margin:0}
+/* 行の右端に矢印を置き、ニュースと同じ挙動にする。
+   矢印は窓の中で右へ抜け、複製が左から入り直す。本文はわずかに右へ動く。 */
+.faq-arw{position:relative;width:40px;height:40px;flex:none;margin-left:auto;
+  display:inline-flex;align-items:center;justify-content:center;overflow:hidden;color:var(--ink)}
+.faq-arw svg{position:absolute;width:14px;height:12px;
+  transition:transform .7s var(--ease-out-expo)}
+.faq-arw svg + svg{transform:translateX(-24px)}
+.faq-qa .q,.faq-qa .a{transition:transform .7s var(--ease-out-expo)}
 /* 区切りは薄い罫線。ホバー時だけ、その上を濃い線が左から引かれる */
 .faq-qa::before{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)}
 .faq-qa::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
   transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease-out-expo)}
-@media (hover:hover){.faq-qa:hover::after{transform:scaleX(1);transition-duration:.35s}}
+@media (hover:hover){
+  .faq-qa:hover::after{transform:scaleX(1);transition-duration:.35s}
+  .faq-qa:hover .q,.faq-qa:hover .a{transform:translateX(2.5px);transition-duration:.35s}
+  .faq-qa:hover .faq-arw svg{transform:translateX(24px);transition-duration:.35s}
+  .faq-qa:hover .faq-arw svg + svg{transform:translateX(0);transition-duration:.35s}
+}
 
 /* タブレット：2カラムが入らなくなったら解除して縦に積む */
 @media (max-width:1180px){
@@ -1033,64 +1034,46 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
        抽象的な背景（弧と点）を置く。コーポレートの Features と同じ作り -->
   <section class="appeal">
     <h3 class="h3" data-words data-observe>クオレガのキャリアアドバイザーで働く魅力</h3>
-    <div class="orbs" data-stagger data-observe>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Value</b></span>
-            <h4>介在価値が生む最高の瞬間</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>本人も気づかない可能性を言語化する</li><li>センターピンを射抜くマッチング</li><li>一人では届かない企業情報を渡せる</li></ul>
-        </article>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Lifestyle</b></span>
-            <h4>「好き」と「仕事」が循環する</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>趣味の食べ歩きがそのまま知見になる</li><li>料理人・支配人など多様なプロと出会う</li><li>支援した人が街で活きる姿を見られる</li></ul>
-        </article>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Purpose</b></span>
-            <h4>業界課題の当事者になれる</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>業界の人手不足を採用で実際に解消する</li><li>インバウンドで伸びる成長産業が舞台</li><li>飲食とホテル両面で提案の幅が広がる</li></ul>
-        </article>
+    <div class="picks" data-stagger data-observe>
+      <article class="pick pick-1">
+        <span class="pick-tag">Value</span>
+        <h4 class="pick-h">介在価値が生む最高の瞬間</h4>
+        <ul class="pick-list"><li>本人も気づかない可能性を言語化する</li><li>センターピンを射抜くマッチング</li><li>一人では届かない企業情報を渡せる</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
+      <article class="pick pick-2">
+        <span class="pick-tag">Lifestyle</span>
+        <h4 class="pick-h">「好き」と「仕事」が循環する</h4>
+        <ul class="pick-list"><li>趣味の食べ歩きがそのまま知見になる</li><li>料理人・支配人など多様なプロと出会う</li><li>支援した人が街で活きる姿を見られる</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
+      <article class="pick pick-3">
+        <span class="pick-tag">Purpose</span>
+        <h4 class="pick-h">業界課題の当事者になれる</h4>
+        <ul class="pick-list"><li>業界の人手不足を採用で実際に解消する</li><li>インバウンドで伸びる成長産業が舞台</li><li>飲食とホテル両面で提案の幅が広がる</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>クオレガのリクルーティングアドバイザーで働く魅力</h3>
-    <div class="orbs" data-stagger data-observe>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Partner</b></span>
-            <h4>経営パートナーとして事業成長に効く</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>採用の壁で止まっていた店舗展開を直接加速できる</li><li>経営者・決裁者レイヤーとダイレクトに向き合える</li><li>「採用できたから新店を出せた」が最大の報酬</li></ul>
-        </article>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Consulting</b></span>
-            <h4>初回商談＝最重要コンサルの場</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>受注ではなく入社実績にこだわる成果報酬モデル</li><li>現状分析から課題設定を行い、期待感を創出する提案力</li><li>振り返りレポートでファクトベースの改善提案を継続</li></ul>
-        </article>
-        <article class="orb">
-          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
-          <div class="in">
-            <span class="en"><b>Marketing</b></span>
-            <h4>求人開拓から訴求設計まで一気通貫</h4>
-            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </div>
-          <ul class="cap"><li>新規開拓から採用決定までを自ら完結させる市場価値</li><li>競合求人との相対比較から訴求メッセージを設計する</li><li>飲食・ホテル両業界の商談経験がシナジーになる</li></ul>
-        </article>
+    <div class="picks" data-stagger data-observe>
+      <article class="pick pick-1">
+        <span class="pick-tag">Partner</span>
+        <h4 class="pick-h">経営パートナーとして事業成長に効く</h4>
+        <ul class="pick-list"><li>採用の壁で止まっていた店舗展開を直接加速できる</li><li>経営者・決裁者レイヤーとダイレクトに向き合える</li><li>「採用できたから新店を出せた」が最大の報酬</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
+      <article class="pick pick-2">
+        <span class="pick-tag">Consulting</span>
+        <h4 class="pick-h">初回商談＝最重要コンサルの場</h4>
+        <ul class="pick-list"><li>受注ではなく入社実績にこだわる成果報酬モデル</li><li>現状分析から課題設定を行い、期待感を創出する提案力</li><li>振り返りレポートでファクトベースの改善提案を継続</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
+      <article class="pick pick-3">
+        <span class="pick-tag">Marketing</span>
+        <h4 class="pick-h">求人開拓から訴求設計まで一気通貫</h4>
+        <ul class="pick-list"><li>新規開拓から採用決定までを自ら完結させる市場価値</li><li>競合求人との相対比較から訴求メッセージを設計する</li><li>飲食・ホテル両業界の商談経験がシナジーになる</li></ul>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+      </article>
     </div>
   </section>
 
@@ -1113,19 +1096,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="pick-tag">Player</span>
         <h4 class="pick-h">プレイヤーとして深める</h4>
         <ul class="pick-list"><li>担当領域を広げる（飲食／ホテル・旅館／グローバル）</li><li>難易度の高い案件・高年収帯を担当する</li><li>面談ロジックの設計や型化に関わる</li></ul>
-        <span class="pick-more">詳しく見る<span class="pick-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
       </article>
       <article class="pick pick-2">
         <span class="pick-tag">Management</span>
         <h4 class="pick-h">チームを持つ</h4>
         <ul class="pick-list"><li>リーダー／チーフリーダーとしてメンバーを持つ</li><li>マネージャーとして部門の目標設計と人員配置を担う</li><li>部長・執行役員へ</li></ul>
-        <span class="pick-more">詳しく見る<span class="pick-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
       </article>
       <article class="pick pick-3">
         <span class="pick-tag">Cross-functional</span>
         <h4 class="pick-h">職種を越える</h4>
         <ul class="pick-list"><li>フィールドセールス（企業担当）へ</li><li>インサイドセールス・アカウントプランナーへ</li><li>事業企画・新規事業・新拠点の立ち上げへ</li></ul>
-        <span class="pick-more">詳しく見る<span class="pick-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
+        <span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span>
       </article>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
@@ -1136,8 +1119,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="m-meta">メンバー ／ 2020年入社</p>
         <div class="m-change">
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
-          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h42"/><path class="hd" d="M38 1.5L44 6l-6 4.5"/></svg></span>
-          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 56 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h50"/><path class="hd" d="M46 1.5L52 6l-6 4.5"/></svg></span>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
@@ -1147,8 +1130,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="m-meta">メンバー ／ 2020年入社</p>
         <div class="m-change">
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
-          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h42"/><path class="hd" d="M38 1.5L44 6l-6 4.5"/></svg></span>
-          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 56 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h50"/><path class="hd" d="M46 1.5L52 6l-6 4.5"/></svg></span>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
@@ -1158,8 +1141,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="m-meta">メンバー ／ 2020年入社</p>
         <div class="m-change">
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
-          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h42"/><path class="hd" d="M38 1.5L44 6l-6 4.5"/></svg></span>
-          <div class="m-col"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+          <span class="m-arrow" aria-hidden="true"><svg viewBox="0 0 56 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="ax" d="M2 6h50"/><path class="hd" d="M46 1.5L52 6l-6 4.5"/></svg></span>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
@@ -1263,10 +1246,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">01</span></span>
             <div class="faq-body"><p class="q">キャリアアドバイザーの具体的な仕事内容を教えてください</p><p class="a">会員登録した求職者との面談を担当します。ヒアリングで経歴・希望・将来のビジョンを整理し、バックヤードで企業担当（フィールドセールス）と連携して求人を選び、提案します。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">02</span></span>
             <div class="faq-body"><p class="q">1日の業務の流れを教えてください</p><p class="a">面談は90分程度の枠で行い、最初の45分ほどをヒアリングに充てます。ヒアリング後は15分程度のマッチング時間で6〜7件の求人を選定し、提案に入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1276,10 +1261,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">03</span></span>
             <div class="faq-body"><p class="q">どのような目標やKPIがありますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テ</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">04</span></span>
             <div class="faq-body"><p class="q">成果はどのように評価されますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1289,10 +1276,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">05</span></span>
             <div class="faq-body"><p class="q">報酬や昇給はどのように決まりますか</p><p class="a">昇給は年4回（3ヶ月ごとの査定）、業績賞与は年2回です。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">06</span></span>
             <div class="faq-body"><p class="q">想定年収を教えてください</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1302,14 +1291,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">07</span></span>
             <div class="faq-body"><p class="q">未経験でも活躍できますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テ</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">08</span></span>
             <div class="faq-body"><p class="q">入社後の研修やサポートはありますか</p><p class="a">面談では ABC フレームワークを用いた教育が徹底されています。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">09</span></span>
             <div class="faq-body"><p class="q">成果が出ない場合、どのようなフォローがありますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テ</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1319,10 +1311,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">10</span></span>
             <div class="faq-body"><p class="q">キャリアアドバイザーの次には、どのようなキャリアがありますか</p><p class="a">社内の役職はメンバー／リーダー／チーフリーダー／マネージャー／部長／執行役員の6段階です。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">11</span></span>
             <div class="faq-body"><p class="q">マネジメント以外のキャリアも選べますか</p><p class="a">回答テキストが入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1332,10 +1326,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">12</span></span>
             <div class="faq-body"><p class="q">残業や休日、働き方について教えてください</p><p class="a">勤務時間は9:00〜18:00、年間休日120日、週休2日制（土日）と祝日です。有給取得率は67%です。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">13</span></span>
             <div class="faq-body"><p class="q">転勤はありますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テ</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1345,10 +1341,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">14</span></span>
             <div class="faq-body"><p class="q">どのような人が活躍していますか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">15</span></span>
             <div class="faq-body"><p class="q">キャリアアドバイザーは何名いますか</p><p class="a">在籍しているキャリアアドバイザーは45名ほどです。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
@@ -1358,14 +1356,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">16</span></span>
             <div class="faq-body"><p class="q">面談はオンラインと対面のどちらですか</p><p class="a">回答テキストが入ります。回答テキストが入ります。回答テキストが入ります。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">17</span></span>
             <div class="faq-body"><p class="q">選考前にカジュアル面談はできますか</p><p class="a">可能です。ページ内のカジュアル面談ボタンからお申し込みいただけます。</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">18</span></span>
             <div class="faq-body"><p class="q">選考の流れを教えてください</p><p class="a">回答テキストが入ります</p></div>
+            <span class="faq-arw" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0.5 6h12M9.4 2.2l3.3 3.8-3.3 3.8"/></svg></span>
           </div>
           </div>
         </div>
