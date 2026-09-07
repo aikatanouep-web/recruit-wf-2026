@@ -316,20 +316,31 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 映像面はスクロールで内側から画面いっぱいへ開く（garage.co.jp の
    DG FinTech Shift と同じ作り）。地は常に全面に敷いたまま、clip-path の
    inset だけを動かすので、中の写真がリサイズで歪まない。
-   --grow: 0 = 幅62%の角丸 / 1 = 全面 */
+   --grow: 0 = 幅95% / 1 = 全面。角は落とさず、断ち切りのまま。
+   横は端ぎりぎりまで広げ、開く動きは主に上下に持たせている。横も一緒に
+   詰めると、開ききるまでの差が小さすぎて動いたことが分からなくなる。 */
 .hero-media{position:absolute;inset:0;z-index:1;overflow:hidden;
-  clip-path:inset(calc((1 - var(--grow,0)) * 13%) calc((1 - var(--grow,0)) * 19%)
-    round calc((1 - var(--grow,0)) * 14px))}
-/* 写真の上でも見出しが読めるように左から暗い膜をかける。
-   全面を均一に暗くすると写真が死ぬので、左だけ濃くする。 */
-.hero::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:var(--grow,0);
-  transition:opacity .2s linear;
-  background:linear-gradient(95deg,rgba(0,0,0,.74) 0%,rgba(0,0,0,.38) 48%,rgba(0,0,0,.06) 100%)}
+  clip-path:inset(calc((1 - var(--grow,0)) * 10%) calc((1 - var(--grow,0)) * 2.5%))}
+/* 写真の上でも見出しが読めるように膜をかける。2枚重ねている。
+   1枚目は左から右への横のグラデーション。コピーのある左だけを濃くし、
+   右の写真は明るいまま残す。
+   2枚目は上下だけを軽く落とす膜。ヘッダーと SCROLL 表示が乗る帯なので、
+   ここだけ写真が明るいと文字が飛ぶ。
+   ※ 以前は濃さを --grow に連動させていたが、映像面が最初から96%になった
+      いま、読み込み直後に膜が無い状態になってしまうため常時掛けにした。 */
+.hero::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(95deg,rgba(0,0,0,.84) 0%,rgba(0,0,0,.52) 42%,rgba(0,0,0,.14) 76%,rgba(0,0,0,.06) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.3) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 76%,rgba(0,0,0,.26) 100%)}
 /* FVの見出しは面の主役なので大きく取る。行間は 1.6 → 1.45 に詰めて
    2行をひとつの塊として立たせる。 */
-.hero h1{font-weight:700;font-size:56px;letter-spacing:.02em;line-height:1.45;margin:0;color:var(--paper)}
+/* ぼかしを大きく取った影を1枚。輪郭の付いた「影」には見えず、
+   文字の周りの空気だけが沈むので、写真が動いても読みが安定する。 */
+.hero h1{font-weight:700;font-size:56px;letter-spacing:.02em;line-height:1.45;margin:0;color:#fff;
+  text-shadow:0 2px 28px rgba(0,0,0,.45)}
 /* 見出しの上の小ラベル（Figma 186:8。リード段落は廃止） */
-.hero .fv-eyebrow{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:0 0 20px}
+.hero .fv-eyebrow{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:0 0 20px;
+  text-shadow:0 2px 20px rgba(0,0,0,.5)}
 .hero .row{display:flex;gap:40px;margin-top:48px;flex-wrap:wrap}
 
 /* 斜めの帯。スクロール追従は .sl-wrap、登場アニメは .slice と、動かす層を分ける。
@@ -385,7 +396,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 @keyframes fv-cue{0%{top:-18px}60%,100%{top:48px}}
 @media (prefers-reduced-motion:reduce){
   .hero-media{clip-path:none !important}
-  .hero::after{opacity:1 !important}
   .slice{transform:none !important;opacity:1 !important}
   .ly{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%) !important}
   .scroll-cue .bar::after{animation:none;top:0}
