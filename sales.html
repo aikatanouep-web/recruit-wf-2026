@@ -213,7 +213,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 13px の欧文大文字＋字送り .1em。語の中がゆるいぶん、語間は
    キャップハイトの約4倍(=40px)まで開けないと語の切れ目が読めない。
    リンク群とボタン群は別のまとまりなので、そこは更に離す。 */
-.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;white-space:nowrap}
+.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;white-space:nowrap;
+  overflow:hidden;max-width:720px;opacity:1;
+  transition:max-width .45s var(--ease-out-expo),opacity .3s ease,padding .45s var(--ease-out-expo)}
 /* 当たり判定を上下に広げる。margin で相殺するのでヘッダーの高さは変わらない。
    下線は ::after の bottom で文字のすぐ下に戻す(padding 16 - 元の 4 = 12px)。 */
 /* 欧文ラベルは Unbounded で統一。ただし表示用の書体なので、ナビでは
@@ -229,7 +231,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .header-nav a.is-current::after{transform:scaleX(1)}
 /* 黒帯の上では白抜きに */
 .site-header--ondark .header-nav a{color:#fff}
-.header-cta{display:flex;align-items:center;gap:10px;flex:none}
+/* 2つの導線は、角丸のカプセルでひとまとまりに見せる。
+   padding は常設し、負の margin で相殺しているので、カプセルを付けても
+   ボタンの位置とヘッダーの高さは変わらない。 */
+.header-cta{display:flex;align-items:center;gap:10px;flex:none;
+  margin:-12px -20px -12px 0;padding:12px 20px;border-radius:999px;
+  background:rgba(251,251,251,.96);box-shadow:0 8px 24px rgba(13,13,14,.1);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:background-color .4s ease,box-shadow .4s ease}
+/* 黒帯の上では、カプセルも地に合わせて暗く沈める */
+.site-header--ondark .header-cta{background:rgba(13,13,14,.5);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+
+/* 下へ読み進めている間は、帯とロゴとナビを消してカプセルだけを浮かせる。
+   上へ戻し始めたら畳んだものを開く（＝ナビを探す動作に応える）ので、
+   リンクへは常に手が届く。 */
+.site-header.is-compact{background:transparent;
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+.site-header.is-compact .logo{width:0;opacity:0;pointer-events:none}
+.site-header.is-compact .header-nav{max-width:0;opacity:0;padding-right:0}
 .cta{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);
   border-radius:999px;padding:9px 18px;font-size:12px;letter-spacing:.1em;line-height:1;
   color:var(--ink);background:transparent;white-space:nowrap;cursor:pointer;
@@ -1565,11 +1584,28 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('resize',sweep);
   sweep();
 })();
-(function(){ /* 追従ヘッダー — カジュアル面談・エントリーのCTAだけを常時表示に残す */
+(function(){ /* 追従ヘッダー — 下へ読み進める間はカプセルだけ、上へ戻すとナビが開く */
   var h=document.getElementById('hdr'); if(!h) return;
-  addEventListener('scroll',function(){var y=Math.max(0,scrollY);
-    h.classList.toggle('is-scrolled',y>8);
-  },{passive:true});
+  var last=Math.max(0,scrollY), compact=false, ticking=false;
+  function sweep(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var y=Math.max(0,scrollY), d=y-last;
+      h.classList.toggle('is-scrolled', y>8);
+      /* 4px の遊びを持たせる。1px 単位で反応させると、慣性スクロールの
+         揺り戻しでナビが開閉を繰り返してちらつく。 */
+      if(Math.abs(d)>4){
+        if(d>0 && y>innerHeight*0.9) compact=true;
+        else if(d<0) compact=false;
+        last=y;
+      }
+      if(y<=innerHeight*0.9) compact=false;
+      h.classList.toggle('is-compact', compact);
+    });
+  }
+  addEventListener('scroll',sweep,{passive:true});
+  sweep();
 })();
 /* FAQ のアコーディオンと Contents の畳みは 2026-08-29 の Figma 差し替えで廃止（常時表示） */
 </script>
