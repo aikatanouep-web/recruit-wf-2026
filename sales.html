@@ -50,6 +50,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 [data-stagger] > *:nth-child(4){transition-delay:.21s}
 [data-stagger] > *:nth-child(5){transition-delay:.28s}
 [data-stagger] > *:nth-child(6){transition-delay:.35s}
+/* 語単位のふわっとした立ち上がり。JSが見出しを語に割り、--i で順番を渡す。
+   透過→不透明と、わずかな上方向の移動、ぼかしの解除を同時にかける。
+   ぼかしを併せると「にじみが晴れる」ように見え、移動量を小さくできる。 */
+[data-words] .wd{display:inline-block;white-space:pre;opacity:0;filter:blur(6px);
+  transform:translateY(.38em);
+  transition:opacity .9s var(--ease-out-expo),transform .9s var(--ease-out-expo),
+    filter .9s var(--ease-out-expo);
+  transition-delay:calc(var(--i,0) * .045s)}
+[data-words].is-inview .wd{opacity:1;filter:blur(0);transform:none}
+/* 本文は語で刻むと落ち着かないので、塊のままゆっくり浮かせる */
+[data-fade]{opacity:0;filter:blur(4px);transform:translateY(14px);
+  transition:opacity 1.1s var(--ease-out-expo),transform 1.1s var(--ease-out-expo),
+    filter 1.1s var(--ease-out-expo);
+  transition-delay:var(--reveal-delay,0s)}
+[data-fade].is-inview{opacity:1;filter:blur(0);transform:none}
 .line-reveal .line{display:block;overflow:hidden}
 .line-reveal .line > span{display:inline-block;transform:translateY(112%);transition:transform 1.15s var(--ease-out-expo)}
 .line-reveal.is-inview .line:nth-child(1) > span{transition-delay:.05s}
@@ -57,7 +72,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .line-reveal.is-inview .line > span{transform:translateY(0)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important}
-  [data-reveal],[data-stagger] > *,.line-reveal .line > span{opacity:1 !important;transform:none !important}
+  [data-reveal],[data-stagger] > *,.line-reveal .line > span,[data-words] .wd,[data-fade]{
+    opacity:1 !important;transform:none !important;filter:none !important}
 }
 
 /* WF部品 */
@@ -108,6 +124,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .tlink:hover .circ svg{transform:translate(16px,-16px);transition-duration:.45s}
   .tlink:hover .circ svg + svg{transform:translate(0,0);transition-duration:.45s}
 }
+/* 黒地に乗せるテキストボタン。文字は白、円は白地に黒矢印で反転させる */
+.tlink--ondark{color:var(--paper)}
+.tlink--ondark .circ{background:var(--paper);color:var(--ink)}
 .tlink--light{font-size:13px;gap:4px}
 .tlink--light .circ{width:auto;height:auto;background:none;color:var(--ink);overflow:visible}
 .tlink--light .circ svg{position:static;width:7px;height:6.5px;margin:0;transition:transform .45s var(--ease-out-expo)}
@@ -145,23 +164,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .cta--ondark.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cta--ondark.primary:hover{background:transparent;color:var(--paper)}
 
-/* 追従ヘッダー — recruit.html と同じ方式。スクロールでヘッダー全体は隠さず、
-   is-compact でロゴとナビを畳み、CTA（カジュアル面談・エントリー）だけを
-   角丸ピルの背景で右上に残す。 */
-.site-header{position:fixed;inset:0 0 auto 0;z-index:100;background:transparent;
-  transition:background-color .4s ease}
-/* FV が全面写真になったため、最上部ではヘッダーを透過して白抜きにする。
-   スクロールした時点(is-scrolled)で白背景・黒文字に戻す。 */
-.site-header:not(.is-scrolled) .logo{color:#fff}
-.site-header:not(.is-scrolled) .header-nav a{color:#fff}
-.site-header:not(.is-scrolled) .header-cta .cta{border-color:#fff;color:#fff}
-.site-header:not(.is-scrolled) .header-cta .cta:hover{background:#fff;color:var(--ink)}
-.site-header:not(.is-scrolled) .header-cta .cta.primary{background:#fff;color:var(--ink)}
-.site-header:not(.is-scrolled) .header-cta .cta.primary:hover{background:transparent;color:#fff}
-.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.site-header.is-compact{background:transparent}
-.site-header.is-compact.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none}
-.site-header.is-compact .logo{width:0;opacity:0;pointer-events:none}
+/* 追従ヘッダー。導線がテキストボタン2本だけになったので、ロゴとナビを畳む
+   is-compact は廃止した。スクロール後は必ず地色を持たせる（透過のままだと
+   文字が本文に重なって読めなくなる）。 */
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between}
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink);overflow:hidden;
@@ -169,37 +174,42 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 .footer .logo{width:131px;height:16.87px}
-/* 13px の欧文大文字＋字送り .1em。語の中がゆるいぶん、語間は
-   キャップハイトの約4倍(=40px)まで開けないと語の切れ目が読めない。
-   リンク群とボタン群は別のまとまりなので、そこは更に離す。 */
-.header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;
-  overflow:hidden;max-width:720px;opacity:1;white-space:nowrap;
-  transition:max-width .45s var(--ease-out-expo),opacity .3s ease,padding .45s var(--ease-out-expo)}
-.site-header.is-compact .header-nav{max-width:0;opacity:0;padding-right:0}
-/* 当たり判定を上下に広げる。margin で相殺するのでヘッダーの高さは変わらない。
-   下線は ::after の bottom で文字のすぐ下に戻す(padding 16 - 元の 4 = 12px)。 */
-.header-nav a{position:relative;padding:16px 0;margin:-12px 0;font-family:var(--font-disp);
-  font-weight:500;font-size:13px;letter-spacing:.1em;line-height:1;color:var(--ink);text-decoration:none}
-.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:1px;background:var(--ink);
-  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-hover) var(--ease-out-expo)}
-@media (hover:hover){.header-nav a:hover::after{transform:scaleX(1);transition-duration:.4s}}
-/* ピルの padding は常設し、margin で相殺して非スクロール時の位置を変えない。
-   is-compact では背景と影だけを点ける（ボタンの位置・サイズは不変）。 */
-.header-cta{display:flex;align-items:center;gap:10px;flex:none;
-  margin:-12px -20px -12px 0;padding:12px 20px;border-radius:999px;background:transparent;
-  box-shadow:0 8px 24px rgba(13,13,14,0);
-  transition:background-color .3s ease,box-shadow .3s ease}
-.site-header.is-compact .header-cta{background:rgba(251,250,248,.96);
-  box-shadow:0 8px 24px rgba(13,13,14,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.header-cta .cta{padding:9px 18px;font-size:12px}
+/* ヘッダーの導線はカジュアル面談とエントリーの2本だけ。丸ボタンは使わず、
+   本文中のリンクと同じテキストボタン（.tlink）に統一する。 */
+.header-cta{display:flex;align-items:center;gap:32px;margin-left:auto;flex:none}
+.tlink--head{font-size:14px}
+/* 暗い面の上に乗るときは白抜き。地色は下の .site-header--ondark で切り替える */
+.site-header--ondark .logo{color:#fff}
+.site-header--ondark .tlink--head{color:#fff}
+.site-header--ondark .tlink--head .circ{background:#fff;color:var(--ink)}
+
+/* TOPに戻る。コーポレートと同じ 64px・角丸4px の四角。明るい面では黒地に
+   白矢印、暗い面ではすりガラス。ホバーでアクセントが左から満ちる。 */
+.to-top{position:fixed;z-index:90;right:max(24px,calc(50vw - 720px + 40px));bottom:40px;
+  width:64px;height:64px;border:1px solid transparent;border-radius:4px;background:var(--ink);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate;
+  cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo),
+    background-color .3s ease,color .3s ease,border-color .3s ease}
+.to-top.is-on{opacity:1;transform:none;pointer-events:auto}
+.to-top::after{content:"";position:absolute;inset:0;z-index:0;background:var(--accent);
+  transform:scaleX(0);transform-origin:left center;transition:transform .4s cubic-bezier(.16,.5,.25,1)}
+.to-top svg{position:relative;z-index:1;width:20px;height:20px;display:block}
+/* 暗い帯の上ではすりガラス。後ろの内容がうっすら透ける */
+.to-top.is-inverted{background:rgba(255,255,255,.1);border-color:transparent;color:rgba(255,255,255,.88);
+  backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
+@media (hover:hover){
+  .to-top:hover{color:var(--ink);border-color:var(--accent)}
+  .to-top:hover::after{transform:scaleX(1)}
+}
 
 /* セクション */
 /* 帯の上下：Merit 96/80・魅力 66/0・Career 108/120・FAQ 96、Company / Contents は80px（Figma実測）*/
-.sec{padding:96px var(--gutter)}
-#company,#contents{padding:80px var(--gutter)}
-#merit{padding-bottom:80px}
-.appeal{padding:66px var(--gutter) 0}
-#career{padding-top:108px;padding-bottom:120px}
+.sec{padding:160px var(--gutter)}
+#company{padding:160px var(--gutter)}
+#merit{padding-bottom:140px}
+.appeal{padding:120px var(--gutter) 0}
+#career{padding-top:160px;padding-bottom:180px}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 .sec--dark{background:var(--ink);color:var(--paper)}
@@ -224,11 +234,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .hero h1{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1.6;margin:0;color:var(--paper)}
 /* 見出しの上の小ラベル（Figma 186:8。リード段落は廃止） */
 .hero .fv-eyebrow{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:0 0 8px}
-.hero .row{display:flex;gap:24px;margin-top:40px;flex-wrap:wrap}
-.hero .cta{height:35px;padding:0 25px;font-size:13px;border-color:#fff;border-width:2px;color:var(--paper)}
-.hero .cta:hover{background:var(--paper);color:var(--ink)}
-.hero .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
-.hero .cta.primary:hover{background:transparent;color:var(--paper)}
+.hero .row{display:flex;gap:40px;margin-top:48px;flex-wrap:wrap}
 
 /* 斜めの帯。スクロール追従は .sl-wrap、登場アニメは .slice と、動かす層を分ける。
    1つの要素に両方の transform を持たせると上書きし合うため。 */
@@ -250,7 +256,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 写真の入れ替え。clip-path の点の数を変えずに4点を動かすことで、
    「斜めの辺が左から右へ抜ける」形のワイプになる（transition が効く）。 */
 .ly{position:absolute;inset:0;clip-path:polygon(-23% 100%, -23% 100%, -1% 0%, -1% 0%)}
-.ly img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+/* 暗い帯の上の仮画像。明るい灰のままだと帯から浮くので地に寄せる */
+.hero .ph,.bb-photo .ph{background:#383838;color:#8c8c8c}
 .ly.is-on{clip-path:polygon(-23% 100%, 121% 100%, 143% 0%, -1% 0%);
   transition:clip-path 1.5s var(--ease-in-out-circ)}
 /* 出ていく1枚は開いたまま下に敷いて待たせる。閉じさせると
@@ -260,10 +267,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .ly--vid{z-index:4}
 .b-inner{position:absolute;inset:-8%}
 .b-inner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-/* 動画が入るまでは静止画をゆっくり動かして代用する。
+/* 動画が入るまでは仮画像をゆっくり動かして代用する。
    mp4 に差し替えたら、この animation は動画側の動きに任せて外してよい。 */
-.b-inner img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;
-  animation:fv-kb 22s var(--ease-in-out-circ) infinite alternate}
+.b-inner .ph{animation:fv-kb 22s var(--ease-in-out-circ) infinite alternate}
 @keyframes fv-kb{from{transform:scale(1) translate(0,0)}to{transform:scale(1.1) translate(-2%,-1.5%)}}
 /* 下端の SCROLL 表示。線が上から下へ落ちるのを繰り返し、
    スクロールが始まったら --sp に応じて消える。 */
@@ -284,8 +290,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* Message：帯は上74/下54。eyebrow→見出し→本文が 40px、本文→リンクが 60px（Figma実測）*/
 /* c-about の Our Purpose と同じ組み。中央揃えをやめて左寄せにし、
    ラベル→見出しを 8px で束ね、見出し→本文を 40px 空ける。 */
-.msg-sec{padding:120px var(--gutter)}
-.msg{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:40px}
+.msg-sec{padding:180px var(--gutter)}
+.msg{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:48px}
 .msg .msg-title{display:flex;flex-direction:column;gap:8px}
 /* 本文は 16px / 行間1.8 / 字送り1.6px。段落間は空白行1本ぶん（16×1.2）。 */
 .msg .body-tx{font-size:16px;letter-spacing:1.6px;line-height:1.8;color:#3a3a40;max-width:660px}
@@ -294,50 +300,123 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 /* 03 Merit：FACT / MEANING / BENEFIT */
 /* Merit：6枚とも同じ高さ(298px)に揃え、中身は天地中央。間隔は縦横とも24px */
-.merit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:32px}
-.merit{background:var(--paper);border-radius:0;padding:0 24px;min-height:298px;
-  display:flex;flex-direction:column;justify-content:center;gap:20px}
-.sec--paper .merit{background:var(--tone)}
-/* 番号は見出しと同じ 20px。太さだけ Regular で落とす（Figma実測）*/
-.merit-no{font-family:var(--font-en);font-weight:400;font-size:20px;letter-spacing:.035em;
-  line-height:1.3;color:var(--ink);flex:none}
-.merit h3{font-weight:700;font-size:20px;letter-spacing:.1em;line-height:1.6;margin:0}
-.merit-head{display:flex;align-items:baseline;gap:12px}
-.fmb{display:flex;flex-direction:column;gap:12px;margin:0}
-.fmb-row{display:grid;grid-template-columns:102px minmax(0,1fr);gap:0 35px;align-items:stretch}
-/* ラベルはグレーの札。本文が何行に折れても行の高さいっぱいまで伸ばす */
-.fmb-k{display:flex;align-items:center;justify-content:center;min-height:43px;
-  background:#efefef;border-radius:2px;
-  font-family:var(--font-en);font-weight:700;font-size:11px;letter-spacing:.14em;
-  line-height:1.9;color:var(--caption)}
-.fmb-v{align-self:center;font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
-/* 3段の終着点なので、BENEFIT の札だけエメラルドにする。
-   FACT / MEANING はグレーのまま残さないと、どこが結論か分からなくなる。 */
-.fmb-row.is-benefit .fmb-k{background:var(--accent);color:#fff}
-.fmb-row.is-benefit .fmb-v{color:var(--ink);font-weight:700}
+/* 03 Merit：コーポレートの PRODUCT LINEUP と同じ作り。
+   見出しが定位置に粘着し、その下で横長カードが1枚ずつ重なって出てくる。
+   カードはすべて同じ位置・同じ寸法で sticky するので、次の1枚が前を覆う。 */
+.mrt{position:relative;background:var(--ink);color:var(--paper);padding:160px 0 0}
+.mrt-intro{padding:0 var(--gutter)}
+.mrt-intro .h2{color:var(--paper)}
+.mrt-intro .lead{margin-top:32px;max-width:780px;color:rgba(255,255,255,.72)}
+/* 粘着する見出し。静止時はグレーで、地に沈ませる */
+.mrt-title{position:sticky;top:120px;z-index:1;width:100%;margin:160px 0 48px;text-align:center}
+.mrt-word{position:relative;display:inline-block;font-family:var(--font-label);font-weight:400;font-size:40px;
+  letter-spacing:4.4px;line-height:64px;color:#5a5a5e}
+/* 一度だけ左から右へ光帯が走る。静止時はグレーのまま地に沈める */
+.mrt-word::after{content:attr(data-text);position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(90,90,94,0) 0%,rgba(255,255,255,.92) 46%,
+    var(--accent) 56%,rgba(90,90,94,0) 100%);
+  background-size:220% 100%;background-position:210% 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;pointer-events:none}
+.mrt-title.is-inview .mrt-word::after{animation:mrtSweep 1.7s cubic-bezier(.54,0,0,.99) .25s both}
+@keyframes mrtSweep{from{background-position:210% 0}to{background-position:-110% 0}}
+.mrt-stack{position:relative}
+/* 見出し(120+64)の40px下に粘着させる */
+.mrt-card{position:sticky;top:224px;z-index:2;display:flex;
+  width:min(1340px,calc(100% - 100px));height:523px;margin:0 auto 40px;
+  background:#141416;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.mrt-card:last-child{margin-bottom:0}
+.mrt-txt{flex:none;width:770px;padding:44px 48px;display:flex;flex-direction:column}
+.mrt-num{margin:0;font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:2.4px;
+  color:rgba(255,255,255,.8)}
+.mrt-h{margin:16px 0 0;font-weight:700;font-size:26px;letter-spacing:2.4px;line-height:1.5;color:#fff}
+.mrt-txt .fmb{margin-top:36px;display:flex;flex-direction:column;gap:16px}
+.mrt-ph{flex:1 1 auto;position:relative}
+/* 黒地の上のグレー面。明るい灰のままだとカードから浮く */
+.mrt-ph .ph{background:#232326;color:#7b7b80}
+/* 黒地のカードに合わせて FACT / MEANING / BENEFIT の札を反転させる */
+.mrt-card .fmb-k{background:rgba(255,255,255,.12);color:rgba(255,255,255,.72)}
+.mrt-card .fmb-v{color:rgba(255,255,255,.8)}
+.mrt-card .fmb-row.is-benefit .fmb-k{background:var(--accent);color:#fff}
+.mrt-card .fmb-row.is-benefit .fmb-v{color:#fff}
 
-/* 03b 魅力カード：branch-col の変種。高さ216固定・中身は幅333で天地中央 */
-/* 3枚のカードの前に横長の写真を1枚置く。カード6枚それぞれに付けると
-   情報が増えすぎるので、CA / RA のまとまりごとに1枚だけにする。 */
-.appeal-band{position:relative;margin-top:24px;border-radius:4px;overflow:hidden;
-  aspect-ratio:1171/240;background:var(--fill2)}
-.appeal-band img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
-.appeal-col{height:216px;align-items:center;justify-content:center}
-.appeal-col .in{width:333px}
-.appeal-col .in h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 16px}
-.appeal-col .in ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-.appeal-col .in li{position:relative;padding-left:15px;font-size:12px;letter-spacing:.06em;line-height:1.8;color:var(--caption)}
-.appeal-col .in li::before{content:"";position:absolute;left:0;top:8.5px;width:5px;height:5px;border-radius:50%;background:#d9d9d9}
+/* 03b 職種別の魅力：写真をやめ、円の囲みの中に抽象的な背景を置く。
+   Merit から続けて黒地にし、「働く魅力」をひとつの黒い章としてまとめる。 */
+.appeal{background:var(--ink);color:var(--paper);padding:180px var(--gutter) 200px}
+.appeal .h3{color:var(--paper);text-align:center}
+.appeal .h3 + .orbs{margin-top:80px}
+.appeal .h3--gap{margin-top:160px}
+/* 円は少しずつ重ねて並べる。重なりが「つながっている」印象をつくる */
+.orbs{display:flex;justify-content:center}
+.orb{position:relative;width:340px;flex:none}
+.orb + .orb{margin-left:-63px}
+/* ホバーで満ちる塗り。上方がわずかに明るいダークティールのラジアル */
+.orb::before{content:"";position:absolute;top:0;left:0;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(46% 42% at 32% 26%,rgba(0,169,173,.5),rgba(0,169,173,0) 70%),
+             radial-gradient(60% 60% at 70% 78%,rgba(0,169,173,.22),rgba(13,13,14,0) 72%),
+             radial-gradient(80% 80% at 50% 50%,rgba(28,52,54,.9),rgba(13,13,14,.9));
+  opacity:0;transform:scale(.96);
+  transition:opacity .7s var(--ease-out-expo),transform .7s var(--ease-out-expo)}
+/* 円周の線。スクロールインで上から時計回りに描かれる */
+.orb .ring{position:relative;display:block;width:340px;height:340px;
+  transition:transform .7s var(--ease-out-expo)}
+.orb .ring circle{fill:none;stroke:rgba(255,255,255,.28);stroke-width:1;
+  stroke-dasharray:1065;stroke-dashoffset:1065;transform:rotate(-90deg);transform-origin:center;
+  transition:stroke-dashoffset 1.4s var(--ease-out-expo),stroke .5s ease}
+.orbs.is-inview .orb:nth-child(1) circle{stroke-dashoffset:0}
+.orbs.is-inview .orb:nth-child(2) circle{stroke-dashoffset:0;transition-delay:.12s}
+.orbs.is-inview .orb:nth-child(3) circle{stroke-dashoffset:0;transition-delay:.24s}
+/* 円の中の抽象イメージ。写真の代わりなので、主張させず地に沈める */
+.orb .deco{position:absolute;top:0;left:0;width:340px;height:340px;pointer-events:none;
+  opacity:.28;transition:opacity .7s var(--ease-out-expo)}
+.orb .deco .arc path{fill:none;stroke:rgba(255,255,255,.5);stroke-width:1}
+.orb .deco .dot circle{fill:var(--accent)}
+/* 3要素は全円で同じ基準線に揃える（英字84 / 見出しは円の中央 / 矢印272） */
+.orb .in{position:absolute;inset:0 0 auto 0;height:340px;text-align:center}
+.orb .en{position:absolute;top:84px;left:0;right:0;font-family:var(--font-label);font-weight:400;
+  font-size:11px;letter-spacing:2.2px;line-height:1.6;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.orb .en b{font-weight:400;color:var(--accent)}
+.orb .in h4{position:absolute;top:170px;left:0;right:0;transform:translateY(-50%);margin:0;padding:0 56px;
+  font-weight:700;font-size:18px;letter-spacing:1.8px;line-height:1.7;color:#fff}
+/* 矢印は窓の中でスワップする（1本目が右へ抜け、2本目が左から入る） */
+.orb .go{position:absolute;top:272px;left:50%;transform:translateX(-50%);display:block;
+  width:14px;height:9px;overflow:hidden;color:rgba(255,255,255,.7);transition:color .5s var(--ease-out-expo)}
+.orb .go svg{display:block;width:14px;height:9px;transition:transform .55s var(--ease-out-expo)}
+.orb .go svg + svg{position:absolute;top:0;left:0;transform:translateX(calc(-100% - 8px))}
+.orb .cap{list-style:none;margin:24px auto 0;padding:0;max-width:250px;
+  display:flex;flex-direction:column;gap:8px;text-align:left}
+.orb .cap li{position:relative;padding-left:14px;font-size:13px;letter-spacing:.7px;line-height:1.7;
+  color:rgba(255,255,255,.45);transition:color .5s var(--ease-out-expo)}
+.orb .cap li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;
+  background:rgba(255,255,255,.3)}
+@media (hover:hover){
+  .orb:hover{z-index:1}
+  .orb:hover::before{opacity:1;transform:scale(1.05)}
+  .orb:hover .ring{transform:scale(1.05)}
+  /* 塗りが満ちたら輪郭線は消す（線と塗りが二重にならないように） */
+  .orb:hover .ring circle{stroke:rgba(255,255,255,0)}
+  .orb:hover .deco{opacity:.5}
+  .orb:hover .go{color:var(--accent)}
+  .orb:hover .go svg:first-child{transform:translateX(calc(100% + 8px))}
+  .orb:hover .go svg + svg{transform:translateX(0)}
+  .orb:hover .cap li{color:rgba(255,255,255,.72)}
+}
+@media (prefers-reduced-motion:reduce){
+  .orb .ring circle{stroke-dashoffset:0 !important}
+}
 
-/* セクション内の小見出しの上余白。もとは 56/70/80px と場所ごとに違っていたが、
-   同じ役割の見出しなので 80px に揃える（Figma の実測値からは意図的に外している）。 */
-.h3--gap{margin-top:80px}
+
+/* セクション内の小見出し。上は前のかたまりと切るために大きく、
+   下は自分の中身と束ねるために小さく取る（上下を同じにすると
+   どのかたまりに属する見出しか読めなくなる）。 */
+.h3--gap{margin-top:140px}
+.h3 + *{margin-top:40px}
+.head-block + .lead{margin-top:32px}
 
 /* 04 Career：枝分かれ */
-.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
+.branch{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 /* ラベル→見出しは締めて一つの束に、見出し→項目は開けて別の束に見せる */
 /* Figma 実測：#f4f4f4・角丸4・padding 20/24。ラベル→見出し4px、見出し→リスト16px */
-.branch-col{background:var(--tone);border-radius:4px;padding:20px 24px;display:flex;flex-direction:column;gap:0}
+.branch-col{background:var(--tone);border-radius:4px;padding:32px;display:flex;flex-direction:column;gap:0}
 .sec--tone .branch-col{background:var(--paper)}
 .branch-en{font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:.2em;
   line-height:1.6;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
@@ -355,19 +434,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .branch-head .from-ic svg{width:100%;height:100%;display:block}
 .branch-head .from{font-family:var(--font-en);font-weight:700;font-size:13px;
   letter-spacing:.16em;line-height:1.6;color:var(--ink)}
-.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:24px}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
 .skill{border-top:1px solid var(--line);padding-top:16px}
 .skill h4{font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;margin:0 0 6px}
 .skill p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* メンバー */
-.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
+.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 /* 画像 → 見出し → 人物 → 変化 → リンク。同じ間隔で並べると全部が
    一つの塊に見えるので、束ごとに間隔と文字の強さを変える。 */
-.member{display:flex;flex-direction:column;gap:20px}
-/* 人物なので、天地中央だと顔が下に寄る。少し上を見せる */
-.member .media{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:4px;background:var(--fill2)}
-.member .media img{position:absolute;inset:0;display:block;width:100%;height:100%;
-  object-fit:cover;object-position:50% 28%}
+.member{display:flex;flex-direction:column;gap:24px}
+.member .media{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:4px}
 .member .ph{aspect-ratio:4/3}
 .m-body{display:flex;flex-direction:column}
 /* 一番強い段。ここだけ他より一回り大きくして主役にする */
@@ -426,9 +502,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   will-change:transform}
 .bb-panel{width:600px;flex:none;display:flex;flex-direction:column;gap:16px;text-decoration:none;color:inherit}
 .bb-photo{position:relative;height:253px;overflow:hidden;border-radius:4px;background:#1a1a1c}
-.bb-photo img{display:block;width:100%;height:100%;object-fit:cover;
-  transition:transform 1.2s var(--ease-out-expo)}
-@media (hover:hover){.bb-panel:hover .bb-photo img{transform:scale(1.04);transition-duration:.7s}}
+.bb-photo .ph{transition:transform 1.2s var(--ease-out-expo)}
+@media (hover:hover){.bb-panel:hover .bb-photo .ph{transform:scale(1.04);transition-duration:.7s}}
 .bb-cap{display:flex;align-items:flex-start;gap:16px}
 .bb-cap-l{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
 /* パネルの見出しは欧文を主、和文を従にする（会社概要の CITY / 拠点名と同じ関係） */
@@ -451,12 +526,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 08 FAQ：コーポレートの News と同じ行リスト。左に通し番号、
    本文は「質問（太）＋回答」の2段、行間は罫線で区切る。
    開閉は持たず、ホバーで行の下辺にインクの線を引くだけにする。 */
-.faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
-.faq-cat + .faq-cat{margin-top:70px}
-.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 32px}
-.faq-list{display:flex;flex-direction:column;gap:40px}
+.faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:64px}
+.faq-cat + .faq-cat{margin-top:96px}
+.faq-cat-ttl{font-weight:700;font-size:22px;letter-spacing:.1em;line-height:1.6;margin:0 0 40px}
+.faq-list{display:flex;flex-direction:column;gap:48px}
 /* News の行と同じ骨格：番号列 85px ＋ gap 60px ＋ 本文 */
-.faq-qa{position:relative;display:flex;align-items:flex-start;gap:60px;padding:0 0 24px}
+.faq-qa{position:relative;display:flex;align-items:flex-start;gap:60px;padding:0 0 32px}
 .faq-no{width:85px;flex:none;font-family:var(--font-label);font-weight:400;line-height:1}
 .faq-no .k{display:block;font-size:14px;letter-spacing:.7px;color:var(--caption)}
 .faq-no .n{display:block;margin-top:8px;font-size:20px;letter-spacing:2px}
@@ -540,16 +615,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <path d="M86.5374 0.0193693C88.8405 0.0193693 91.124 1.18074 92.1245 3.34457L89.741 4.68642C89.0603 3.48386 88.0186 2.76389 86.4158 2.76389C84.1519 2.76389 82.5511 4.60599 82.5511 7.05035C82.5511 9.57319 84.1735 11.3564 86.5374 11.3564C87.8597 11.3564 88.8209 11.0151 89.4408 10.3756L89.433 9.21026H87.5556V6.35785H92.2638V9.21026V11.3584C91.2829 12.8395 89.1995 14.0225 86.5355 14.0225C82.5903 14.0225 79.5457 10.8974 79.5457 7.01308C79.5457 3.12877 82.5511 0.0193693 86.5374 0.0193693Z" fill="currentColor"/>
       </g>
     </svg></a>
-    <nav class="header-nav">
-      <a href="#merit">MERIT</a>
-      <a href="#career">CAREER</a>
-      <a href="#company">COMPANY</a>
-      <a href="#contents">CONTENTS</a>
-      <a href="#faq">FAQ</a>
-    </nav>
     <div class="header-cta">
-      <span class="cta">カジュアル面談</span>
-      <span class="cta primary">エントリー</span>
+      <a class="tlink tlink--head" href="#"><span class="label">カジュアル面談</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <a class="tlink tlink--head" href="#"><span class="label">エントリー</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
     </div>
   </div>
 </header>
@@ -565,33 +633,31 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="line"><span>自分のキャリアを広げる。</span></span>
       </h1>
       <div class="row" data-reveal data-delay="0.5">
-        <span class="cta">カジュアル面談を申し込む</span>
-        <span class="cta primary">エントリー</span>
+        <a class="tlink tlink--ondark" href="#"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="tlink tlink--ondark" href="#"><span class="label">エントリー</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
       </div>
     </div>
 
     <div class="hero-media" aria-hidden="true">
       <div class="b-wrap">
-        <!-- imgs/fv/ の写真は Openverse 経由の CC0 素材。ワイヤーフレーム確認用の
-             仮当てなので、公開前に必ず自社の撮影素材へ差し替えること。 -->
         <!-- 左の帯：写真を斜めワイプで入れ替える。順序は
              面談 → 企業とのやり取り → 送り出した先の現場 → チーム → 街へ抜ける引き。
              前半で「人のキャリアを動かす」、後半で「自分のキャリアが広がる」。 -->
         <div class="sl-wrap sw-a"><div class="slice sl-a">
-          <div class="ly is-on"><img src="imgs/fv/01-interview.jpg" alt=""></div>
-          <div class="ly"><img src="imgs/fv/02-desk.jpg" alt=""></div>
-          <div class="ly"><img src="imgs/fv/03-field.jpg" alt=""></div>
-          <div class="ly"><img src="imgs/fv/04-team.jpg" alt=""></div>
-          <div class="ly"><img src="imgs/fv/05-city.jpg" alt=""></div>
+          <div class="ly is-on"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="ly"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="ly"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="ly"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="ly"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         </div></div>
         <!-- 右の帯：動画。コピーに被らない側なので、動かすのはこちらだけにする。 -->
         <div class="sl-wrap sw-b"><div class="slice sl-b">
           <div class="ly ly--vid is-on">
             <div class="b-inner">
               <!-- 動画ができたら、この img を差し替える：
-                   <video src="imgs/fv/movie.mp4" poster="imgs/fv/movie-poster.jpg"
+                   <video src="imgs/fv-movie.mp4" poster="imgs/fv-movie.jpg"
                           autoplay muted loop playsinline></video> -->
-              <img src="imgs/fv/movie-poster.jpg" alt="">
+              <div class="ph"><i>VISUAL ASSETS</i></div>
             </div>
           </div>
         </div></div>
@@ -611,123 +677,162 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <div data-reveal data-delay="0.15">
         <!-- 改行位置は読みの区切りに合わせて明示する（参考サイトと同じ組み方） -->
-        <p class="body-tx">日本の食・宿泊産業が元気であれば、<br>日本は世界で高い価値を発揮できる。<br>だから私たちは、その産業を支える<br>「人」の採用・就業を支援しています。</p>
-        <p class="body-tx">Cuolegaのセールスは、求職者一人の次の一歩や、<br>受け入れる企業の未来に関わる仕事です。</p>
+        <p class="body-tx" data-fade data-observe>日本の食・宿泊産業が元気であれば、<br>日本は世界で高い価値を発揮できる。<br>だから私たちは、その産業を支える<br>「人」の採用・就業を支援しています。</p>
+        <p class="body-tx" data-fade data-observe>Cuolegaのセールスは、求職者一人の次の一歩や、<br>受け入れる企業の未来に関わる仕事です。</p>
       </div>
       <a class="tlink" href="#" target="_blank" rel="noopener"><span class="label">About Cuolega</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
     </div>
   </section>
 
-  <!-- ============ 03 Merit ============ 最重要。事実→意味→求職者にとっての価値 の3段で示す -->
-  <section class="sec sec--tone" id="merit">
-    <div class="head-block" data-reveal>
-      <p class="eyebrow">Merit</p>
-      <h2 class="h2">Cuolegaでセールスとして働く魅力<span class="h2-sub">（IS・FS共通）</span></h2>
+    <!-- ============ 03 Merit ============ 最重要。事実→意味→求職者にとっての価値 の3段で示す。
+       コーポレートの PRODUCT LINEUP と同じ、見出しが粘着して下でカードが1枚ずつ重なる形 -->
+  <section class="mrt" id="merit">
+    <div class="mrt-intro">
+      <div class="head-block" data-reveal>
+        <p class="eyebrow">Merit</p>
+        <h2 class="h2" data-words data-observe>Cuolegaでセールスとして働く魅力<span class="h2-sub">（IS・FS共通）</span></h2>
+      </div>
+      <p class="lead" data-fade data-delay="0.08">制度や環境を売り込むのではなく、事実と、その事実が持つ意味を並べます。</p>
     </div>
-    <p class="lead" data-reveal data-delay="0.08" style="margin-top:24px;max-width:780px">制度や環境を売り込むのではなく、事実と、その事実が持つ意味を並べます。</p>
-    <div class="merit-grid" data-stagger data-observe>
-      <article class="merit"><div class="merit-head"><span class="merit-no">01</span><h3>誰もが知っている企業がクライアントに</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">飲食・ホテル業界に特化したFoodsLabo／HotelsLaboを運営し、誰もが知っているレストラン・ホテルがクライアントに並ぶ。</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">プライベートでも日常的に触れている、身近な業界を担当することになる。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">他業界と比べて担当先に愛着を持ちやすく、働きがいにつながる。</p></div>
-        </div>
-      </article>
-      <article class="merit"><div class="merit-head"><span class="merit-no">02</span><h3>成果が処遇に返るまでが早い</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">評価は年4回（四半期ごと）の査定。定量評価と定性評価からQ評価を確定し、次のQの給与に反映する。</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">3ヶ月サイクルなので目標設定と振り返りのリズムが合い、軌道修正が早い。四半期前には評価項目の説明会も実施。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">年齢や社歴に関係なく、結果を出せば処遇に返るまでが早い。</p></div>
-        </div>
-      </article>
-      <article class="merit"><div class="merit-head"><span class="merit-no">03</span><h3>無形商材の面白さ</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">扱うのは人材という無形商材。物件や商品のように「モノありき」で判断されることがない。</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">商品の良し悪しではなく、営業担当者としての介在価値で勝負が決まる。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">自分自身が商品になる。コンサルティング力・提案力がそのまま成果に直結する。</p></div>
-        </div>
-      </article>
-      <article class="merit"><div class="merit-head"><span class="merit-no">04</span><h3>マネジメント機会と昇格スピード</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">社員の新卒比率は60%。FoodsLabo・HotelsLabo・Cuoport Japanの各事業で、拠点責任者・エリア責任者・事業マネージャーなどのポジションが継続的に生まれている。</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">中途入社で結果を出せば、早い段階でマネジメント側の役割が回ってくる。1年でマネージャーへ昇格した例もある。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">主力事業のグロースと新規事業の両方にチャンスがあり、裁量とカバー範囲が広い。</p></div>
-        </div>
-      </article>
-      <article class="merit"><div class="merit-head"><span class="merit-no">05</span><h3>スピード感＝成長スピード</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">面談から入社・売上計上までが1〜3週間。一般的な3〜6ヶ月と比べてリードタイムが極めて短い。</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">リードタイムの短さがそのまま試行回数の多さになり、短期間で成功体験を積める。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">同じHR業界でも成果の即時性が高く、営業としての成長サイクルが速く回る。</p></div>
-        </div>
-      </article>
-      <article class="merit"><div class="merit-head"><span class="merit-no">06</span><h3>未経験から活躍できるオンボーディング</h3></div>
-        <div class="fmb">
-          <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">不動産営業、塾講師・教室長、ウエディングプランナー、旅行代理店、保険営業など、未経験でも活躍している人が多数</p></div>
-          <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">前職が多様であることを前提に、立ち上がりを支えるオンボーディング体制が組まれている。</p></div>
-          <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">塾講師出身の中途社員が入社1年目から連続で売上目標を達成するなど、未経験でも1年以内に中核として結果を出せる。</p></div>
-        </div>
-      </article>
+    <h2 class="mrt-title" data-observe><span class="mrt-word" data-text="MERIT">MERIT</span></h2>
+    <div class="mrt-stack">
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 01</p>
+            <h3 class="mrt-h" data-words data-observe>誰もが知っている企業がクライアントに</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">飲食・ホテル業界に特化したFoodsLabo／HotelsLaboを運営し、誰もが知っているレストラン・ホテルがクライアントに並ぶ。</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">プライベートでも日常的に触れている、身近な業界を担当することになる。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">他業界と比べて担当先に愛着を持ちやすく、働きがいにつながる。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 02</p>
+            <h3 class="mrt-h" data-words data-observe>成果が処遇に返るまでが早い</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">評価は年4回（四半期ごと）の査定。定量評価と定性評価からQ評価を確定し、次のQの給与に反映する。</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">3ヶ月サイクルなので目標設定と振り返りのリズムが合い、軌道修正が早い。四半期前には評価項目の説明会も実施。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">年齢や社歴に関係なく、結果を出せば処遇に返るまでが早い。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 03</p>
+            <h3 class="mrt-h" data-words data-observe>無形商材の面白さ</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">扱うのは人材という無形商材。物件や商品のように「モノありき」で判断されることがない。</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">商品の良し悪しではなく、営業担当者としての介在価値で勝負が決まる。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">自分自身が商品になる。コンサルティング力・提案力がそのまま成果に直結する。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 04</p>
+            <h3 class="mrt-h" data-words data-observe>マネジメント機会と昇格スピード</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">社員の新卒比率は60%。FoodsLabo・HotelsLabo・Cuoport Japanの各事業で、拠点責任者・エリア責任者・事業マネージャーなどのポジションが継続的に生まれている。</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">中途入社で結果を出せば、早い段階でマネジメント側の役割が回ってくる。1年でマネージャーへ昇格した例もある。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">主力事業のグロースと新規事業の両方にチャンスがあり、裁量とカバー範囲が広い。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 05</p>
+            <h3 class="mrt-h" data-words data-observe>スピード感＝成長スピード</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">面談から入社・売上計上までが1〜3週間。一般的な3〜6ヶ月と比べてリードタイムが極めて短い。</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">リードタイムの短さがそのまま試行回数の多さになり、短期間で成功体験を積める。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">同じHR業界でも成果の即時性が高く、営業としての成長サイクルが速く回る。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
+        <article class="mrt-card">
+          <div class="mrt-txt">
+            <p class="mrt-num">MERIT 06</p>
+            <h3 class="mrt-h" data-words data-observe>未経験から活躍できるオンボーディング</h3>
+            <div class="fmb">
+            <div class="fmb-row"><span class="fmb-k">FACT</span><p class="fmb-v">不動産営業、塾講師・教室長、ウエディングプランナー、旅行代理店、保険営業など、未経験でも活躍している人が多数</p></div>
+            <div class="fmb-row"><span class="fmb-k">MEANING</span><p class="fmb-v">前職が多様であることを前提に、立ち上がりを支えるオンボーディング体制が組まれている。</p></div>
+            <div class="fmb-row is-benefit"><span class="fmb-k">BENEFIT</span><p class="fmb-v">塾講師出身の中途社員が入社1年目から連続で売上目標を達成するなど、未経験でも1年以内に中核として結果を出せる。</p></div>
+            </div>
+          </div>
+          <div class="mrt-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        </article>
     </div>
   </section>
 
-  <!-- ============ 03b 職種別の魅力 ============ CA / RA それぞれ3枚（Figma 186:702 / 186:648） -->
-  <section class="sec sec--paper appeal">
-    <h3 class="h3" data-reveal>クオレガのキャリアアドバイザーで働く魅力</h3>
-    <div class="appeal-band" data-reveal><img src="imgs/fv/appeal-ca.jpg" alt=""></div>
-    <div class="branch" data-stagger data-observe>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Value</span><h4>介在価値が生む最高の瞬間</h4>
-        <ul>
-          <li>本人も気づかない可能性を言語化する</li>
-          <li>センターピンを射抜くマッチング</li>
-          <li>一人では届かない企業情報を渡せる</li>
-        </ul>
-      </div></div>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Lifestyle</span><h4>「好き」と「仕事」が循環する</h4>
-        <ul>
-          <li>趣味の食べ歩きがそのまま知見になる</li>
-          <li>料理人・支配人など多様なプロと出会う</li>
-          <li>支援した人が街で活きる姿を見られる</li>
-        </ul>
-      </div></div>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Purpose</span><h4>業界課題の当事者になれる</h4>
-        <ul>
-          <li>業界の人手不足を採用で実際に解消する</li>
-          <li>インバウンドで伸びる成長産業が舞台</li>
-          <li>飲食とホテル両面で提案の幅が広がる</li>
-        </ul>
-      </div></div>
+    <!-- ============ 03b 職種別の魅力 ============ 写真は使わず、円の囲みの中に
+       抽象的な背景（弧と点）を置く。コーポレートの Features と同じ作り -->
+  <section class="appeal">
+    <h3 class="h3" data-words data-observe>クオレガのキャリアアドバイザーで働く魅力</h3>
+    <div class="orbs" data-stagger data-observe>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Value</b></span>
+            <h4>介在価値が生む最高の瞬間</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>本人も気づかない可能性を言語化する</li><li>センターピンを射抜くマッチング</li><li>一人では届かない企業情報を渡せる</li></ul>
+        </article>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Lifestyle</b></span>
+            <h4>「好き」と「仕事」が循環する</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>趣味の食べ歩きがそのまま知見になる</li><li>料理人・支配人など多様なプロと出会う</li><li>支援した人が街で活きる姿を見られる</li></ul>
+        </article>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Purpose</b></span>
+            <h4>業界課題の当事者になれる</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>業界の人手不足を採用で実際に解消する</li><li>インバウンドで伸びる成長産業が舞台</li><li>飲食とホテル両面で提案の幅が広がる</li></ul>
+        </article>
     </div>
-    <h3 class="h3 h3--gap" data-reveal>クオレガのリクルーティングアドバイザーで働く魅力</h3>
-    <div class="appeal-band" data-reveal><img src="imgs/fv/appeal-ra.jpg" alt=""></div>
-    <div class="branch" data-stagger data-observe>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Partner</span><h4>経営パートナーとして事業成長に効く</h4>
-        <ul>
-          <li>採用の壁で止まっていた店舗展開を直接加速できる</li>
-          <li>経営者・決裁者レイヤーとダイレクトに向き合える</li>
-          <li>「採用できたから新店を出せた」が最大の報酬</li>
-        </ul>
-      </div></div>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Consulting</span><h4>初回商談＝最重要コンサルの場</h4>
-        <ul>
-          <li>受注ではなく入社実績にこだわる成果報酬モデル</li>
-          <li>現状分析から課題設定を行い、期待感を創出する提案力</li>
-          <li>振り返りレポートでファクトベースの改善提案を継続</li>
-        </ul>
-      </div></div>
-      <div class="branch-col appeal-col"><div class="in">
-        <span class="branch-en">Marketing</span><h4>求人開拓から訴求設計まで一気通貫</h4>
-        <ul>
-          <li>新規開拓から採用決定までを自ら完結させる市場価値</li>
-          <li>競合求人との相対比較から訴求メッセージを設計する</li>
-          <li>飲食・ホテル両業界の商談経験がシナジーになる</li>
-        </ul>
-      </div></div>
+    <h3 class="h3 h3--gap" data-words data-observe>クオレガのリクルーティングアドバイザーで働く魅力</h3>
+    <div class="orbs" data-stagger data-observe>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Partner</b></span>
+            <h4>経営パートナーとして事業成長に効く</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>採用の壁で止まっていた店舗展開を直接加速できる</li><li>経営者・決裁者レイヤーとダイレクトに向き合える</li><li>「採用できたから新店を出せた」が最大の報酬</li></ul>
+        </article>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Consulting</b></span>
+            <h4>初回商談＝最重要コンサルの場</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>受注ではなく入社実績にこだわる成果報酬モデル</li><li>現状分析から課題設定を行い、期待感を創出する提案力</li><li>振り返りレポートでファクトベースの改善提案を継続</li></ul>
+        </article>
+        <article class="orb">
+          <svg class="ring" viewBox="0 0 340 340" aria-hidden="true"><circle cx="170" cy="170" r="169.5"/></svg><svg class="deco" viewBox="0 0 340 340" aria-hidden="true"><g class="arc"><path d="M60 170a110 110 0 0 1 220 0"/><path d="M92 170a78 78 0 0 0 156 0"/><path d="M170 44v252"/></g><g class="dot"><circle cx="60" cy="170" r="3"/><circle cx="280" cy="170" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="170" cy="296" r="3"/></g></svg>
+          <div class="in">
+            <span class="en"><b>Marketing</b></span>
+            <h4>求人開拓から訴求設計まで一気通貫</h4>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 9" fill="none"><path d="M0.5 4.5h12M9.4 1.2l3.3 3.3-3.3 3.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <ul class="cap"><li>新規開拓から採用決定までを自ら完結させる市場価値</li><li>競合求人との相対比較から訴求メッセージを設計する</li><li>飲食・ホテル両業界の商談経験がシナジーになる</li></ul>
+        </article>
     </div>
   </section>
 
@@ -735,16 +840,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec sec--paper" id="career">
     <div class="head-block" data-reveal>
       <p class="eyebrow">Career</p>
-      <h2 class="h2">キャリアの広がりと、歩んでいる人</h2>
+      <h2 class="h2" data-words data-observe>キャリアの広がりと、歩んでいる人</h2>
     </div>
-    <h3 class="h3 h3--gap" data-reveal>身につくもの</h3>
+    <h3 class="h3 h3--gap" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
       <div class="skill"><h4>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
       <div class="skill"><h4>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
       <div class="skill"><h4>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
       <div class="skill"><h4>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
     </div>
-    <h3 class="h3 h3--gap" data-reveal>この先の選択肢</h3>
+    <h3 class="h3 h3--gap" data-words data-observe>この先の選択肢</h3>
     <div class="branch" data-stagger data-observe>
       <div class="branch-col"><span class="branch-en">Player</span><h4>プレイヤーとして深める</h4>
         <ul>
@@ -768,9 +873,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </ul>
       </div>
     </div>
-    <h3 class="h3 h3--gap" data-reveal>活躍しているメンバー</h3>
+    <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
-      <article class="member"><div class="media"><img src="imgs/fv/member-a.jpg" alt=""></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member A</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -781,7 +886,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><img src="imgs/fv/member-b.jpg" alt=""></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member B</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -792,7 +897,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><img src="imgs/fv/member-c.jpg" alt=""></div>
+      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member C</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -812,14 +917,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2>まずは、キャリアについて話してみませんか</h2>
       <p>応募を決めていなくても構いません。仕事の実際や、この先のキャリアの話をする場です。</p>
     </div>
-    <div class="row"><span class="cta cta--ondark lg">カジュアル面談を申し込む</span></div>
+    <div class="row"><a class="tlink tlink--ondark" href="#"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
   </section>
 
   <!-- ============ 06 Company ============ 会社・事業・プロダクトをひとまとまりで -->
   <section class="sec sec--tone" id="company">
     <div class="head-block" data-reveal>
       <p class="eyebrow">Company</p>
-      <h2 class="h2">会社と事業について</h2>
+      <h2 class="h2" data-words data-observe>会社と事業について</h2>
     </div>
     <div class="co-grid" data-stagger data-observe>
       <div class="co"><h3>解決しようとしている課題</h3><p>飲食・宿泊業界は業種・職種が多様で人材ニーズが高い一方、採用と就業のミスマッチが起きやすい産業です。私たちはその「人」の課題に特化しています。</p></div>
@@ -827,7 +932,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <div class="co"><h3>業界への専門性</h3><p>年間4万人以上の転職支援を行い、飲食・宿泊業界に固有の職種・条件・キャリアの型が社内に蓄積されています。</p></div>
       <div class="co"><h3>キャリアアドバイザーの関わり</h3><p>面談で拾った求職者の実像は、求人データやプロダクトの改善に還る構造にあります。事業の伸びに直接関わる持ち場です。</p></div>
     </div>
-    <h3 class="h3 h3--gap" data-reveal>プロダクト</h3>
+    <h3 class="h3 h3--gap" data-words data-observe>プロダクト</h3>
     <div class="prod-row" data-stagger data-observe>
       <div class="prod"><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
       <div class="prod"><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
@@ -840,46 +945,46 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="bb-sticky">
       <div class="bb-head" data-reveal>
         <p class="eyebrow">Contents</p>
-        <h2 class="h2">Cuolegaを知る</h2>
+        <h2 class="h2" data-words data-observe>Cuolegaを知る</h2>
       </div>
       <div class="bb-track">
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/04-team.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MESSAGE</span><span class="sub">代表メッセージ</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/01-interview.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">INTERVIEW</span><span class="sub">社員インタビュー</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/02-desk.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">NOTE</span><span class="sub">note</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/appeal-ra.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">COMPANY DECK</span><span class="sub">会社紹介資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/03-field.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">CULTURE DECK</span><span class="sub">カルチャー資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><img src="imgs/fv/05-city.jpg" alt=""></div>
+          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MOVIE</span><span class="sub">動画コンテンツ</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
@@ -894,11 +999,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="sec sec--tone" id="faq">
     <div class="faq-head" data-reveal>
       <p class="eyebrow">FAQ</p>
-      <h2 class="h2">よくある質問</h2>
+      <h2 class="h2" data-words data-observe>よくある質問</h2>
     </div>
     <div class="faq-main">
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>仕事内容</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>仕事内容</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">01</span></span>
@@ -911,7 +1016,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>成果・目標</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>成果・目標</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">03</span></span>
@@ -924,7 +1029,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>評価・報酬</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>評価・報酬</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">05</span></span>
@@ -937,7 +1042,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>教育・サポート</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>教育・サポート</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">07</span></span>
@@ -954,7 +1059,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>キャリアパス</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>キャリアパス</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">10</span></span>
@@ -967,7 +1072,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>働き方</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>働き方</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">12</span></span>
@@ -980,7 +1085,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>組織・カルチャー</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>組織・カルチャー</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">14</span></span>
@@ -993,7 +1098,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-reveal>応募・選考</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe>応募・選考</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">16</span></span>
@@ -1014,9 +1119,29 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 </div><!-- /stage -->
 
+<button class="to-top" id="totop" type="button" aria-label="ページ上部へ戻る">
+  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 16V4M4.5 9.5L10 4l5.5 5.5"/></svg>
+</button>
+
 <script>
+(function(){ /* 見出しを語に割り、--i で順番を渡す（[data-words] の下ごしらえ） */
+  /* 日本語は空白で割れないので、句読点・括弧・記号の切れ目でも割る。
+     1文字ずつだと字間が崩れるうえ、動きが騒がしくなる。 */
+  var SPLIT=/([^\s。、・（）「」／]+[。、・）」／]?|\s+)/g;
+  [].forEach.call(document.querySelectorAll('[data-words]'),function(el){
+    if(el.querySelector('.wd')) return;
+    var parts=(el.textContent||'').match(SPLIT); if(!parts) return;
+    el.textContent=''; var n=0;
+    parts.forEach(function(w){
+      if(/^\s+$/.test(w)){ el.appendChild(document.createTextNode(w)); return; }
+      var sp=document.createElement('span');
+      sp.className='wd'; sp.style.setProperty('--i',n++); sp.textContent=w;
+      el.appendChild(sp);
+    });
+  });
+})();
 (function(){ /* reveal */
-  var t=[].slice.call(document.querySelectorAll('[data-reveal],[data-stagger],[data-observe]'));
+  var t=[].slice.call(document.querySelectorAll('[data-reveal],[data-stagger],[data-observe],[data-fade],[data-words]'));
   t.forEach(function(el){var d=el.getAttribute('data-delay'); if(d) el.style.setProperty('--reveal-delay',d+'s');});
   if(!('IntersectionObserver' in window)){t.forEach(function(e){e.classList.add('is-inview');});return;}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){
@@ -1110,12 +1235,39 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('load',function(){measure();onScroll();});
   measure(); onScroll();
 })();
+(function(){ /* TOPに戻る／ヘッダーと戻るボタンの明暗反転 */
+  var tt=document.getElementById('totop'), hdr=document.getElementById('hdr');
+  if(!tt) return;
+  tt.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});
+  /* 黒地のセクション。ここに重なっている間だけ、地色を反転させる */
+  var darks=[].slice.call(document.querySelectorAll('.hero,.bb-sec,.midcta'));
+  var ticking=false;
+  function sweep(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      tt.classList.toggle('is-on', scrollY>innerHeight*0.6);
+      /* 判定はボタン自身と、ヘッダー帯（上から80px）の中心が
+         黒地に入っているかで見る */
+      var tr=tt.getBoundingClientRect(), ty=tr.top+tr.height/2;
+      var onDarkTT=false, onDarkHdr=false;
+      darks.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.top<ty && r.bottom>ty) onDarkTT=true;
+        if(r.top<40 && r.bottom>40) onDarkHdr=true;
+      });
+      tt.classList.toggle('is-inverted', onDarkTT);
+      if(hdr) hdr.classList.toggle('site-header--ondark', onDarkHdr);
+    });
+  }
+  addEventListener('scroll',sweep,{passive:true});
+  addEventListener('resize',sweep);
+  sweep();
+})();
 (function(){ /* 追従ヘッダー — カジュアル面談・エントリーのCTAだけを常時表示に残す */
   var h=document.getElementById('hdr'); if(!h) return;
   addEventListener('scroll',function(){var y=Math.max(0,scrollY);
     h.classList.toggle('is-scrolled',y>8);
-    /* FV が 100vh になったため、畳むのは FV を抜けるあたりから */
-    h.classList.toggle('is-compact',y>innerHeight*0.7);
   },{passive:true});
 })();
 /* FAQ のアコーディオンと Contents の畳みは 2026-08-29 の Figma 差し替えで廃止（常時表示） */

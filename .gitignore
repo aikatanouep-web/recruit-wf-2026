@@ -12,3 +12,4 @@
 # ログ・一時ファイル
 *.log
 .cache/
+_deploy/
