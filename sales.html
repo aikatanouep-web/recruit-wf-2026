@@ -20,6 +20,8 @@
   --ink:#0d0d0e; --paper:#fbfbfb; --stage:#e9e9e9; --tone:#f4f4f4;
   --caption:#606070; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
   --fill:#eaeaea; --fill2:#f1f1f1;
+  /* 画像が入る四角はページ全体でこの1色。地の明暗で変えない */
+  --ph:#ededed;
   /* コーポレートのロゴマークから採ったエメラルドブルー。
      使いどころは2つだけに絞る。増やすとキーカラーとして効かなくなる。
        1. セクションの入口を示す欧文の小ラベル（eyebrow / branch-en）
@@ -85,25 +87,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 
 /* WF部品 */
-/* あたり画像。Figma の指定どおり「VISUAL ASSETS / place holder」の2行に。
-   色は #a2a2a2 固定で、地の明るさに関わらず同じ見え方にする。 */
-.ph{background:var(--fill2);border:none;display:flex;flex-direction:column;align-items:center;
+/* あたり画像。文字は「VISUAL ASSETS」の1行だけにする（2行目の
+   place holder は体裁として不要）。面の色はページ全体で1つに統一する。 */
+.ph{background:var(--ph);border:none;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;color:#a2a2a2;font-family:var(--font-en);
   text-align:center;width:100%;height:100%;container-type:inline-size}
 /* Figma 実測。箱が小さいときは組み全体を 0.676 倍に落とす（大 13/10px → 小 8.8/6.8px）。
    字間は Figma では px 固定なので、段ごとに em に割り戻して持たせる */
 .ph i{font-style:normal;display:block;font-size:8.8px;font-weight:500;letter-spacing:.18em;line-height:1.6}
-.ph i::after{content:"place holder";display:block;font-size:6.8px;font-weight:500;
-  letter-spacing:.234em;line-height:1.6}
 /* 中くらいの箱（370px 前後）では 8.8px は痩せすぎるので一段挟む */
 @container (min-width:340px){
   .ph i{font-size:11px}
-  .ph i::after{font-size:8.5px}
-}
+  }
 @container (min-width:420px){
   .ph i{font-size:13px}
-  .ph i::after{font-size:10px}
-}
+  }
 /* 未確認は必ず見た目で区別する */
 
 /* 見出し階層 h1 64 / h2 32 / h3 24 */
@@ -390,13 +388,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sl-c{animation-delay:.33s}
 /* 写真の入れ替え。clip-path の点の数を変えずに4点を動かすことで、
    「斜めの辺が左から右へ抜ける」形のワイプになる（transition が効く）。 */
-/* 写真の重ね替えは不透明度で行う。マスクを1枚ずつに掛ける作りは、
-   帯ごとに幅も傾きも違うため掛かり方が揃わず、面が丸ごと消えることがあった。
-   単純な重ね替えなら確実で、切り替わりも滑らかに見える。 */
-.ly{position:absolute;inset:0;opacity:0;transition:opacity 1.2s var(--ease-out-expo)}
+/* 写真の重ね替えは不透明度で行う。入ってくる1枚を必ず上に重ね、
+   出ていく1枚はその下で不透明のまま残す。下は完全に隠れているので、
+   消えていく過程は見えない。これで途中に地の黒が覗く瞬間が無くなる。
+   イージングは ease-out 系ではなく linear に近いものを使う。
+   終盤で急に止まる曲線だと、そこが「カチッ」と切り替わって見える。 */
+.ly{position:absolute;inset:0;opacity:0;
+  transition:opacity 1.8s cubic-bezier(.4,0,.6,1)}
 .ly.is-on{opacity:1}
-/* 出ていく1枚は敷いたまま待たせる。先に消すと地の黒が覗く */
-.ly.is-under{opacity:1;transition:none}
 /* 右帯の動画。--fv-movie に動画がまだ無い間は、あたり画像がゆっくり動く。 */
 .ly--vid{z-index:4}
 .b-inner{position:absolute;inset:-8%}
@@ -441,9 +440,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    幅を固定し、コピー側だけを可変にする。 */
 .msg-sec .in{display:grid;grid-template-columns:minmax(0,1fr) 480px;gap:96px;align-items:center}
 .msg{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:48px}
-/* 明るい面に濃い面を置いて、文字だけの帯が続かないようにする */
 .msg-media{position:relative;aspect-ratio:7/6;border-radius:8px;overflow:hidden}
-.msg-media .ph{background:#232326;color:#7b7b80}
 .msg .msg-title{display:flex;flex-direction:column;gap:8px}
 /* 本文は 16px / 行間1.8 / 字送り1.6px。段落間は空白行1本ぶん（16×1.2）。 */
 .msg .body-tx{font-size:16px;letter-spacing:1.6px;line-height:1.8;color:#3a3a40;max-width:660px}
@@ -459,9 +456,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-intro{padding:0 var(--gutter)}
 .mrt-intro .h2{color:var(--paper)}
 .mrt-intro .lead{margin-top:32px;max-width:780px;color:rgba(255,255,255,.72)}
-/* 見出しだけの帯が長く続くと寂しいので、粘着タイトルの手前に画像面を置く */
+/* 見出しだけの帯が長く続くと寂しいので、粘着タイトルの手前に画像面を置く。
+   面の色は他と同じライトグレー（--ph）。黒地でも出し分けない。 */
 .mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/420;border-radius:8px;overflow:hidden}
-.mrt-media .ph{background:#232326;color:#7b7b80}
 /* 粘着する見出し。静止時はグレーで、地に沈ませる */
 .mrt-title{position:sticky;top:120px;z-index:1;width:100%;margin:160px 0 48px;text-align:center}
 .mrt-word{position:relative;display:inline-block;font-family:var(--font-disp2);font-weight:400;font-size:40px;
@@ -497,8 +494,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-h{margin:16px 0 0;font-weight:700;font-size:26px;letter-spacing:2.4px;line-height:1.5;color:#fff}
 .mrt-txt .fmb{margin-top:36px;display:flex;flex-direction:column;gap:16px}
 .mrt-ph{flex:1 1 auto;position:relative}
-/* 黒地の上のグレー面。明るい灰のままだとカードから浮く */
-.mrt-ph .ph{background:#232326;color:#7b7b80}
 /* FACT / MEANING / BENEFIT の3段。ラベルは枠線のピルにする。
    塗りの札は面が重くなるうえ、3つ縦に並ぶと色の帯に見えてしまう。 */
 .fmb-row{display:grid;grid-template-columns:104px minmax(0,1fr);gap:0 28px;align-items:start}
@@ -567,16 +562,34 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 身につくもの：4つを並列に見せる。罫はスクロールインで左から引き、
    通し番号を薄く置いて「4つで1組」であることを示す。 */
 .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.skill{position:relative;padding-top:28px}
+.skill{position:relative;padding-top:24px}
 .skill::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line2);
   transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease-out-expo)}
 .is-inview .skill::before{transform:scaleX(1)}
 .skills .skill:nth-child(2)::before{transition-delay:.09s}
 .skills .skill:nth-child(3)::before{transition-delay:.18s}
 .skills .skill:nth-child(4)::before{transition-delay:.27s}
-.skill-no{display:block;font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:2.4px;
-  line-height:1;color:var(--accent);margin:0 0 16px}
-.skill h4{font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.7;margin:0 0 10px}
+/* 見出しの上に線画のイラストを置く。色面のタイルはやめ、地は白のまま。
+   色はエメラルドと藍の2色に絞る（参考は寒色＋黄だが、ここは
+   ブランドが寒色系なので、暖色を足さず濃淡で階層をつくる）。 */
+/* 図はコーナーの横幅いっぱいに置く。高さは viewBox の比率で決まる。 */
+.skill-fig{display:block;width:100%;margin:0 0 20px;
+  --i1:#00a9ad;--i2:#2e3d63;--i3:#7fd0d2}
+.skill-fig svg{width:100%;height:auto;display:block;overflow:visible}
+.skill-fig .s1{fill:none;stroke:var(--i1);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.skill-fig .s2{fill:none;stroke:var(--i2);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.skill-fig .s3{fill:none;stroke:var(--i3);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.skill-fig .dash{stroke-dasharray:1.5 6}
+.skill-fig .t1{fill:var(--i1)}
+.skill-fig .t2{fill:var(--i2)}
+.skill-fig text{font-family:var(--font-label);font-weight:700;font-size:13px;letter-spacing:.5px}
+/* 14px。番号を行頭に入れたぶん、15px だと「ビルドアップ / 2ステップキャリア」
+   だけ2行に折れて、4つの見出しの高さが揃わなくなる。 */
+.skill h4{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.6;margin:0 0 10px}
+/* 番号は見出しの行頭に置く。別行にすると図と見出しの間に段が増えて
+   かたまりが分かれて見えるので、見出しと同じ行に収める。 */
+.skill h4 .no{font-family:var(--font-label);font-weight:700;font-size:12px;letter-spacing:1.6px;
+  color:var(--accent);margin-right:10px}
 .skill p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* メンバー */
 /* この先の選択肢：色面のカード。3枚は同じ色相帯（青緑〜藍）の中で
@@ -609,8 +622,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       線が左端を起点に伸びる）
    ・丸は 32px の塗り。矢印は入れ替えず、丸ごと 1.1 倍にふくらむだけ
    ・反応の起点はボタンではなくカード全体 */
+/* 太字にしすぎると和文が潰れる。500 で十分に効く */
 .gbtn{display:inline-flex;align-items:center;gap:10px;align-self:flex-end;margin-top:auto;
-  font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1;
+  font-weight:500;font-size:14px;letter-spacing:.06em;line-height:1;
   color:inherit;text-decoration:none;cursor:pointer}
 .gbtn .lb{display:inline;padding-bottom:.005em;
   background-image:linear-gradient(90deg,currentColor,currentColor);
@@ -626,8 +640,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .pick:hover .gbtn,.gbtn:hover{--ul-pos:0 100%;--ul-size:100% 1px}
   .pick:hover .gbtn .circ,.gbtn:hover .circ{transform:scale(1.1)}
 }
-/* 色面の上では、丸を白地・黒矢印に反転させる */
-.pick .gbtn .circ{background:#fff;color:var(--ink)}
+/* 色面の上では丸を白地に。矢印は黒ではなくカードの色にする。
+   黒だと面から浮いて、そこだけ別部品に見える。 */
+.pick .gbtn .circ{background:#fff;color:var(--c1,var(--c))}
+/* 小さい版。カードの中の副次的な導線に使う */
+.gbtn--sm{font-size:13px;gap:8px;align-self:flex-start;margin-top:0}
+.gbtn--sm .circ{width:26px;height:26px}
+.gbtn--sm .circ svg{width:10px;height:10px}
+@media (hover:hover){
+  .member:hover .gbtn--sm{--ul-pos:0 100%;--ul-size:100% 1px}
+  .member:hover .gbtn--sm .circ{transform:scale(1.1)}
+}
 
 /* ============================================================
    3つのまとまりは、同じ .pick を土台にしながら描き分ける。
@@ -911,7 +934,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    つなぎの語は小文字のままにして、文として読めるようにする。 */
 .endcta .stmt{font-family:var(--font-en);font-weight:400;font-size:56px;letter-spacing:0;
   line-height:1.24;margin:0;color:var(--ink)}
-.endcta .row{display:flex;justify-content:center;gap:40px;margin-top:56px;flex-wrap:wrap}
+.endcta .row{display:flex;justify-content:center;gap:24px;margin-top:56px;flex-wrap:wrap}
 
 /* 10 フッター。黒地で締める。上段はロゴと導線、下段は権利表記と規程類。 */
 .footer{background:var(--ink);color:var(--paper);padding:52px var(--gutter) 0}
@@ -1056,6 +1079,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
               <img src="imgs/fv/movie-poster.jpg" alt="" fetchpriority="high" decoding="async">
             </div>
           </div>
+          <div class="ly"><img src="imgs/fv/05-city.jpg" alt="" fetchpriority="low" decoding="async"></div>
+          <div class="ly"><img src="imgs/fv/01-interview.jpg" alt="" fetchpriority="low" decoding="async"></div>
+          <div class="ly"><img src="imgs/fv/03-field.jpg" alt="" fetchpriority="low" decoding="async"></div>
+          <div class="ly"><img src="imgs/fv/02-desk.jpg" alt="" fetchpriority="low" decoding="async"></div>
         </div></div>
       </div>
     </div>
@@ -1227,10 +1254,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="sec-media" data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <h3 class="h3 h3--gap" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
-      <div class="skill"><span class="skill-no">01</span><h4>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
-      <div class="skill"><span class="skill-no">02</span><h4>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
-      <div class="skill"><span class="skill-no">03</span><h4>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
-      <div class="skill"><span class="skill-no">04</span><h4>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><path class="s3" d="M100 34L36 84M100 34l64 50M36 84h128"/><circle class="s1" cx="100" cy="28" r="24"/><text class="t1" x="100" y="33" text-anchor="middle">A</text><circle class="s3" cx="30" cy="88" r="24"/><text class="t1" x="30" y="93" text-anchor="middle">B</text><circle class="s2" cx="170" cy="88" r="24"/><text class="t2" x="170" y="93" text-anchor="middle">C</text></svg></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><rect class="s1" x="4" y="26" width="42" height="58" rx="4"/><path class="s1" d="M14 42h22M14 53h22M14 64h14"/><path class="s3 dash" d="M54 55h22"/><circle class="s2" cx="106" cy="50" r="24"/><path class="s2" d="M123 67l13 13"/><text class="t2" x="106" y="56" text-anchor="middle">?</text><path class="s3 dash" d="M144 55h20"/><circle class="s1" cx="176" cy="55" r="22"/><path class="s1" d="M166 55l7 8 13-15"/></svg></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><rect class="s1" x="4" y="60" width="68" height="50" rx="5"/><circle class="s1" cx="38" cy="78" r="7"/><path class="s1" d="M27 96a11 11 0 0 1 22 0"/><rect class="s2" x="88" y="28" width="104" height="82" rx="5"/><path class="s2" d="M130 28V6M130 6l20 7-20 7"/><path class="s3" d="M12 44C34 16 62 6 96 6"/><path class="s3" d="M88 0l9 6-9 6"/></svg></span><h4><span class="no">03</span>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><path class="s1" d="M14 26h74v20a11 11 0 0 0 0 26v20H14a6 6 0 0 1-6-6V32a6 6 0 0 1 6-6z"/><circle class="s1" cx="44" cy="52" r="8"/><path class="s1" d="M31 74a13 13 0 0 1 26 0"/><path class="s2" d="M99 26h81a6 6 0 0 1 6 6v54a6 6 0 0 1-6 6H99V72a11 11 0 0 0 0-26z"/><path class="s2" d="M120 84V44h32v40M128 54h5M141 54h5M128 66h5M141 66h5"/><path class="s3" d="M93 12V2M81 18l-7-7M105 18l7-7"/></svg></span><h4><span class="no">04</span>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>この先の選択肢</h3>
     <div class="picks picks--c" data-stagger data-observe>
@@ -1263,7 +1290,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
       <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1273,7 +1300,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
       <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1283,7 +1310,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">記事を読む</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
     </div>
   </section>
@@ -1633,16 +1660,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   hero.style.setProperty('--grow','0');
   hero.style.setProperty('--split','0');
 
-  [].forEach.call(hero.querySelectorAll('.sl-a,.sl-b'),function(slice,si){
-    var ly=[].slice.call(slice.querySelectorAll('.ly:not(.ly--vid)')), i=0;
+  [].forEach.call(hero.querySelectorAll('.sl-a,.sl-b,.sl-c'),function(slice,si){
+    var ly=[].slice.call(slice.querySelectorAll('.ly')), i=0, z=10;
+    if(ly.length<2) return;
     setInterval(function(){
       var prev=ly[i]; i=(i+1)%ly.length; var next=ly[i];
-      prev.classList.remove('is-on'); prev.classList.add('is-under');
-      next.classList.remove('is-under');
-      void next.offsetWidth;                /* 開いた状態から巻き戻すためのリフロー */
+      /* 入ってくる1枚を必ず一番上に置く。z を積み上げるだけなので、
+         前後関係を計算し直す必要がない。 */
+      next.style.zIndex = ++z;
       next.classList.add('is-on');
-      ly.forEach(function(e,n){ e.style.zIndex = (n===i)?3:(e.classList.contains('is-under')?2:1); });
-    }, 5600 + si*900);   /* 2面が同時に切り替わらないよう、ずらして回す */
+      /* 出ていく1枚を消すのは、上の1枚が完全に重なってから。
+         同時に消すと、両方が半透明になる瞬間に地の黒が覗く。 */
+      setTimeout(function(){ prev.classList.remove('is-on'); }, 1900);
+    }, 6200 + si*800);   /* 3面が同時に切り替わらないよう、ずらして回す */
   });
 
   var ticking=false;
