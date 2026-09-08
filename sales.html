@@ -612,10 +612,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   filter:blur(28px);
   animation:figSpin var(--fd,26s) linear infinite}
 /* 粒を重ねて、のっぺりした光にしない */
-.skill-fig::after{content:"";position:absolute;inset:0;
+.skill-fig::after{content:"";position:absolute;inset:0;z-index:2;
   background-image:var(--grain);background-size:150px 150px;
   mix-blend-mode:soft-light;opacity:.65;pointer-events:none}
 @keyframes figSpin{to{rotate:360deg}}
+
+/* 画像を入れたときは、それを上に敷く。上のグラデーションは
+   画像が用意されていない間の受け皿として残す（読み込みに失敗した img は
+   JSで取り除くので、その場合もグラデーションがそのまま見える）。 */
+.skill-fig img{position:absolute;inset:0;z-index:1;display:block;
+  width:100%;height:100%;object-fit:cover;
+  animation:figDrift var(--fd,26s) ease-in-out infinite alternate}
+/* ゆっくり寄りながら少しだけ流れる。4つで時間が違うので同じ動きに揃わない */
+@keyframes figDrift{
+  from{transform:scale(1.06) translate3d(-1.5%,-1%,0)}
+  to{transform:scale(1.16) translate3d(1.5%,1.5%,0)}
+}
+@media (prefers-reduced-motion:reduce){
+  .skill-fig img{animation:none;transform:none}
+}
 /* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
 .skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:26s}
 .skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:30s}
@@ -1306,10 +1321,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     <div class="skills-band">
       <h3 class="h3" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">03</span>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">04</span>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><img src="imgs/fv/skill-01.jpg" alt="" decoding="async" data-optional></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><img src="imgs/fv/skill-02.jpg" alt="" decoding="async" data-optional></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><img src="imgs/fv/skill-03.jpg" alt="" decoding="async" data-optional></span><h4><span class="no">03</span>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"><img src="imgs/fv/skill-04.jpg" alt="" decoding="async" data-optional></span><h4><span class="no">04</span>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
       </div>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>この先の選択肢</h3>
@@ -1863,6 +1878,23 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   addEventListener('scroll',sweep,{passive:true});
   addEventListener('resize',sweep);
   sweep();
+})();
+(function(){ /* 差し替え待ちの画像。ファイルが無いときは取り除いて、
+                 下に敷いたグラデーションをそのまま見せる */
+  /* png が無ければ jpg を試し、どちらも無ければ取り除く。
+     素材の拡張子がどちらで来ても、置くだけで反映されるようにしておく。 */
+  [].forEach.call(document.querySelectorAll('img[data-optional]'),function(im){
+    function fail(){
+      if(!im.dataset.tried && /\.png$/i.test(im.getAttribute('src'))){
+        im.dataset.tried='1';
+        im.setAttribute('src', im.getAttribute('src').replace(/\.png$/i,'.jpg'));
+        return;
+      }
+      im.remove();
+    }
+    im.addEventListener('error',fail);
+    if(im.complete && im.naturalWidth===0) fail();
+  });
 })();
 (function(){ /* 画像がスクロールでゆっくり寄る */
   var els=[].slice.call(document.querySelectorAll('[data-zoom]'));
