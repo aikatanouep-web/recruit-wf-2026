@@ -312,7 +312,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sec{padding:160px var(--gutter)}
 #company{padding:160px var(--gutter)}
 #merit{padding-bottom:140px}
-#career{padding-top:160px;padding-bottom:180px}
+/* Career は直前が黒地の「魅力」なので、地色が変わることで区切りは足りている。
+   さらに160px空けると、見出しが画面のずっと下から始まって間延びする。 */
+#career{padding-top:110px;padding-bottom:160px}
 .sec--tone{background:var(--tone)}
 .sec--paper{background:var(--paper)}
 .sec--dark{background:var(--ink);color:var(--paper)}
@@ -467,10 +469,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 見出しだけの帯が長く続くと寂しいので、粘着タイトルの手前に画像面を置く。
    面の色は他と同じライトグレー（--ph）。黒地でも出し分けない。 */
 .mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/420;border-radius:8px;overflow:hidden}
-/* 粘着する見出し。静止時はグレーで、地に沈ませる */
-/* カード(z-index:2)より前面に置く。後ろにすると、最後のカードが上へ抜けるとき
-   タイトルの上を通り、見出しが一瞬覆われて壊れて見える。 */
-.mrt-title{position:sticky;top:120px;z-index:3;width:100%;margin:160px 0 48px;text-align:center}
+/* 粘着する見出し。静止時はグレーで、地に沈ませる。
+   カード(z-index:2)より後ろに置く。前面にすると、粘着が終わる最後に
+   タイトルがカードの上へ乗って文字が重なる。後ろなら不透明なカードが
+   そのまま覆い隠すので、重なりが見えない。 */
+.mrt-title{position:sticky;top:120px;z-index:1;width:100%;margin:160px 0 48px;text-align:center}
 .mrt-word{position:relative;display:inline-block;font-family:var(--font-disp2);font-weight:400;font-size:40px;
   letter-spacing:4.4px;line-height:64px;color:#5a5a5e}
 /* 一度だけ左から右へ光帯が走る。静止時はグレーのまま地に沈める */
@@ -525,23 +528,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .appeal{background:var(--ink);color:var(--paper);padding:96px var(--gutter) 180px}
 .appeal .h3{color:var(--paper);text-align:center}
 .appeal .h3 + .picks{margin-top:64px}
-.appeal /* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠 */
-.sec-media{margin-top:48px;aspect-ratio:1171/420;border-radius:8px;overflow:hidden}
-
-.h3--gap{margin-top:140px}
+.appeal .h3--gap{margin-top:140px}
 /* 色面のカードは「この先の選択肢」と同じ .pick を使う。
    同じ性質の情報なので、別の見た目を作らず部品を共有する。 */
-.appeal .picks + /* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠 */
-.sec-media{margin-top:48px;aspect-ratio:1171/420;border-radius:8px;overflow:hidden}
-
-.h3--gap{margin-top:140px}
-
+.appeal .picks + .h3--gap{margin-top:140px}
 
 /* セクション内の小見出し。上は前のかたまりと切るために大きく、
    下は自分の中身と束ねるために小さく取る（上下を同じにすると
    どのかたまりに属する見出しか読めなくなる）。 */
 /* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠 */
 .sec-media{margin-top:48px;aspect-ratio:1171/420;border-radius:8px;overflow:hidden}
+.sec-media img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* 画像は、枠に入ってから抜けるまでの間にゆっくり寄る。
+   --z は 0→1（JSが入れる）。枠は動かさず中身だけを拡大するので、
+   周りのレイアウトには影響しない。 */
+[data-zoom]{overflow:hidden}
+[data-zoom] > *{transform:scale(calc(1 + var(--z,0) * .09));
+  transform-origin:center;will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  [data-zoom] > *{transform:none}
+}
 
 .h3--gap{margin-top:140px}
 .h3 + *{margin-top:40px}
@@ -581,8 +588,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skills .skill:nth-child(4)::before{transition-delay:.27s}
 /* 身につくものは黒地の帯にする。Merit・魅力から続く黒い章の締めくくりで、
    ここだけ地色が変わると流れが切れるため。左右は帯を画面幅まで伸ばす。 */
+/* 帯の内側の余白だけで見出しを立たせる。見出し側の .h3--gap は付けない
+   （両方効くと 120 + 140 = 260px 空いて、帯の上が間延びする）。 */
 .skills-band{background:var(--ink);color:var(--paper);
-  margin:0 calc(-1 * var(--gutter));padding:120px var(--gutter) 130px}
+  margin:64px calc(-1 * var(--gutter)) 0;padding:88px var(--gutter) 100px}
 .skills-band .h3{color:var(--paper)}
 .skills-band .skill::before{background:rgba(255,255,255,.24)}
 .skills-band .skill h4{color:#fff}
@@ -593,7 +602,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    円錐グラデーションを大きくぼかし、回転させているだけなので軽い。 */
 .skill-fig{position:relative;display:block;width:100%;aspect-ratio:5/4;margin:0;
   border-radius:10px;overflow:hidden;background:#101113}
-.skill-fig::before{content:"";position:absolute;inset:-40%;
+/* 回しても四隅が欠けないよう、枠の対角より大きい正方形を中央に置く。
+   inset で上下左右を同じだけ広げると、横長の枠では回転時に短辺側が足りない。
+   位置合わせは transform、回転は rotate と別のプロパティに分けている
+   （同じ transform に入れると、アニメーションが平行移動を打ち消す）。 */
+.skill-fig::before{content:"";position:absolute;top:50%;left:50%;width:175%;aspect-ratio:1;
+  transform:translate(-50%,-50%);
   background:conic-gradient(from 0deg at 50% 50%,var(--f1),var(--f2) 35%,var(--f3) 65%,var(--f1));
   filter:blur(28px);
   animation:figSpin var(--fd,26s) linear infinite}
@@ -601,7 +615,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skill-fig::after{content:"";position:absolute;inset:0;
   background-image:var(--grain);background-size:150px 150px;
   mix-blend-mode:soft-light;opacity:.65;pointer-events:none}
-@keyframes figSpin{to{transform:rotate(360deg)}}
+@keyframes figSpin{to{rotate:360deg}}
 /* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
 .skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:26s}
 .skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:30s}
@@ -1143,7 +1157,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <a class="tlink" href="#" target="_blank" rel="noopener"><span class="label">About Cuolega</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
     </div>
-      <div class="msg-media" aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+      <div class="msg-media" data-zoom aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
   </section>
 
@@ -1157,7 +1171,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <p class="lead" data-fade data-delay="0.08">制度や環境を売り込むのではなく、事実と、その事実が持つ意味を並べます。</p>
     </div>
-    <div class="mrt-media" data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    <div class="mrt-media" data-zoom data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <h2 class="mrt-title" data-observe><span class="mrt-word" data-text="MERIT">MERIT</span></h2>
     <div class="mrt-stack">
         <article class="mrt-card">
@@ -1288,9 +1302,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <p class="eyebrow">Career</p>
       <h2 class="h2" data-words data-observe>キャリアの広がりと、歩んでいる人</h2>
     </div>
-    <div class="sec-media" data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    <div class="sec-media" data-zoom data-reveal data-delay="0.12"><img src="imgs/fv/career.jpg" alt="" decoding="async"></div>
     <div class="skills-band">
-      <h3 class="h3 h3--gap" data-words data-observe>身につくもの</h3>
+      <h3 class="h3" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
       <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
       <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
@@ -1321,7 +1335,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member A</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1331,7 +1345,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member B</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1341,7 +1355,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member C</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1351,7 +1365,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member D</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1361,7 +1375,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member E</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1371,7 +1385,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member F</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1407,9 +1421,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>プロダクト</h3>
     <div class="prod-row" data-stagger data-observe>
-      <div class="prod"><div class="prod-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph"><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     </div>
   </section>
 
@@ -1422,42 +1436,42 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <div class="bb-track">
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MESSAGE</span><span class="sub">代表メッセージ</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">INTERVIEW</span><span class="sub">社員インタビュー</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">NOTE</span><span class="sub">note</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">COMPANY DECK</span><span class="sub">会社紹介資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">CULTURE DECK</span><span class="sub">カルチャー資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
         <a class="bb-panel" href="#" target="_blank" rel="noopener">
-          <div class="bb-photo"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+          <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MOVIE</span><span class="sub">動画コンテンツ</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
@@ -1844,6 +1858,28 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         if(r.top<=line && r.bottom>line) cur=i;
       });
       links.forEach(function(a,i){a.classList.toggle('is-current', i===cur);});
+    });
+  }
+  addEventListener('scroll',sweep,{passive:true});
+  addEventListener('resize',sweep);
+  sweep();
+})();
+(function(){ /* 画像がスクロールでゆっくり寄る */
+  var els=[].slice.call(document.querySelectorAll('[data-zoom]'));
+  if(!els.length) return;
+  var ticking=false;
+  function sweep(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var vh=innerHeight;
+      els.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.bottom<0 || r.top>vh) return;   /* 画面外は計算しない */
+        /* 枠の下端が画面下に来た時が 0、上端が画面上に抜けた時が 1 */
+        var p=(vh - r.top) / (vh + r.height);
+        el.style.setProperty('--z', Math.min(1,Math.max(0,p)).toFixed(4));
+      });
     });
   }
   addEventListener('scroll',sweep,{passive:true});
