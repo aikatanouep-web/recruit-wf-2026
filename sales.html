@@ -15,13 +15,15 @@
      すると、3ホストへの往復が終わるまで描画も後続スクリプトも止まる。 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600&display=swap" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Lato:wght@400;500;700&family=Unbounded:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Lato:wght@400;500;700&family=Unbounded:wght@400&display=swap">
 <style>:root{
   --ink:#0d0d0e; --paper:#fbfbfb; --stage:#e9e9e9; --tone:#f4f4f4;
   --caption:#606070; --line:rgba(13,13,14,.12); --line2:rgba(13,13,14,.28);
   --fill:#eaeaea; --fill2:#f1f1f1;
   /* 画像が入る四角はページ全体でこの1色。地の明暗で変えない */
   --ph:#ededed;
+  /* 粒状のノイズ。色面に刷りもののざらつきを足すのに使う */
+  --grain:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27140%27%20height%3D%27140%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%273%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27140%27%20height%3D%27140%27%20filter%3D%27url%28%23n%29%27%20opacity%3D%270.5%27%2F%3E%3C%2Fsvg%3E");
   /* コーポレートのロゴマークから採ったエメラルドブルー。
      使いどころは2つだけに絞る。増やすとキーカラーとして効かなくなる。
        1. セクションの入口を示す欧文の小ラベル（eyebrow / branch-en）
@@ -112,11 +114,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   line-height:1;text-transform:uppercase;color:var(--accent);margin:0}
 /* コーポレートのセクション見出し（.bb-head h2）に合わせて 24px / 字送り2.4px。
    もとは Figma 実測の 32px。ページ全体の見出しの段差を参考サイトに揃えている。 */
-.h2{font-weight:700;font-size:24px;letter-spacing:2.4px;line-height:1.5;margin:0}
+.h2{font-weight:600;font-size:24px;letter-spacing:2.4px;line-height:1.5;margin:0}
 .h2 .h2-sub{font-size:24px}
-.h3{font-weight:700;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
+.h3{font-weight:600;font-size:24px;letter-spacing:.1em;line-height:1.6;margin:0}
 /* Our Purpose の見出し（.ba-hero .title h1）と同じ 48px / 行間1.26 / 字送り2.4px */
-.statement{font-weight:700;font-size:48px;letter-spacing:2.4px;line-height:1.26;margin:0}
+.statement{font-weight:600;font-size:48px;letter-spacing:2.4px;line-height:1.26;margin:0}
 .lead{font-size:16px;letter-spacing:.08em;line-height:1.9;color:#3a3a40;margin:0}
 .body-tx{font-size:14px;letter-spacing:.1em;line-height:2;color:#3a3a40;margin:0}
 
@@ -159,6 +161,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    ・枠は2px・角丸100px、内側の余白は .75em 2em
    ・ラベルは 20px / weight 500。バッジは 2.8em × 1.4em の横長スタジアム
    ・ホバーで動くのは矢印だけ */
+/* 遷移先が決まるまでは押せる要素にしない（span で置いている）。
+   ホバーの反応だけは残すので、見え方は変わらない。 */
 .btn{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;
   padding:15px 20px 15px 40px;
   border:2.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);
@@ -263,14 +267,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   color:var(--ink);background:transparent;white-space:nowrap;cursor:pointer;
   transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo),
     border-color .45s var(--ease-out-expo)}
-.cta:hover{background:var(--ink);color:var(--paper)}
+/* ホバーはキーカラーの塗り＋白文字。黒⇄白の反転だと、黒帯の上と
+   明るい面とで反応が逆になって落ち着かない。 */
+.cta:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .cta.primary{background:var(--ink);color:var(--paper)}
-.cta.primary:hover{background:transparent;color:var(--ink)}
+.cta.primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 /* 黒帯の上では白抜きに反転させる */
 .site-header--ondark .cta{border-color:#fff;color:#fff}
-.site-header--ondark .cta:hover{background:#fff;color:var(--ink)}
 .site-header--ondark .cta.primary{background:#fff;color:var(--ink);border-color:#fff}
-.site-header--ondark .cta.primary:hover{background:transparent;color:#fff}
+.site-header--ondark .cta:hover,.site-header--ondark .cta.primary:hover{
+  background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* TOPに戻る。miai-corporate の作法に合わせる。64px・角丸4pxの四角で、
    明るい面では黒地に白矢印。ホバーで色面が左端を軸に開く。
@@ -288,8 +294,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform:scaleX(0);transform-origin:left center;
   transition:transform .4s cubic-bezier(.16,.5,.25,1)}
 .to-top svg{position:relative;z-index:1;display:block;width:20px;height:20px}
-.to-top.is-inverted{background:rgba(255,255,255,.1);border-color:transparent;
-  color:rgba(255,255,255,.88);
+/* 黒地の上でも輪郭が分かるよう、地色を上げて白い罫を持たせる。
+   すりガラスだけでは真っ黒な面の上でほぼ見えない。 */
+.to-top.is-inverted{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.42);
+  color:#fff;
   backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
 @media (hover:hover){
   .to-top:hover{color:#fff;border-color:var(--accent)}
@@ -344,7 +352,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    2行をひとつの塊として立たせる。 */
 /* ぼかしを大きく取った影を1枚。輪郭の付いた「影」には見えず、
    文字の周りの空気だけが沈むので、写真が動いても読みが安定する。 */
-.hero h1{font-weight:700;font-size:56px;letter-spacing:.02em;line-height:1.45;margin:0;color:#fff;
+.hero h1{font-weight:600;font-size:56px;letter-spacing:.02em;line-height:1.45;margin:0;color:#fff;
   text-shadow:0 2px 28px rgba(0,0,0,.45)}
 /* 見出しの上の小ラベル（Figma 186:8。リード段落は廃止） */
 .hero .fv-eyebrow{font-size:15px;letter-spacing:.06em;line-height:2;color:#fff;margin:0 0 20px;
@@ -460,7 +468,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    面の色は他と同じライトグレー（--ph）。黒地でも出し分けない。 */
 .mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/420;border-radius:8px;overflow:hidden}
 /* 粘着する見出し。静止時はグレーで、地に沈ませる */
-.mrt-title{position:sticky;top:120px;z-index:1;width:100%;margin:160px 0 48px;text-align:center}
+/* カード(z-index:2)より前面に置く。後ろにすると、最後のカードが上へ抜けるとき
+   タイトルの上を通り、見出しが一瞬覆われて壊れて見える。 */
+.mrt-title{position:sticky;top:120px;z-index:3;width:100%;margin:160px 0 48px;text-align:center}
 .mrt-word{position:relative;display:inline-block;font-family:var(--font-disp2);font-weight:400;font-size:40px;
   letter-spacing:4.4px;line-height:64px;color:#5a5a5e}
 /* 一度だけ左から右へ光帯が走る。静止時はグレーのまま地に沈める */
@@ -491,7 +501,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-txt{flex:none;width:770px;padding:44px 48px;display:flex;flex-direction:column}
 .mrt-num{margin:0;font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:2.4px;
   color:rgba(255,255,255,.8)}
-.mrt-h{margin:16px 0 0;font-weight:700;font-size:26px;letter-spacing:2.4px;line-height:1.5;color:#fff}
+.mrt-h{margin:16px 0 0;font-weight:600;font-size:26px;letter-spacing:2.4px;line-height:1.5;color:#fff}
 .mrt-txt .fmb{margin-top:36px;display:flex;flex-direction:column;gap:16px}
 .mrt-ph{flex:1 1 auto;position:relative}
 /* FACT / MEANING / BENEFIT の3段。ラベルは枠線のピルにする。
@@ -545,7 +555,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .sec--tone .branch-col{background:var(--paper)}
 .branch-en{font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:.2em;
   line-height:1.6;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
-.branch-col h4{font-weight:700;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 16px}
+.branch-col h4{font-weight:600;font-size:16px;letter-spacing:.1em;line-height:1.6;margin:0 0 16px}
 .branch-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 /* 文頭は 5px の丸ポチ（Figma 実測 #d9d9d9）。行頭から 10px あけて本文 */
 .branch-col li{position:relative;padding-left:15px;
@@ -569,23 +579,40 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skills .skill:nth-child(2)::before{transition-delay:.09s}
 .skills .skill:nth-child(3)::before{transition-delay:.18s}
 .skills .skill:nth-child(4)::before{transition-delay:.27s}
-/* 見出しの上に線画のイラストを置く。色面のタイルはやめ、地は白のまま。
-   色はエメラルドと藍の2色に絞る（参考は寒色＋黄だが、ここは
-   ブランドが寒色系なので、暖色を足さず濃淡で階層をつくる）。 */
-/* 図はコーナーの横幅いっぱいに置く。高さは viewBox の比率で決まる。 */
-.skill-fig{display:block;width:100%;margin:0 0 20px;
-  --i1:#00a9ad;--i2:#2e3d63;--i3:#7fd0d2}
-.skill-fig svg{width:100%;height:auto;display:block;overflow:visible}
-.skill-fig .s1{fill:none;stroke:var(--i1);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.skill-fig .s2{fill:none;stroke:var(--i2);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.skill-fig .s3{fill:none;stroke:var(--i3);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.skill-fig .dash{stroke-dasharray:1.5 6}
-.skill-fig .t1{fill:var(--i1)}
-.skill-fig .t2{fill:var(--i2)}
-.skill-fig text{font-family:var(--font-label);font-weight:700;font-size:13px;letter-spacing:.5px}
+/* 身につくものは黒地の帯にする。Merit・魅力から続く黒い章の締めくくりで、
+   ここだけ地色が変わると流れが切れるため。左右は帯を画面幅まで伸ばす。 */
+.skills-band{background:var(--ink);color:var(--paper);
+  margin:0 calc(-1 * var(--gutter));padding:120px var(--gutter) 130px}
+.skills-band .h3{color:var(--paper)}
+.skills-band .skill::before{background:rgba(255,255,255,.24)}
+.skills-band .skill h4{color:#fff}
+.skills-band .skill p{color:rgba(255,255,255,.56)}
+
+/* 図は線画をやめ、ゆっくり回り続ける色の面にした。線で意味を説明すると
+   既製のアイコンに見えるうえ、4つ並ぶと画面が細かくなる。
+   円錐グラデーションを大きくぼかし、回転させているだけなので軽い。 */
+.skill-fig{position:relative;display:block;width:100%;aspect-ratio:5/4;margin:0;
+  border-radius:10px;overflow:hidden;background:#101113}
+.skill-fig::before{content:"";position:absolute;inset:-40%;
+  background:conic-gradient(from 0deg at 50% 50%,var(--f1),var(--f2) 35%,var(--f3) 65%,var(--f1));
+  filter:blur(28px);
+  animation:figSpin var(--fd,26s) linear infinite}
+/* 粒を重ねて、のっぺりした光にしない */
+.skill-fig::after{content:"";position:absolute;inset:0;
+  background-image:var(--grain);background-size:150px 150px;
+  mix-blend-mode:soft-light;opacity:.65;pointer-events:none}
+@keyframes figSpin{to{transform:rotate(360deg)}}
+/* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
+.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:26s}
+.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:30s}
+.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:34s}
+.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:22s}
+@media (prefers-reduced-motion:reduce){
+  .skill-fig::before{animation:none}
+}
 /* 14px。番号を行頭に入れたぶん、15px だと「ビルドアップ / 2ステップキャリア」
    だけ2行に折れて、4つの見出しの高さが揃わなくなる。 */
-.skill h4{font-weight:700;font-size:14px;letter-spacing:.06em;line-height:1.6;margin:0 0 10px}
+.skill h4{font-weight:600;font-size:14px;letter-spacing:.06em;line-height:1.6;margin:0 0 10px}
 /* 番号は見出しの行頭に置く。別行にすると図と見出しの間に段が増えて
    かたまりが分かれて見えるので、見出しと同じ行に収める。 */
 .skill h4 .no{font-family:var(--font-label);font-weight:700;font-size:12px;letter-spacing:1.6px;
@@ -609,7 +636,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .pick-tag{position:relative;z-index:1;align-self:flex-start;padding:6px 14px;border:1px solid rgba(255,255,255,.6);border-radius:999px;
   font-family:var(--font-label);font-weight:700;font-size:11px;letter-spacing:1.6px;line-height:1;
   text-transform:uppercase}
-.pick-h{position:relative;z-index:1;margin:24px 0 0;font-weight:700;font-size:20px;letter-spacing:.06em;line-height:1.5}
+.pick-h{position:relative;z-index:1;margin:24px 0 0;font-weight:600;font-size:20px;letter-spacing:.06em;line-height:1.5}
 /* 本文の量がカードごとに違っても、足元のボタンの高さが揃うようにする */
 .pick-list{list-style:none;margin:20px 0 28px;padding:0;display:flex;flex-direction:column;gap:12px;flex:1}
 .pick-list li{position:relative;padding-left:16px;font-size:13px;letter-spacing:.04em;line-height:1.8;
@@ -686,7 +713,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    斜めに流れるグラデーションにして、面の中に動きを持たせる。
    さらに粒状のノイズを重ねる。画像を持たずに刷りものの網点のようなざらつきを
    出すため、SVGのフラクタルノイズをそのまま背景に敷いている。 --- */
-.picks--c{--grain:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27140%27%20height%3D%27140%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%273%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27140%27%20height%3D%27140%27%20filter%3D%27url%28%23n%29%27%20opacity%3D%270.5%27%2F%3E%3C%2Fsvg%3E")}
+
 .picks--c .pick{background-image:var(--grain),linear-gradient(146deg,var(--c1) 0%,var(--c2) 52%,var(--c3) 100%);
   background-size:140px 140px,auto;background-blend-mode:soft-light,normal}
 .picks--c .pick-1{--c:#2e3d63;--c1:#1d2740;--c2:#3d4f78;--c3:#7d8cae}
@@ -729,18 +756,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 @media (prefers-reduced-motion:reduce){
 }
 
-.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 /* 画像 → 見出し → 人物 → 変化 → リンク。同じ間隔で並べると全部が
    一つの塊に見えるので、束ごとに間隔と文字の強さを変える。 */
 .member{display:flex;flex-direction:column;gap:24px}
-.member{position:relative}
-.member .media{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:8px}
+/* 1人ぶんが1枚のカードとして読めるようにする。写真・見出し・経歴・導線が
+   囲いなしで縦に並ぶと、隣の列と混ざってどこまでが1人か分からなくなる。 */
+.member{position:relative;display:flex;flex-direction:column;gap:16px;
+  background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 16px 20px;
+  transition:transform .6s var(--ease-out-expo),box-shadow .6s var(--ease-out-expo)}
+@media (hover:hover){
+  .member:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(13,13,14,.08)}
+}
+.member .media{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:6px}
 .member .media img{transition:transform 1.2s var(--ease-out-expo)}
 @media (hover:hover){.member:hover .media img{transform:scale(1.05);transition-duration:.8s}}
 .member .ph{aspect-ratio:4/3}
 .m-body{display:flex;flex-direction:column}
 /* 一番強い段。ここだけ他より一回り大きくして主役にする */
-.m-title{font-weight:700;font-size:18px;letter-spacing:.06em;line-height:1.6;margin:0}
+.m-title{font-weight:600;font-size:18px;letter-spacing:.06em;line-height:1.6;margin:0}
 /* 人物の束 */
 .m-name{font-family:var(--font-en);font-weight:700;font-size:14px;letter-spacing:.14em;
   line-height:1.6;margin:18px 0 0}
@@ -768,11 +802,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   letter-spacing:1.8px;line-height:1;text-transform:uppercase;color:var(--caption)}
 .m-v{font-size:13px;letter-spacing:.04em;line-height:1.7;margin:10px 0 0;color:var(--caption)}
 .m-col--now .m-k{color:var(--accent)}
-.m-col--now .m-v{color:var(--ink);font-weight:700}
+.m-col--now .m-v{color:var(--ink);font-weight:600}
 @media (prefers-reduced-motion:reduce){
   .m-change::before,.m-col::before{transform:none !important}
 }
-.m-more{margin-top:20px}
+/* 本文の量が人によって違っても、導線はカードの下端に揃える */
+.m-more{margin-top:auto;padding-top:4px}
 
 /* 中間CTA */
 /* 中間の黒帯CTA：Figma では左右振り分けをやめて中央寄せ。
@@ -788,12 +823,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 写真の上に膜を敷く。左を濃く、右をやや抜いて写真を残す */
 .midcta::before{content:"";position:absolute;inset:0;
   background:linear-gradient(95deg,rgba(13,13,14,.92) 0%,rgba(13,13,14,.78) 46%,rgba(13,13,14,.6) 100%)}
-/* エメラルドの細い斜線を1本だけ通す */
-.midcta::after{content:"";position:absolute;top:-20%;bottom:-20%;right:32%;width:2px;
-  background:linear-gradient(180deg,rgba(0,169,173,0),var(--accent) 45%,rgba(0,169,173,0));
-  transform:skewX(-12.4deg)}
 .midcta > *{position:relative;z-index:1}
-.midcta h2{font-weight:700;font-size:32px;letter-spacing:.06em;line-height:1.45;margin:0;max-width:724px}
+.midcta h2{font-weight:600;font-size:32px;letter-spacing:.06em;line-height:1.45;margin:0;max-width:724px}
 .midcta p{font-size:14px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);
   margin:20px 0 0;max-width:640px}
 .midcta .row{display:flex;gap:24px;flex:none}
@@ -805,18 +836,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    上辺の1本だけを残し、余白で区切りを作る。 */
 .co{position:relative;background:none;border:0;border-radius:0;padding:32px 0 0;
   display:flex;flex-direction:column;gap:14px}
-.co::before,.prod::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
+.co::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
   background:var(--line2)}
+/* プロダクトは画像が先頭に来る。画像の上に罫が乗ると面が分断されて見えるので、
+   ここだけ罫を持たせない。区切りは画像そのものが担う。 */
+.prod{padding-top:0}
 /* ホバーでは上辺の罫がアクセント色に置き換わりながら左から引き直される */
-.co::after,.prod::after{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
+.co::after{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
   background:var(--accent);transform:scaleX(0);transform-origin:left;
   transition:transform .6s var(--ease-out-expo)}
 .co h3,.prod .prod-name{transition:transform .6s var(--ease-out-expo)}
 @media (hover:hover){
-  .co:hover::after,.prod:hover::after{transform:scaleX(1)}
+  .co:hover::after{transform:scaleX(1)}
   .co:hover h3,.prod:hover .prod-name{transform:translateX(4px)}
 }
-.co h3{font-weight:700;font-size:18px;letter-spacing:.1em;line-height:1.6;margin:0}
+.co h3{font-weight:600;font-size:18px;letter-spacing:.1em;line-height:1.6;margin:0}
 .co p{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
 .prod-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
 .prod{position:relative;background:none;border:0;border-radius:0;padding:32px 0 0;
@@ -871,7 +905,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-cat + .faq-cat{margin-top:56px}
 /* カテゴリ見出しは設問の束をまとめる印。設問より一段大きければ足りるので、
    22px から落として上下も詰める。 */
-.faq-cat-ttl{font-weight:700;font-size:17px;letter-spacing:.1em;line-height:1.6;margin:0 0 20px}
+.faq-cat-ttl{font-weight:600;font-size:17px;letter-spacing:.1em;line-height:1.6;margin:0 0 20px}
 .faq-list{display:flex;flex-direction:column;gap:20px}
 /* News の行と同じ骨格：番号列 85px ＋ gap 60px ＋ 本文 */
 /* 番号の列と本文の間は 60 → 36px。番号は2〜3文字しかないので、
@@ -882,11 +916,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-no .k{font-size:11px;letter-spacing:.7px;color:var(--caption)}
 .faq-no .n{font-size:16px;letter-spacing:1.4px}
 .faq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.faq-qa .q{font-weight:700;font-size:14px;letter-spacing:1px;line-height:1.5;color:var(--ink);margin:0}
+.faq-qa .q{font-weight:600;font-size:14px;letter-spacing:1px;line-height:1.5;color:var(--ink);margin:0}
 .faq-qa .a{font-size:13px;letter-spacing:1px;line-height:1.75;color:#3a3a40;margin:0}
 /* 行の右端に矢印を置き、ニュースと同じ挙動にする。
    矢印は窓の中で右へ抜け、複製が左から入り直す。本文はわずかに右へ動く。 */
-.faq-arw{position:relative;width:32px;height:32px;flex:none;margin-left:auto;
+/* 行は上揃えだが矢印だけは天地中央に置く。上に揃えると、回答が
+   2行以上のとき矢印だけ取り残されて見える。 */
+.faq-arw{position:relative;width:32px;height:32px;flex:none;margin-left:auto;align-self:center;
   display:inline-flex;align-items:center;justify-content:center;overflow:hidden;color:var(--ink)}
 .faq-arw svg{position:absolute;width:14px;height:12px;
   transition:transform .7s var(--ease-out-expo)}
@@ -944,6 +980,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .foot-brand .logo{width:131px;height:16.87px;color:#fff}
 .foot-sub{font-size:13px;letter-spacing:.1em;line-height:1;color:rgba(255,255,255,.72);margin:0}
 /* コーポレートサイトへの導線だけ、白い面のボタンにして他と区別する */
+.foot-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .foot-corp{display:inline-flex;align-items:center;gap:10px;
   height:38px;padding:0 16px;border:1px solid rgba(255,255,255,.5);border-radius:4px;
   color:#fff;text-decoration:none;font-size:13px;letter-spacing:.1em;line-height:1;white-space:nowrap;
@@ -1252,12 +1289,14 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2 class="h2" data-words data-observe>キャリアの広がりと、歩んでいる人</h2>
     </div>
     <div class="sec-media" data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
-    <h3 class="h3 h3--gap" data-words data-observe>身につくもの</h3>
+    <div class="skills-band">
+      <h3 class="h3 h3--gap" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><path class="s3" d="M100 34L36 84M100 34l64 50M36 84h128"/><circle class="s1" cx="100" cy="28" r="24"/><text class="t1" x="100" y="33" text-anchor="middle">A</text><circle class="s3" cx="30" cy="88" r="24"/><text class="t1" x="30" y="93" text-anchor="middle">B</text><circle class="s2" cx="170" cy="88" r="24"/><text class="t2" x="170" y="93" text-anchor="middle">C</text></svg></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><rect class="s1" x="4" y="26" width="42" height="58" rx="4"/><path class="s1" d="M14 42h22M14 53h22M14 64h14"/><path class="s3 dash" d="M54 55h22"/><circle class="s2" cx="106" cy="50" r="24"/><path class="s2" d="M123 67l13 13"/><text class="t2" x="106" y="56" text-anchor="middle">?</text><path class="s3 dash" d="M144 55h20"/><circle class="s1" cx="176" cy="55" r="22"/><path class="s1" d="M166 55l7 8 13-15"/></svg></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><rect class="s1" x="4" y="60" width="68" height="50" rx="5"/><circle class="s1" cx="38" cy="78" r="7"/><path class="s1" d="M27 96a11 11 0 0 1 22 0"/><rect class="s2" x="88" y="28" width="104" height="82" rx="5"/><path class="s2" d="M130 28V6M130 6l20 7-20 7"/><path class="s3" d="M12 44C34 16 62 6 96 6"/><path class="s3" d="M88 0l9 6-9 6"/></svg></span><h4><span class="no">03</span>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
-      <div class="skill"><span class="skill-fig" aria-hidden="true"><svg viewBox="0 0 196 116"><path class="s1" d="M14 26h74v20a11 11 0 0 0 0 26v20H14a6 6 0 0 1-6-6V32a6 6 0 0 1 6-6z"/><circle class="s1" cx="44" cy="52" r="8"/><path class="s1" d="M31 74a13 13 0 0 1 26 0"/><path class="s2" d="M99 26h81a6 6 0 0 1 6 6v54a6 6 0 0 1-6 6H99V72a11 11 0 0 0 0-26z"/><path class="s2" d="M120 84V44h32v40M128 54h5M141 54h5M128 66h5M141 66h5"/><path class="s3" d="M93 12V2M81 18l-7-7M105 18l7-7"/></svg></span><h4><span class="no">04</span>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">01</span>ABC フレームワーク</h4><p>希望（A）・市場評価（B）・内定可能性（C）の3点で仮説を立てる。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">02</span>クロージング仮説</h4><p>面談前に薄い職歴情報から仮説を立て、面談中に検証する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">03</span>ビルドアップ / 2ステップキャリア</h4><p>市場評価と希望が乖離する場合に、到達可能な経路を設計して提案する。</p></div>
+      <div class="skill"><span class="skill-fig" aria-hidden="true"></span><h4><span class="no">04</span>テストマッチング</h4><p>求人を出す前に方向性の合意を取り、提案の精度を上げる。</p></div>
+      </div>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>この先の選択肢</h3>
     <div class="picks picks--c" data-stagger data-observe>
@@ -1282,7 +1321,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
     <div class="member-grid" data-stagger data-observe>
-      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member A</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1292,7 +1331,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member B</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
@@ -1302,9 +1341,39 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         </div>
         <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
-      <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
         <p class="m-name">Member C</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+      </article>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member D</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+      </article>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member E</p>
+        <p class="m-meta">メンバー ／ 2020年入社</p>
+        <div class="m-change">
+          <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
+          <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
+        </div>
+        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+      </article>
+        <article class="member"><div class="media"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+        <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
+        <p class="m-name">Member F</p>
         <p class="m-meta">メンバー ／ 2020年入社</p>
         <div class="m-change">
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
@@ -1321,7 +1390,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2>まずは、キャリアについて話してみませんか</h2>
       <p>応募を決めていなくても構いません。仕事の実際や、この先のキャリアの話をする場です。</p>
     </div>
-    <div class="row"><a class="btn btn--ondark" href="#"><span class="btn-label"><span class="btn-flip"><span>カジュアル面談を申し込む</span><span aria-hidden="true">カジュアル面談を申し込む</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></a></div>
+    <div class="row"><span class="btn btn--ondark"><span class="btn-label"><span class="btn-flip"><span>カジュアル面談を申し込む</span><span aria-hidden="true">カジュアル面談を申し込む</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span></div>
   </section>
 
   <!-- ============ 06 Company ============ 会社・事業・プロダクトをひとまとまりで -->
@@ -1543,8 +1612,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="endcta">
     <p class="stmt" data-words data-observe>MOVING SOMEONE&rsquo;S CAREER<br>expands YOUR OWN</p>
     <div class="row" data-reveal data-delay="0.15">
-      <a class="btn " href="#"><span class="btn-label"><span class="btn-flip"><span>カジュアル面談</span><span aria-hidden="true">カジュアル面談</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></a>
-      <a class="btn " href="#"><span class="btn-label"><span class="btn-flip"><span>新卒エントリー</span><span aria-hidden="true">新卒エントリー</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></a>
+      <span class="btn "><span class="btn-label"><span class="btn-flip"><span>カジュアル面談</span><span aria-hidden="true">カジュアル面談</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
+      <span class="btn "><span class="btn-label"><span class="btn-flip"><span>新卒エントリー</span><span aria-hidden="true">新卒エントリー</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
     </div>
   </section>
 
@@ -1571,7 +1640,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </g>
     </svg></a>
       <p class="foot-sub">セールス採用特設サイト</p>
-      <a class="foot-corp" href="#" target="_blank" rel="noopener">コーポレートサイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+      <div class="foot-links"><a class="foot-corp" href="#" target="_blank" rel="noopener">コーポレートサイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="foot-corp" href="#" target="_blank" rel="noopener">新卒採用サイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
     </div>
     <nav class="foot-nav">
       <a href="#merit">MERIT</a>
