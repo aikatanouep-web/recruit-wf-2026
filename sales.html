@@ -164,7 +164,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 外部リンクは枠線のピルにする（garage.co.jp の作法）。文字だけの
    リンクだと、外部へ出るという性質が本文中のリンクと区別できない。 */
 .xlink{display:inline-flex;align-items:center;gap:10px;
-  height:38px;padding:0 18px;border:1.5px solid var(--line2);border-radius:999px;
+  height:38px;padding:0 18px;border:1.5px solid var(--ink);border-radius:999px;
   font-size:13px;letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;
   white-space:nowrap;
   transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo),
@@ -326,13 +326,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform:scaleX(0);transform-origin:left center;
   transition:transform .4s cubic-bezier(.16,.5,.25,1)}
 .to-top svg{position:relative;z-index:1;display:block;width:20px;height:20px}
-/* 黒地の上では、すりガラスをやめて白い枠のはっきりした四角にする。
-   半透明の地＋薄い罫では、真っ黒な面の上で輪郭がほとんど読めなかった。 */
-.to-top.is-inverted{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.72);
-  border-width:1.5px;color:#fff;
+/* 黒地の上では罫線を引かず、薄い透過の面だけで置く。枠があると
+   ボタンが浮いて見えるので、面の濃さだけで輪郭を出す。 */
+.to-top.is-inverted{background:rgba(255,255,255,.13);border-color:transparent;
+  color:#fff;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 @media (hover:hover){
-  .to-top:hover{color:#fff;border-color:var(--accent)}
+  .to-top:hover{color:#fff}
   .to-top:hover .tt-fill{transform:scaleX(1)}
 }
 @media (prefers-reduced-motion:reduce){
@@ -500,7 +500,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-intro .lead{margin-top:32px;max-width:780px;color:rgba(255,255,255,.72)}
 /* 見出しだけの帯が長く続くと寂しいので、粘着タイトルの手前に画像面を置く。
    面の色は他と同じライトグレー（--ph）。黒地でも出し分けない。 */
-.mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/560;border-radius:8px;overflow:hidden}
+/* 角丸と切り抜きは [data-grow] 側の中身が持つので、ここでは持たない */
+.mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/720}
 /* 粘着する見出し。静止時はグレーで、地に沈ませる。
    カード(z-index:2)より後ろに置く。前面にすると、粘着が終わる最後に
    タイトルがカードの上へ乗って文字が重なる。後ろなら不透明なカードが
@@ -570,8 +571,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* セクション内の小見出し。上は前のかたまりと切るために大きく、
    下は自分の中身と束ねるために小さく取る（上下を同じにすると
    どのかたまりに属する見出しか読めなくなる）。 */
-/* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠 */
-.sec-media{margin-top:48px;aspect-ratio:1171/540;border-radius:8px;overflow:hidden}
+/* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠。
+   角丸と切り抜きは [data-grow] 側の中身が持つので、ここでは持たない。 */
+.sec-media{margin-top:48px;aspect-ratio:1171/700}
 .sec-media img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* 画像は、枠に入ってから抜けるまでの間にゆっくり寄る。
@@ -582,6 +584,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform-origin:center;will-change:transform}
 @media (prefers-reduced-motion:reduce){
   [data-zoom] > *{transform:none}
+}
+
+/* 枠ごと開く。garage.co.jp の DG FinTech Shift と同じ作法で、
+   54% の小さな面で入ってきて、読み進めるうちに等倍まで広がる。
+   --p は 0→1（JSが入れる）。枠の場所と高さは最初から確定しているので、
+   広がってもまわりのレイアウトは動かない。
+   角丸は縮小ぶんを割り戻す。割り戻さないと、小さいときの丸みが
+   拡大されて等倍で丸くなりすぎる。20px→10px と、開くにつれて締める。 */
+[data-grow]{--p:0;--g:calc(.54 + .46 * var(--p))}
+[data-grow] > *{width:100%;height:100%;overflow:hidden;
+  border-radius:calc((20px - 10px * var(--p)) / var(--g));
+  transform:scale(var(--g));transform-origin:50% 50%;will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  [data-grow]{--g:1}
+  [data-grow] > *{border-radius:10px}
 }
 
 .h3--gap{margin-top:140px}
@@ -614,12 +631,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    通し番号を薄く置いて「4つで1組」であることを示す。 */
 .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
 .skill{position:relative;padding-top:24px}
-.skill::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line2);
-  transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease-out-expo)}
-.is-inview .skill::before{transform:scaleX(1)}
-.skills .skill:nth-child(2)::before{transition-delay:.09s}
-.skills .skill:nth-child(3)::before{transition-delay:.18s}
-.skills .skill:nth-child(4)::before{transition-delay:.27s}
+/* 罫線は引かない。画像が先頭に来るので、線が乗ると面が分断されて見える */
 /* 身につくものは黒地の帯にする。Merit・魅力から続く黒い章の締めくくりで、
    ここだけ地色が変わると流れが切れるため。左右は帯を画面幅まで伸ばす。 */
 /* 帯の内側の余白だけで見出しを立たせる。見出し側の .h3--gap は付けない
@@ -627,7 +639,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skills-band{background:var(--ink);color:var(--paper);
   margin:64px calc(-1 * var(--gutter)) 0;padding:88px var(--gutter) 100px}
 .skills-band .h3{color:var(--paper)}
-.skills-band .skill::before{background:rgba(255,255,255,.24)}
 .skills-band .skill h4{color:#fff}
 .skills-band .skill p{color:rgba(255,255,255,.56)}
 
@@ -657,19 +668,21 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skill-fig img{position:absolute;inset:0;z-index:1;display:block;
   width:100%;height:100%;object-fit:cover;
   animation:figDrift var(--fd,26s) ease-in-out infinite alternate}
-/* ゆっくり寄りながら少しだけ流れる。4つで時間が違うので同じ動きに揃わない */
+/* 絵の中がゆっくり動き続ける。26〜34秒では変化が緩やかすぎて
+   止まって見えたので、時間を詰めて動きの幅も広げた。
+   4つで時間が違うので同じ動きに揃わない。 */
 @keyframes figDrift{
-  from{transform:scale(1.06) translate3d(-1.5%,-1%,0)}
-  to{transform:scale(1.16) translate3d(1.5%,1.5%,0)}
+  from{transform:scale(1.04) translate3d(-2.5%,-2%,0) rotate(-.4deg)}
+  to{transform:scale(1.2) translate3d(2.5%,2.5%,0) rotate(.4deg)}
 }
 @media (prefers-reduced-motion:reduce){
   .skill-fig img{animation:none;transform:none}
 }
 /* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
-.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:26s}
-.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:30s}
-.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:34s}
-.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:22s}
+.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:15s}
+.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:18s}
+.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:21s}
+.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:13s}
 @media (prefers-reduced-motion:reduce){
   .skill-fig::before{animation:none}
 }
@@ -704,7 +717,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .pick-tag{position:relative;z-index:1;align-self:flex-start;padding:6px 14px;border:1px solid rgba(255,255,255,.6);border-radius:999px;
   font-family:var(--font-label);font-weight:700;font-size:11px;letter-spacing:1.6px;line-height:1;
   text-transform:uppercase}
-.pick-h{position:relative;z-index:1;margin:24px 0 0;font-weight:600;font-size:20px;letter-spacing:.06em;line-height:1.5}
+/* 右上の透かしの番号と重ならないよう、見出しの上を空ける */
+.pick-h{position:relative;z-index:1;margin:40px 0 0;font-weight:600;font-size:20px;letter-spacing:.06em;line-height:1.5}
 /* 本文の量がカードごとに違っても、足元のボタンの高さが揃うようにする */
 .pick-list{list-style:none;margin:20px 0 28px;padding:0;display:flex;flex-direction:column;gap:12px;flex:1}
 .pick-list li{position:relative;padding-left:16px;font-size:13px;letter-spacing:.04em;line-height:1.8;
@@ -721,7 +735,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .gbtn{display:inline-flex;align-items:center;gap:10px;align-self:flex-end;margin-top:auto;
   font-weight:500;font-size:14px;letter-spacing:.06em;line-height:1;
   color:inherit;text-decoration:none;cursor:pointer}
-.gbtn .lb{display:inline;padding-bottom:.005em;
+/* 下線は文字から少し離す。詰めると和文の下端に当たって潰れて見える */
+.gbtn .lb{display:inline;padding-bottom:.28em;
   background-image:linear-gradient(90deg,currentColor,currentColor);
   background-repeat:no-repeat;
   background-position:var(--ul-pos,100% 100%);
@@ -912,15 +927,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* プロダクトは画像が先頭に来る。画像の上に罫が乗ると面が分断されて見えるので、
    ここだけ罫を持たせない。区切りは画像そのものが担う。 */
 .prod{padding-top:0}
-/* ホバーでは上辺の罫がアクセント色に置き換わりながら左から引き直される */
-.co::after{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
-  background:var(--accent);transform:scaleX(0);transform-origin:left;
-  transition:transform .6s var(--ease-out-expo)}
-.co h3,.prod .prod-name{transition:transform .6s var(--ease-out-expo)}
-@media (hover:hover){
-  .co:hover::after{transform:scaleX(1)}
-  .co:hover h3{transform:translateX(4px)}
-}
+/* ここは読み物であって導線ではないので、ホバーの反応は持たせない。
+   反応があると押せると思わせてしまう。 */
+.prod .prod-name{transition:transform .6s var(--ease-out-expo)}
 .co h3{font-weight:600;font-size:18px;letter-spacing:.1em;line-height:1.6;margin:0}
 .co p{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
 .prod-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
@@ -1239,7 +1248,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </div>
       <p class="lead" data-fade data-delay="0.08">制度や環境を売り込むのではなく、事実と、その事実が持つ意味を並べます。</p>
     </div>
-    <div class="mrt-media" data-zoom data-reveal data-delay="0.12"><div class="ph"><i>VISUAL ASSETS</i></div></div>
+    <div class="mrt-media" data-grow><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <h2 class="mrt-title" data-observe><span class="mrt-word" data-text="MERIT">MERIT</span></h2>
     <div class="mrt-stack">
         <article class="mrt-card">
@@ -1370,7 +1379,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <p class="eyebrow">Career</p>
       <h2 class="h2" data-words data-observe>キャリアの広がりと、歩んでいる人</h2>
     </div>
-    <div class="sec-media" data-zoom data-reveal data-delay="0.12"><img src="imgs/fv/career.jpg" alt="" decoding="async"></div>
+    <div class="sec-media" data-grow><img src="imgs/fv/career.jpg" alt="" decoding="async"></div>
     <div class="skills-band">
       <h3 class="h3" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
@@ -1386,19 +1395,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="pick-tag">Player</span>
         <h4 class="pick-h">プレイヤーとして深める</h4>
         <ul class="pick-list"><li>担当領域を広げる（飲食／ホテル・旅館／グローバル）</li><li>難易度の高い案件・高年収帯を担当する</li><li>面談ロジックの設計や型化に関わる</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c6 9 11 15 11 22M15 4c2 9 3 15 0 22M26 4c-2 9-3 15 0 22M37 4c-6 9-11 15-11 22"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.4"/><path d="M11 26a9.5 9.5 0 0 1 19 0"/><circle cx="20.5" cy="17" r="15" opacity=".45"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
       <article class="pick pick-2" data-no="02">
         <span class="pick-tag">Management</span>
         <h4 class="pick-h">チームを持つ</h4>
         <ul class="pick-list"><li>リーダー／チーフリーダーとしてメンバーを持つ</li><li>マネージャーとして部門の目標設計と人員配置を担う</li><li>部長・執行役員へ</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 27V11M20.5 27C13 25 8 20 6 13M20.5 27c7.5-2 12.5-7 14.5-14M20.5 22c-4-1.4-7-4.4-8.4-8.4M20.5 22c4-1.4 7-4.4 8.4-8.4"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.2"/><path d="M12 25a8.5 8.5 0 0 1 17 0"/><circle cx="6" cy="12" r="3.2" opacity=".6"/><path d="M1 25a5 5 0 0 1 8-4" opacity=".6"/><circle cx="35" cy="12" r="3.2" opacity=".6"/><path d="M40 25a5 5 0 0 0-8-4" opacity=".6"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
       <article class="pick pick-3" data-no="03">
         <span class="pick-tag">Cross-functional</span>
         <h4 class="pick-h">職種を越える</h4>
         <ul class="pick-list"><li>フィールドセールス（企業担当）へ</li><li>インサイドセールス・アカウントプランナーへ</li><li>事業企画・新規事業・新拠点の立ち上げへ</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11c4-4 8-4 12 0s8 4 12 0 8-4 8 0M4 19c4-4 8-4 12 0s8 4 12 0 8-4 8 0M4 27c4-4 8-4 12 0s8 4 12 0 8-4 8 0"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="8" width="15" height="15" rx="2.5"/><rect x="24.5" y="8" width="15" height="15" rx="2.5" opacity=".6"/><path d="M14 15.5h13M23.5 11.5l4 4-4 4"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
@@ -1964,6 +1973,29 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         /* 枠の下端が画面下に来た時が 0、上端が画面上に抜けた時が 1 */
         var p=(vh - r.top) / (vh + r.height);
         el.style.setProperty('--z', Math.min(1,Math.max(0,p)).toFixed(4));
+      });
+    });
+  }
+  addEventListener('scroll',sweep,{passive:true});
+  addEventListener('resize',sweep);
+  sweep();
+})();
+(function(){ /* 枠がスクロールで開く（garage.co.jp の DG FinTech Shift と同じ区間） */
+  var els=[].slice.call(document.querySelectorAll('[data-grow]'));
+  if(!els.length) return;
+  var ticking=false;
+  function sweep(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var vh=innerHeight;
+      els.forEach(function(el){
+        var top=el.getBoundingClientRect().top;
+        /* 枠の上端が画面下から半画面ぶん下にある時が 0、
+           画面上端の 0.2 画面手前まで上がってきた時に 1。
+           入りきる前に開き終わるので、読み始めには等倍になっている。 */
+        var p=(1.5*vh - top)/(1.3*vh);
+        el.style.setProperty('--p', Math.min(1,Math.max(0,p)).toFixed(4));
       });
     });
   }
