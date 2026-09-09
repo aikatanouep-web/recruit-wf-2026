@@ -679,22 +679,40 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    JSで取り除くので、その場合もグラデーションがそのまま見える）。 */
 .skill-fig img{position:absolute;inset:0;z-index:1;display:block;
   width:100%;height:100%;object-fit:cover;
-  animation:figDrift var(--fd,26s) ease-in-out infinite alternate}
-/* 絵の中がゆっくり動き続ける。26〜34秒では変化が緩やかすぎて
-   止まって見えたので、時間を詰めて動きの幅も広げた。
-   4つで時間が違うので同じ動きに揃わない。 */
-@keyframes figDrift{
-  from{transform:scale(1.04) translate3d(-2.5%,-2%,0) rotate(-.4deg)}
-  to{transform:scale(1.2) translate3d(2.5%,2.5%,0) rotate(.4deg)}
+  animation:var(--fk,figPan) var(--fd,26s) var(--fe,ease-in-out) infinite alternate}
+/* 絵の中がゆっくり動き続ける。4つは経路そのものを変える。
+   速さだけ変えても同じ道を違う速さでなぞるだけなので、
+   並べたときに「同じ動き」に見えてしまう。
+   01=横に流れる / 02=寄って引く / 03=斜めに沈む / 04=回りながら寄る */
+@keyframes figPan{
+  from{transform:scale(1.14) translate3d(-4.5%,0,0)}
+  to{transform:scale(1.14) translate3d(4.5%,-1%,0)}
+}
+@keyframes figZoom{
+  from{transform:scale(1.08) translate3d(0,1.5%,0)}
+  to{transform:scale(1.26) translate3d(-1.5%,-2%,0)}
+}
+@keyframes figSink{
+  from{transform:scale(1.16) translate3d(3%,-3.5%,0) rotate(.8deg)}
+  to{transform:scale(1.14) translate3d(-3%,3.5%,0) rotate(-.8deg)}
+}
+@keyframes figTurn{
+  from{transform:scale(1.06) rotate(-1.4deg)}
+  to{transform:scale(1.24) rotate(1.4deg)}
 }
 @media (prefers-reduced-motion:reduce){
   .skill-fig img{animation:none;transform:none}
 }
-/* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
-.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:6s}
-.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:7s}
-.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:8s}
-.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:5s}
+/* 4つは色相を振り、動きの経路（--fk）・周期（--fd）・緩急（--fe）を
+   それぞれ変える。3つとも違えば、同じ画面に並んでも揃って見えない。 */
+.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;
+  --fk:figPan;--fd:9s;--fe:cubic-bezier(.45,0,.55,1)}
+.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;
+  --fk:figZoom;--fd:6.5s;--fe:ease-in-out}
+.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;
+  --fk:figSink;--fd:7.5s;--fe:cubic-bezier(.37,0,.63,1)}
+.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;
+  --fk:figTurn;--fd:5.5s;--fe:ease-in-out}
 @media (prefers-reduced-motion:reduce){
   .skill-fig::before{animation:none}
 }
