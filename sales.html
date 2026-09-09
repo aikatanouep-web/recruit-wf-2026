@@ -231,9 +231,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   width:56px;height:28px;border-radius:999px;background:var(--ink);color:#fff;overflow:hidden;}
 /* inset:0 と margin:auto で中央に置く。これが無いと絶対配置の基準が
    左上になり、待機中の2枚目がバッジの角からはみ出して見える */
-.btn-badge svg{position:absolute;inset:0;margin:auto;width:13px;height:13px}
+.btn-badge > svg{position:absolute;inset:0;margin:auto;width:13px;height:13px}
 /* 矢印は動かさない。外部へ出る印であって、ホバーの装飾ではない */
-.btn-badge svg + svg{display:none}
+.btn-badge > svg + svg{display:none}
 /* 黒地の上では白の枠線・白バッジで反転させる */
 .btn--ondark{border-color:var(--paper);color:var(--paper)}
 .btn--ondark .btn-badge{background:var(--paper);color:var(--ink)}
