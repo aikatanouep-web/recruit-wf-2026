@@ -179,9 +179,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* こちらは黒い面を敷かず、黒いアイコンだけを置く。面まで付けると
    小さいボタンの中で黒が二段になり、枠のピルより面のほうが目立つ。 */
 .xlink .btn-badge{width:auto;height:auto;background:none;color:var(--ink);border-radius:0}
-/* 線の太さは文字の縦線に合わせる。既定の 2px は 14px / weight500 の
-   和文より太く、アイコンだけが濃く見えていた。 */
-.xlink .btn-badge .ext{width:28px;height:28px;opacity:1}
+/* この SVG は絵が枠の 75% ほどしか占めないので、20px の指定で
+   見た目は 15px 前後になる。文字（14px）と同じか、わずかに大きい。
+   線の太さも文字の縦線に合わせる。既定の 2px は weight500 の和文より
+   太く、アイコンだけが濃く見えていた。 */
+.xlink .btn-badge .ext{width:20px;height:20px;opacity:1}
 .xlink .btn-badge .ext svg{stroke-width:1.6}
 
 /* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
