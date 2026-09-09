@@ -162,17 +162,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 @media (hover:hover){a:hover > .ext{opacity:1}}
 
 /* 外部リンクは枠線のピルにする（garage.co.jp の作法）。文字だけの
-   リンクだと、外部へ出るという性質が本文中のリンクと区別できない。 */
-.xlink{display:inline-flex;align-items:center;gap:10px;
-  height:38px;padding:0 18px;border:1.5px solid var(--ink);border-radius:999px;
-  font-size:13px;letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;
-  white-space:nowrap;
-  transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo),
-    border-color .45s var(--ease-out-expo)}
-@media (hover:hover){
-  .xlink:hover{background:var(--ink);border-color:var(--ink);color:#fff}
-  .xlink:hover .ext{opacity:1}
-}
+   リンクだと、外部へ出るという性質が本文中のリンクと区別できない。
+   形と動きは下部の導線ボタン（.btn）と揃える。同じ「押して出ていく」
+   部品なので、別の作法を持たせる理由がない。寸法だけ一段落として、
+   本文の中で主導線と競合しないようにする。
+   バッジの中は矢印ではなく別窓の印にする。外部へ出ることは
+   ホバーの装飾ではなく、待機中から伝わっているべき情報。 */
+.xlink{position:relative;display:inline-flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:9px 22px;border:2px solid var(--ink);border-radius:999px;
+  background:transparent;color:var(--ink);text-decoration:none;
+  font-weight:500;font-size:14px;letter-spacing:.06em;line-height:1.2;white-space:nowrap;
+  --st:.028s}
+/* 縦積みの中に置かれても、幅は文字ぶんだけにする。伸びると
+   ラベルとバッジの間だけが開いて、ボタンの形が崩れる。 */
+.xlink{align-self:flex-start}
+/* こちらは黒い面を敷かず、黒いアイコンだけを置く。面まで付けると
+   小さいボタンの中で黒が二段になり、枠のピルより面のほうが目立つ。 */
+.xlink .btn-badge{width:auto;height:auto;background:none;color:var(--ink);border-radius:0}
+/* 線の太さは文字の縦線に合わせる。既定の 2px は 14px / weight500 の
+   和文より太く、アイコンだけが濃く見えていた。 */
+.xlink .btn-badge .ext{width:28px;height:28px;opacity:1}
+.xlink .btn-badge .ext svg{stroke-width:1.6}
 
 /* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
    ・枠は2px・角丸100px、内側の余白は .75em 2em
@@ -196,7 +206,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    斜めに動いたときに自分の枠で横に切れてしまう。 */
 .btn-label{display:block;overflow:hidden;height:1.25em;line-height:1.25}
 .btn-ch{position:relative;display:inline-block;vertical-align:top;height:1.25em;line-height:1.25}
-.btn-ch > span{display:block}
+.btn-ch > span{display:block;white-space:pre}
 .btn-ch > span + span{position:absolute;top:0;left:0;transform:translate(-.32em,100%)}
 /* 右上へ抜け、複製が左下から入ってくる。真上に流すより動きに向きが出る。
    1文字ずつの遅れを大きく取り（--st）、波が左から右へ伝わるようにする。
@@ -205,13 +215,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 @keyframes chOut{to{transform:translate(.32em,-100%)}}
 @keyframes chIn{from{transform:translate(-.32em,100%)}to{transform:translate(0,0)}}
 @media (hover:hover){
-  .btn:hover .btn-ch > span{
+  .btn:hover .btn-ch > span,.xlink:hover .btn-ch > span{
     animation:chOut .42s cubic-bezier(.24,.12,.09,1) calc(var(--i,0) * var(--st))}
-  .btn:hover .btn-ch > span + span{
+  .btn:hover .btn-ch > span + span,.xlink:hover .btn-ch > span + span{
     animation:chIn .42s cubic-bezier(.24,.12,.09,1) calc(var(--i,0) * var(--st))}
 }
 @media (prefers-reduced-motion:reduce){
-  .btn:hover .btn-ch > span{animation:none}
+  .btn:hover .btn-ch > span,.xlink:hover .btn-ch > span{animation:none}
 }
 
 /* バッジは横長。円にすると矢印だけが浮いて、ラベルとの関係が切れる。
@@ -1232,7 +1242,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="body-tx" data-fade data-observe>日本の食・宿泊産業が元気であれば、<br>日本は世界で高い価値を発揮できる。<br>だから私たちは、その産業を支える<br>「人」の採用・就業を支援しています。</p>
         <p class="body-tx" data-fade data-observe>Cuolegaのセールスは、求職者一人の次の一歩や、<br>受け入れる企業の未来に関わる仕事です。</p>
       </div>
-      <a class="xlink" href="#" target="_blank" rel="noopener">About Cuolega<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      <a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>A</span><span aria-hidden="true">A</span></span><span class="btn-ch" style="--i:1"><span>b</span><span aria-hidden="true">b</span></span><span class="btn-ch" style="--i:2"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:3"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:4"><span>t</span><span aria-hidden="true">t</span></span><span class="btn-ch" style="--i:5"><span>&nbsp;</span><span aria-hidden="true">&nbsp;</span></span><span class="btn-ch" style="--i:6"><span>C</span><span aria-hidden="true">C</span></span><span class="btn-ch" style="--i:7"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:8"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:9"><span>l</span><span aria-hidden="true">l</span></span><span class="btn-ch" style="--i:10"><span>e</span><span aria-hidden="true">e</span></span><span class="btn-ch" style="--i:11"><span>g</span><span aria-hidden="true">g</span></span><span class="btn-ch" style="--i:12"><span>a</span><span aria-hidden="true">a</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
     </div>
       <div class="msg-media" data-zoom aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
@@ -1498,9 +1508,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>プロダクト</h3>
     <div class="prod-row" data-stagger data-observe>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
     </div>
   </section>
 
