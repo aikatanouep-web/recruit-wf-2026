@@ -152,10 +152,27 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    ラベルに追従させる。線の太さだけは non-scaling-stroke で固定し、
    どの大きさでも実効 1.5px になるようにする。 */
 .ext{display:inline-flex;align-items:center;justify-content:center;width:1.08em;height:1.08em;flex:none;
-  color:currentColor;border:0;padding:0;transition:transform var(--dur-hover) var(--ease-out-expo)}
+  color:currentColor;border:0;padding:0;
+  transition:opacity .35s var(--ease-out-expo)}
 .ext svg{width:100%;height:100%;display:block;stroke-width:2}
 .ext svg *{vector-effect:non-scaling-stroke}
-@media (hover:hover){a:hover > .ext{transform:translate(2px,-2px);transition-duration:.4s}}
+/* 別窓アイコンは動かさない。斜め上へ飛ばすと、外部へ出る印なのか
+   ホバーの装飾なのか区別がつかず、落ち着かない。濃度だけ変える。 */
+.ext{opacity:.6}
+@media (hover:hover){a:hover > .ext{opacity:1}}
+
+/* 外部リンクは枠線のピルにする（garage.co.jp の作法）。文字だけの
+   リンクだと、外部へ出るという性質が本文中のリンクと区別できない。 */
+.xlink{display:inline-flex;align-items:center;gap:10px;
+  height:38px;padding:0 18px;border:1.5px solid var(--line2);border-radius:999px;
+  font-size:13px;letter-spacing:.06em;line-height:1;color:var(--ink);text-decoration:none;
+  white-space:nowrap;
+  transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo),
+    border-color .45s var(--ease-out-expo)}
+@media (hover:hover){
+  .xlink:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+  .xlink:hover .ext{opacity:1}
+}
 
 /* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
    ・枠は2px・角丸100px、内側の余白は .75em 2em
@@ -163,26 +180,51 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    ・ホバーで動くのは矢印だけ */
 /* 遷移先が決まるまでは押せる要素にしない（span で置いている）。
    ホバーの反応だけは残すので、見え方は変わらない。 */
-.btn{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;
-  padding:15px 20px 15px 40px;
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:space-between;gap:20px;
+  isolation:isolate;padding:15px 20px 15px 40px;
   border:2.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);
   text-decoration:none;cursor:pointer;
-  font-weight:500;font-size:20px;letter-spacing:.06em;line-height:1.2;white-space:nowrap}
-/* ラベルは窓の中で入れ替わる（tech.garage.co.jp の c-flip と同じ）。
-   同じ文字を2枚重ね、上へ送って2枚目を出す。文字が動くことで、
-   矢印だけが動くより「反応した」ことがはっきり伝わる。 */
-/* 窓の高さを1行に固定する。overflow だけでは箱が2行ぶんに伸びて、
-   2枚重ねた文字がそのまま並んで見えてしまう。 */
-.btn-label{display:block;overflow:hidden;height:1.25em;line-height:1.25}
-.btn-flip{display:block;transition:transform .5s var(--ease-out-expo)}
-.btn-flip > span{display:block}
-@media (hover:hover){.btn:hover .btn-flip{transform:translateY(-50%)}}
+  font-weight:500;font-size:20px;letter-spacing:.06em;line-height:1.2;white-space:nowrap;
+  transition:color .45s var(--ease-out-expo),border-color .45s var(--ease-out-expo)}
+/* garage.co.jp の gradbtn と同じ2つの動きを実装している。実装（app.js）を
+   読んで値を合わせた。
+   1. 枠のグラデーションの角度が、ホバー中ずっと回り続ける（4秒で1周・線形・ループ）
+   2. ラベルが1文字ずつ、7.5ms ずつずれて上へ流れて入れ替わる（0.4秒）
+   背景は塗りつぶさない。参考も地は白のままで、動くのは枠と文字だけ。 */
+@property --ga{syntax:"<angle>";inherits:false;initial-value:0deg}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:999px;
+  padding:2.5px;opacity:0;
+  background:conic-gradient(from var(--ga),var(--accent),#7fd0d2 25%,#0d5f66 55%,var(--accent));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  transition:opacity .3s ease}
+@keyframes gaSpin{to{--ga:360deg}}
+@media (hover:hover){
+  .btn:hover{border-color:transparent}
+  .btn:hover::before{opacity:1;animation:gaSpin 4s linear infinite}
+}
+
+/* 文字は1文字ずつ入れ替える。窓の高さを1行に固定しないと、
+   下で待機している複製がそのまま並んで見える。 */
+.btn-label{display:block;line-height:1.25}
+.btn-ch{position:relative;display:inline-block;overflow:hidden;vertical-align:top;
+  height:1.25em;line-height:1.25}
+.btn-ch > span{display:block;
+  transition:transform .4s cubic-bezier(.24,.12,.09,1);
+  transition-delay:calc(var(--i,0) * .0075s)}
+.btn-ch > span + span{position:absolute;top:0;left:0;transform:translateY(100%)}
+@media (hover:hover){
+  .btn:hover .btn-ch > span{transform:translateY(-100%)}
+  .btn:hover .btn-ch > span + span{transform:translateY(0)}
+}
 
 /* バッジは横長。円にすると矢印だけが浮いて、ラベルとの関係が切れる。
    反応は矢印の入れ替えだけにする。面まで一緒に動かすと、素早く
    カーソルを往復させたときに塗りと矢印がずれて雑に見える。 */
 .btn-badge{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;
-  width:56px;height:28px;border-radius:999px;background:var(--ink);color:#fff;overflow:hidden}
+  width:56px;height:28px;border-radius:999px;background:var(--ink);color:#fff;overflow:hidden;
+  transition:background-color .45s var(--ease-out-expo),color .45s var(--ease-out-expo)}
 /* inset:0 と margin:auto で中央に置く。これが無いと絶対配置の基準が
    左上になり、待機中の2枚目がバッジの角からはみ出して見える */
 .btn-badge svg{position:absolute;inset:0;margin:auto;width:13px;height:13px;
@@ -196,6 +238,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 黒地の上では白の枠線・白バッジで反転させる */
 .btn--ondark{border-color:var(--paper);color:var(--paper)}
 .btn--ondark .btn-badge{background:var(--paper);color:var(--ink)}
+
 
 /* 追従ヘッダー。導線がテキストボタン2本だけになったので、ロゴとナビを畳む
    is-compact は廃止した。スクロール後は必ず地色を持たせる（透過のままだと
@@ -294,11 +337,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform:scaleX(0);transform-origin:left center;
   transition:transform .4s cubic-bezier(.16,.5,.25,1)}
 .to-top svg{position:relative;z-index:1;display:block;width:20px;height:20px}
-/* 黒地の上でも輪郭が分かるよう、地色を上げて白い罫を持たせる。
-   すりガラスだけでは真っ黒な面の上でほぼ見えない。 */
-.to-top.is-inverted{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.42);
-  color:#fff;
-  backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
+/* 黒地の上では、すりガラスをやめて白い枠のはっきりした四角にする。
+   半透明の地＋薄い罫では、真っ黒な面の上で輪郭がほとんど読めなかった。 */
+.to-top.is-inverted{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.72);
+  border-width:1.5px;color:#fff;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 @media (hover:hover){
   .to-top:hover{color:#fff;border-color:var(--accent)}
   .to-top:hover .tt-fill{transform:scaleX(1)}
@@ -468,7 +511,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .mrt-intro .lead{margin-top:32px;max-width:780px;color:rgba(255,255,255,.72)}
 /* 見出しだけの帯が長く続くと寂しいので、粘着タイトルの手前に画像面を置く。
    面の色は他と同じライトグレー（--ph）。黒地でも出し分けない。 */
-.mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/420;border-radius:8px;overflow:hidden}
+.mrt-media{margin:64px var(--gutter) 0;aspect-ratio:1340/560;border-radius:8px;overflow:hidden}
 /* 粘着する見出し。静止時はグレーで、地に沈ませる。
    カード(z-index:2)より後ろに置く。前面にすると、粘着が終わる最後に
    タイトルがカードの上へ乗って文字が重なる。後ろなら不透明なカードが
@@ -499,8 +542,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 見出し(120+64)の40px下に粘着させる */
 .mrt-card{position:sticky;top:224px;z-index:2;display:flex;
   width:min(1340px,calc(100% - 100px));height:523px;margin:0 auto 40px;
-  background:#141416;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+  background:#141416;border-radius:4px;overflow:hidden}
 .mrt-card:last-child{margin-bottom:0}
+/* カードに枠線は持たせない。右半分は明るい画像面なので、枠線が
+   その上を黒い線として横切ってしまう。境界は面の色の差で足りる。 */
 .mrt-txt{flex:none;width:770px;padding:44px 48px;display:flex;flex-direction:column}
 .mrt-num{margin:0;font-family:var(--font-label);font-weight:400;font-size:12px;letter-spacing:2.4px;
   color:rgba(255,255,255,.8)}
@@ -537,7 +582,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    下は自分の中身と束ねるために小さく取る（上下を同じにすると
    どのかたまりに属する見出しか読めなくなる）。 */
 /* 見出しの直後に置く画像面。雰囲気を伝える写真が入る前提の枠 */
-.sec-media{margin-top:48px;aspect-ratio:1171/420;border-radius:8px;overflow:hidden}
+.sec-media{margin-top:48px;aspect-ratio:1171/540;border-radius:8px;overflow:hidden}
 .sec-media img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* 画像は、枠に入ってから抜けるまでの間にゆっくり寄る。
@@ -600,7 +645,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 図は線画をやめ、ゆっくり回り続ける色の面にした。線で意味を説明すると
    既製のアイコンに見えるうえ、4つ並ぶと画面が細かくなる。
    円錐グラデーションを大きくぼかし、回転させているだけなので軽い。 */
-.skill-fig{position:relative;display:block;width:100%;aspect-ratio:5/4;margin:0;
+.skill-fig{position:relative;display:block;width:100%;aspect-ratio:5/4;margin:0 0 4px;
   border-radius:10px;overflow:hidden;background:#101113}
 /* 回しても四隅が欠けないよう、枠の対角より大きい正方形を中央に置く。
    inset で上下左右を同じだけ広げると、横長の枠では回転時に短辺側が足りない。
@@ -641,11 +686,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 }
 /* 14px。番号を行頭に入れたぶん、15px だと「ビルドアップ / 2ステップキャリア」
    だけ2行に折れて、4つの見出しの高さが揃わなくなる。 */
-.skill h4{font-weight:600;font-size:14px;letter-spacing:.06em;line-height:1.6;margin:0 0 10px}
+/* 画像と見出しの間はしっかり空ける。詰めると絵とタイトルが1つの塊に見え、
+   4列が横につながって読みにくい。 */
+.skill h4{font-weight:600;font-size:14px;letter-spacing:.06em;line-height:1.6;margin:0 0 12px}
+.skills-band .skill h4{margin-top:22px}
 /* 番号は見出しの行頭に置く。別行にすると図と見出しの間に段が増えて
    かたまりが分かれて見えるので、見出しと同じ行に収める。 */
 .skill h4 .no{font-family:var(--font-label);font-weight:700;font-size:12px;letter-spacing:1.6px;
   color:var(--accent);margin-right:10px}
+/* 黒地では番号も白。地の上でエメラルドだけが浮いて、見出しから離れて見える */
+.skills-band .skill h4 .no{color:#fff}
 .skill p{font-size:12px;letter-spacing:.06em;line-height:1.9;color:var(--caption);margin:0}
 /* メンバー */
 /* この先の選択肢：色面のカード。3枚は同じ色相帯（青緑〜藍）の中で
@@ -818,8 +868,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .m-change::before{content:"";position:absolute;left:0;right:0;top:5px;height:1px;background:var(--line2);
   transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease-out-expo)}
 .is-inview .m-change::before{transform:scaleX(1)}
-.m-col{position:relative}
-/* 節点。レールが引かれ終わってから、左・右の順に現れる */
+/* 節点とラベルは横一列に並べる。節点を上、ラベルを下に置くと段が増え、
+   1人ぶんのカードの中で行数が嵩んで窮屈になる。 */
+.m-col{position:relative;padding-top:22px}
 .m-col::before{content:"";position:absolute;left:0;top:0;width:11px;height:11px;border-radius:50%;
   background:var(--paper);border:1px solid var(--line2);box-sizing:border-box;
   transform:scale(0);transition:transform .5s var(--ease-out-expo) .5s}
@@ -827,16 +878,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 到達点だけを塗り、薄い輪を添えて重みを付ける */
 .m-col--now::before{background:var(--accent);border-color:var(--accent);
   box-shadow:0 0 0 4px rgba(0,169,173,.16);transition-delay:.72s}
-.m-k{display:block;margin:20px 0 0;font-family:var(--font-label);font-weight:400;font-size:10px;
+.m-k{position:absolute;left:19px;top:1px;margin:0;
+  font-family:var(--font-label);font-weight:400;font-size:10px;
   letter-spacing:1.8px;line-height:1;text-transform:uppercase;color:var(--caption)}
-.m-v{font-size:13px;letter-spacing:.04em;line-height:1.7;margin:10px 0 0;color:var(--caption)}
+.m-v{font-size:13px;letter-spacing:.04em;line-height:1.7;margin:0;color:var(--caption)}
 .m-col--now .m-k{color:var(--accent)}
 .m-col--now .m-v{color:var(--ink);font-weight:600}
 @media (prefers-reduced-motion:reduce){
   .m-change::before,.m-col::before{transform:none !important}
 }
-/* 本文の量が人によって違っても、導線はカードの下端に揃える */
-.m-more{margin-top:auto;padding-top:4px}
+/* 本文の量が人によって違っても、導線はカードの下端に揃える。
+   直前の Before → Now とは離しておく（続けて置くと導線が経歴の一部に見える）。 */
+.m-more{margin-top:auto;padding-top:20px}
 
 /* 中間CTA */
 /* 中間の黒帯CTA：Figma では左右振り分けをやめて中央寄せ。
@@ -877,7 +930,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .co h3,.prod .prod-name{transition:transform .6s var(--ease-out-expo)}
 @media (hover:hover){
   .co:hover::after{transform:scaleX(1)}
-  .co:hover h3,.prod:hover .prod-name{transform:translateX(4px)}
+  .co:hover h3{transform:translateX(4px)}
 }
 .co h3{font-weight:600;font-size:18px;letter-spacing:.1em;line-height:1.6;margin:0}
 .co p{font-size:13px;letter-spacing:.06em;line-height:1.9;color:#3a3a40;margin:0}
@@ -933,17 +986,28 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .faq-head{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
 .faq-cat + .faq-cat{margin-top:56px}
 /* カテゴリ見出しは設問の束をまとめる印。設問より一段大きければ足りるので、
-   22px から落として上下も詰める。 */
-.faq-cat-ttl{font-weight:600;font-size:17px;letter-spacing:.1em;line-height:1.6;margin:0 0 20px}
+   22px から落として上下も詰める。頭にアクセントの短い罫を添えて、
+   文字だけが縦に続く単調さを断つ。 */
+.faq-cat-ttl{position:relative;display:flex;align-items:center;gap:12px;
+  font-weight:600;font-size:17px;letter-spacing:.1em;line-height:1.6;margin:0 0 20px}
+.faq-cat-ttl::before{content:"";width:22px;height:2px;flex:none;border-radius:2px;
+  background:var(--accent);
+  transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease-out-expo)}
+.faq-cat-ttl.is-inview::before{transform:scaleX(1)}
 .faq-list{display:flex;flex-direction:column;gap:20px}
 /* News の行と同じ骨格：番号列 85px ＋ gap 60px ＋ 本文 */
 /* 番号の列と本文の間は 60 → 36px。番号は2〜3文字しかないので、
    85px も取ると本文までの距離だけが空いて読みにくい。 */
 .faq-qa{position:relative;display:flex;align-items:flex-start;gap:36px;padding:0 0 20px}
-.faq-no{width:52px;flex:none;font-family:var(--font-label);font-weight:400;line-height:1;
-  display:flex;align-items:baseline;gap:4px;padding-top:2px}
-.faq-no .k{font-size:11px;letter-spacing:.7px;color:var(--caption)}
-.faq-no .n{font-size:16px;letter-spacing:1.4px}
+/* 番号は淡い丸の中に置く。裸の数字が縦に並ぶより、行の起点がはっきりする。 */
+.faq-no{width:44px;height:44px;flex:none;border-radius:50%;background:rgba(0,169,173,.08);
+  font-family:var(--font-label);font-weight:400;line-height:1;
+  display:flex;align-items:baseline;justify-content:center;gap:3px;
+  padding-top:17px;color:var(--accent);
+  transition:background-color .5s var(--ease-out-expo)}
+.faq-qa:hover .faq-no{background:rgba(0,169,173,.16)}
+.faq-no .k{font-size:10px;letter-spacing:.7px}
+.faq-no .n{font-size:14px;letter-spacing:1.2px}
 .faq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
 .faq-qa .q{font-weight:600;font-size:14px;letter-spacing:1px;line-height:1.5;color:var(--ink);margin:0}
 .faq-qa .a{font-size:13px;letter-spacing:1px;line-height:1.75;color:#3a3a40;margin:0}
@@ -1170,7 +1234,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="body-tx" data-fade data-observe>日本の食・宿泊産業が元気であれば、<br>日本は世界で高い価値を発揮できる。<br>だから私たちは、その産業を支える<br>「人」の採用・就業を支援しています。</p>
         <p class="body-tx" data-fade data-observe>Cuolegaのセールスは、求職者一人の次の一歩や、<br>受け入れる企業の未来に関わる仕事です。</p>
       </div>
-      <a class="tlink" href="#" target="_blank" rel="noopener"><span class="label">About Cuolega</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      <a class="xlink" href="#" target="_blank" rel="noopener">About Cuolega<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
     </div>
       <div class="msg-media" data-zoom aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
@@ -1419,7 +1483,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <h2>まずは、キャリアについて話してみませんか</h2>
       <p>応募を決めていなくても構いません。仕事の実際や、この先のキャリアの話をする場です。</p>
     </div>
-    <div class="row"><span class="btn btn--ondark"><span class="btn-label"><span class="btn-flip"><span>カジュアル面談を申し込む</span><span aria-hidden="true">カジュアル面談を申し込む</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span></div>
+    <div class="row"><span class="btn btn--ondark"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>カ</span><span aria-hidden="true">カ</span></span><span class="btn-ch" style="--i:1"><span>ジ</span><span aria-hidden="true">ジ</span></span><span class="btn-ch" style="--i:2"><span>ュ</span><span aria-hidden="true">ュ</span></span><span class="btn-ch" style="--i:3"><span>ア</span><span aria-hidden="true">ア</span></span><span class="btn-ch" style="--i:4"><span>ル</span><span aria-hidden="true">ル</span></span><span class="btn-ch" style="--i:5"><span>面</span><span aria-hidden="true">面</span></span><span class="btn-ch" style="--i:6"><span>談</span><span aria-hidden="true">談</span></span><span class="btn-ch" style="--i:7"><span>を</span><span aria-hidden="true">を</span></span><span class="btn-ch" style="--i:8"><span>申</span><span aria-hidden="true">申</span></span><span class="btn-ch" style="--i:9"><span>し</span><span aria-hidden="true">し</span></span><span class="btn-ch" style="--i:10"><span>込</span><span aria-hidden="true">込</span></span><span class="btn-ch" style="--i:11"><span>む</span><span aria-hidden="true">む</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span></div>
   </section>
 
   <!-- ============ 06 Company ============ 会社・事業・プロダクトをひとまとまりで -->
@@ -1436,9 +1500,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>プロダクト</h3>
     <div class="prod-row" data-stagger data-observe>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="tlink tlink--light" href="#" target="_blank" rel="noopener"><span class="label">サービスサイトへ</span><span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="xlink" href="#" target="_blank" rel="noopener">サービスサイトへ<span class="ext" role="img" aria-label="別タブで開きます" title="別タブで開きます"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a></div>
     </div>
   </section>
 
@@ -1505,7 +1569,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <div class="faq-main">
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>仕事内容</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>仕事内容</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">01</span></span>
@@ -1520,7 +1584,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>成果・目標</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>成果・目標</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">03</span></span>
@@ -1535,7 +1599,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>評価・報酬</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>評価・報酬</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">05</span></span>
@@ -1550,7 +1614,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>教育・サポート</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>教育・サポート</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">07</span></span>
@@ -1570,7 +1634,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>キャリアパス</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>キャリアパス</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">10</span></span>
@@ -1585,7 +1649,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>働き方</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>働き方</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">12</span></span>
@@ -1600,7 +1664,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>組織・カルチャー</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>組織・カルチャー</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">14</span></span>
@@ -1615,7 +1679,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           </div>
         </div>
         <div class="faq-cat">
-          <h3 class="faq-cat-ttl" data-words data-observe>応募・選考</h3>
+          <h3 class="faq-cat-ttl" data-words data-observe data-reveal>応募・選考</h3>
           <div class="faq-list" data-stagger data-observe>
           <div class="faq-qa">
             <span class="faq-no" aria-hidden="true"><span class="k">Q</span><span class="n">16</span></span>
@@ -1641,8 +1705,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <section class="endcta">
     <p class="stmt" data-words data-observe>MOVING SOMEONE&rsquo;S CAREER<br>expands YOUR OWN</p>
     <div class="row" data-reveal data-delay="0.15">
-      <span class="btn "><span class="btn-label"><span class="btn-flip"><span>カジュアル面談</span><span aria-hidden="true">カジュアル面談</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
-      <span class="btn "><span class="btn-label"><span class="btn-flip"><span>新卒エントリー</span><span aria-hidden="true">新卒エントリー</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
+      <span class="btn "><span class="btn-label"><span class="btn-ch" style="--i:0"><span>カ</span><span aria-hidden="true">カ</span></span><span class="btn-ch" style="--i:1"><span>ジ</span><span aria-hidden="true">ジ</span></span><span class="btn-ch" style="--i:2"><span>ュ</span><span aria-hidden="true">ュ</span></span><span class="btn-ch" style="--i:3"><span>ア</span><span aria-hidden="true">ア</span></span><span class="btn-ch" style="--i:4"><span>ル</span><span aria-hidden="true">ル</span></span><span class="btn-ch" style="--i:5"><span>面</span><span aria-hidden="true">面</span></span><span class="btn-ch" style="--i:6"><span>談</span><span aria-hidden="true">談</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
+      <span class="btn "><span class="btn-label"><span class="btn-ch" style="--i:0"><span>新</span><span aria-hidden="true">新</span></span><span class="btn-ch" style="--i:1"><span>卒</span><span aria-hidden="true">卒</span></span><span class="btn-ch" style="--i:2"><span>エ</span><span aria-hidden="true">エ</span></span><span class="btn-ch" style="--i:3"><span>ン</span><span aria-hidden="true">ン</span></span><span class="btn-ch" style="--i:4"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:5"><span>リ</span><span aria-hidden="true">リ</span></span><span class="btn-ch" style="--i:6"><span>ー</span><span aria-hidden="true">ー</span></span></span><span class="btn-badge" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5L10.5 3.5M10.5 9.6V3.5H4.4"/></svg></span></span>
     </div>
   </section>
 
