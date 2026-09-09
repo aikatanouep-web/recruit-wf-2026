@@ -691,10 +691,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .skill-fig img{animation:none;transform:none}
 }
 /* 4つは色相を振る。回る速さも少しずつ変えて、同じ動きに揃わないようにする */
-.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:15s}
-.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:18s}
-.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:21s}
-.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:13s}
+.skill:nth-child(1) .skill-fig{--f1:#0f2a4a;--f2:#3f6fae;--f3:#0a1a2e;--fd:11s}
+.skill:nth-child(2) .skill-fig{--f1:#3a2a4e;--f2:#8a6bb0;--f3:#1e1430;--fd:13s}
+.skill:nth-child(3) .skill-fig{--f1:#12402f;--f2:#4f9c74;--f3:#0a2419;--fd:15s}
+.skill:nth-child(4) .skill-fig{--f1:#0b3f47;--f2:#22a6ac;--f3:#062227;--fd:9.5s}
 @media (prefers-reduced-motion:reduce){
   .skill-fig::before{animation:none}
 }
@@ -706,7 +706,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .skills-band .skill h4{margin-top:22px}
 /* 番号は見出しの行頭に置く。別行にすると図と見出しの間に段が増えて
    かたまりが分かれて見えるので、見出しと同じ行に収める。 */
-.skill h4 .no{font-family:var(--font-label);font-weight:700;font-size:12px;letter-spacing:1.6px;
+.skill h4 .no{font-family:var(--font-label);font-weight:700;font-size:14px;letter-spacing:1.6px;
   color:var(--accent);margin-right:10px}
 /* 黒地では番号も白。地の上でエメラルドだけが浮いて、見出しから離れて見える */
 .skills-band .skill h4 .no{color:#fff}
@@ -828,7 +828,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transition:background-color .6s var(--ease-out-expo),transform .6s var(--ease-out-expo)}
 .pick-icon svg{width:30px;height:30px;display:block}
 @media (hover:hover){
-  .pick:hover .pick-icon{background:rgba(255,255,255,.24);transform:translateY(-2px)}
+  /* 動かさず、色だけ変える。持ち上げると押せる要素に見えてしまう */
+  .pick:hover .pick-icon{background:rgba(255,255,255,.24)}
 }
 /* 進行を示す印は、レールをやめて番号のチップにした。横に長い罫線は
    「ただの線」に見えて意味が伝わらないうえ、3枚のカードの関係も表せない。
@@ -914,17 +915,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    ページ後半で「FVと同じ面に戻ってきた」と分かる目印になる。 */
 /* 背景は写真。黒を重ねて沈めたうえで文字を乗せる。仮素材なので
    imgs/fv/04-team.jpg を当てている（オフィスの実写に差し替える前提）。 */
+/* 文章とボタンを中央に積む。左右に振ると、読み終わった先に導線がなく、
+   視線が横へ戻される。真下に置けば読んだ流れのまま押せる。 */
 .midcta{position:relative;background:var(--ink) url("imgs/fv/04-team.jpg") center/cover no-repeat;
   color:var(--paper);
-  padding:120px var(--gutter);display:flex;align-items:center;justify-content:space-between;
-  gap:56px;flex-wrap:wrap;overflow:hidden}
-/* 写真の上に膜を敷く。左を濃く、右をやや抜いて写真を残す */
+  padding:120px var(--gutter);display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:40px;overflow:hidden}
+/* 写真の上に膜を敷く。中央に文字を置くので、左右で濃さを変えず一様にする */
 .midcta::before{content:"";position:absolute;inset:0;
-  background:linear-gradient(95deg,rgba(13,13,14,.92) 0%,rgba(13,13,14,.78) 46%,rgba(13,13,14,.6) 100%)}
+  background:linear-gradient(180deg,rgba(13,13,14,.88) 0%,rgba(13,13,14,.8) 100%)}
 .midcta > *{position:relative;z-index:1}
 .midcta h2{font-weight:600;font-size:32px;letter-spacing:.06em;line-height:1.45;margin:0;max-width:724px}
 .midcta p{font-size:14px;letter-spacing:.08em;line-height:1.9;color:rgba(255,255,255,.72);
-  margin:20px 0 0;max-width:640px}
+  margin:20px auto 0;max-width:640px}
 .midcta .row{display:flex;gap:24px;flex:none}
 
 /* 07 Company */
@@ -1391,7 +1394,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <p class="eyebrow">Career</p>
       <h2 class="h2" data-words data-observe>キャリアの広がりと、歩んでいる人</h2>
     </div>
-    <div class="sec-media" data-grow><img src="imgs/fv/career.jpg" alt="" decoding="async"></div>
+    <div class="sec-media" data-grow><div class="ph"><i>VISUAL ASSETS</i></div></div>
     <div class="skills-band">
       <h3 class="h3" data-words data-observe>身につくもの</h3>
     <div class="skills" data-stagger data-observe>
