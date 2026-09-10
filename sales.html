@@ -330,7 +330,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    暗い面ではすりガラスにして、後ろの内容をうっすら透かす。 */
 .to-top{position:fixed;z-index:90;right:max(24px,calc(50vw - 720px + 40px));bottom:40px;
   width:64px;height:64px;display:grid;place-items:center;
-  border:1px solid transparent;border-radius:4px;background:var(--ink);color:#fff;
+  border:1px solid transparent;border-radius:4px;background:#2e2e31;color:#fff;
   overflow:hidden;isolation:isolate;cursor:pointer;padding:0;
   opacity:0;transform:translateY(12px);pointer-events:none;
   transition:opacity .3s ease,transform .3s ease,color .3s ease,
@@ -341,10 +341,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform:scaleX(0);transform-origin:left center;
   transition:transform .4s cubic-bezier(.16,.5,.25,1)}
 .to-top svg{position:relative;z-index:1;display:block;width:20px;height:20px}
-/* 黒地の上ではライトグレーの面にして、矢印を黒で置く。明るい面の
-   （黒地に白矢印の）ちょうど反転になり、どちらの地でも同じ強さで見える。
-   すりガラスはやめる。不透明な面には効かない。 */
-.to-top.is-inverted{background:var(--ph);border-color:transparent;color:var(--ink)}
+/* 地の明暗で色を変えない。1つのグレーで通す。明るい面では黒に近い面として、
+   黒い面では一段明るい面として読めるので、どちらでも同じ部品に見える。
+   （is-inverted は JS が付け外しするが、見た目は変えない） */
+.to-top.is-inverted{background:#2e2e31;border-color:transparent;color:#fff}
 @media (hover:hover){
   .to-top:hover{color:#fff}
   .to-top:hover .tt-fill{transform:scaleX(1)}
