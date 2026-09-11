@@ -191,7 +191,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    線の太さも文字の縦線に合わせる。既定の 2px は weight500 の和文より
    太く、アイコンだけが濃く見えていた。 */
 .xlink .btn-badge .ext{width:20px;height:20px;opacity:1}
-.xlink .btn-badge .ext svg{stroke-width:2}
+.xlink .btn-badge .ext svg{stroke-width:2.4}
 
 /* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
    ・枠は2px・角丸100px、内側の余白は .75em 2em
@@ -262,8 +262,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
 .header-inner{width:100%;margin:0;height:80px;padding:0 var(--gutter);
   display:flex;align-items:center;justify-content:space-between}
+/* 畳むときに幅を 0 にしない。幅が動くと、右にあるナビとカプセルが
+   一緒に引きずられて「横へ飛んで消える」動きになる。その場で引く。 */
 .logo{flex:none;display:block;width:109px;height:14.021px;color:var(--ink);overflow:hidden;
-  transition:opacity .3s ease,width .4s var(--ease-out-expo)}
+  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo)}
 .logo .lg{display:block;width:100%;height:100%}
 .logo .lg-mark{display:none}
 /* ヘッダーの導線はカジュアル面談とエントリーの2本だけ。丸ボタンは使わず、
@@ -277,9 +279,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* 13px の欧文大文字＋字送り .1em。語の中がゆるいぶん、語間は
    キャップハイトの約4倍(=40px)まで開けないと語の切れ目が読めない。
    リンク群とボタン群は別のまとまりなので、そこは更に離す。 */
+/* 畳む動きは opacity とごく浅い上方向の移動だけで作る。max-width を
+   縮める作りは、語が右へ滑りながら順に隠れるので目で追ってしまう。
+   場所を動かさずに引けば、消えたことにだけ気づく。 */
 .header-nav{display:flex;gap:40px;margin-left:auto;padding-right:56px;white-space:nowrap;
-  overflow:hidden;max-width:720px;opacity:1;
-  transition:max-width .45s var(--ease-out-expo),opacity .3s ease,padding .45s var(--ease-out-expo)}
+  opacity:1;
+  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo),
+    filter .5s var(--ease-out-expo)}
 /* 当たり判定を上下に広げる。margin で相殺するのでヘッダーの高さは変わらない。
    下線は ::after の bottom で文字のすぐ下に戻す(padding 16 - 元の 4 = 12px)。 */
 /* 欧文ラベルは Unbounded で統一。ただし表示用の書体なので、ナビでは
@@ -311,8 +317,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    リンクへは常に手が届く。 */
 .site-header.is-compact{background:transparent;
   backdrop-filter:none;-webkit-backdrop-filter:none}
-.site-header.is-compact .logo{width:0;opacity:0;pointer-events:none}
-.site-header.is-compact .header-nav{max-width:0;opacity:0;padding-right:0}
+.site-header.is-compact .logo{opacity:0;transform:translateY(-6px);pointer-events:none}
+.site-header.is-compact .header-nav{opacity:0;transform:translateY(-6px);filter:blur(3px);
+  pointer-events:none}
 .cta{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--ink);
   border-radius:999px;padding:9px 18px;font-size:12px;letter-spacing:.1em;line-height:1;
   color:var(--ink);background:transparent;white-space:nowrap;cursor:pointer;
@@ -334,7 +341,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
    暗い面ではすりガラスにして、後ろの内容をうっすら透かす。 */
 .to-top{position:fixed;z-index:90;right:max(24px,calc(50vw - 720px + 40px));bottom:40px;
   width:64px;height:64px;display:grid;place-items:center;
-  border:1px solid transparent;border-radius:4px;background:#2e2e31;color:#fff;
+  border:1px solid transparent;border-radius:4px;background:var(--ink);color:#fff;
   overflow:hidden;isolation:isolate;cursor:pointer;padding:0;
   opacity:0;transform:translateY(12px);pointer-events:none;
   transition:opacity .3s ease,transform .3s ease,color .3s ease,
@@ -345,10 +352,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   transform:scaleX(0);transform-origin:left center;
   transition:transform .4s cubic-bezier(.16,.5,.25,1)}
 .to-top svg{position:relative;z-index:1;display:block;width:20px;height:20px}
-/* 地の明暗で色を変えない。1つのグレーで通す。明るい面では黒に近い面として、
-   黒い面では一段明るい面として読めるので、どちらでも同じ部品に見える。
-   （is-inverted は JS が付け外しするが、見た目は変えない） */
-.to-top.is-inverted{background:#2e2e31;border-color:transparent;color:#fff}
+/* 黒い面の上では淡いグレーに置き換える。黒地に黒い面だと輪郭が出ない。
+   切り替えは background-color の transition に任せるので、章をまたぐときは
+   色が入れ替わるのではなく、片方の色からもう片方へ静かに変わる。 */
+.to-top.is-inverted{background:#4a4a50;border-color:transparent;color:#fff}
 @media (hover:hover){
   .to-top:hover{color:#fff}
   .to-top:hover .tt-fill{transform:scaleX(1)}
@@ -851,9 +858,46 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   border:1px solid rgba(255,255,255,.22);color:#fff;
   transition:background-color .6s var(--ease-out-expo),transform .6s var(--ease-out-expo)}
 .pick-icon svg{width:30px;height:30px;display:block}
+/* 絵の部品。ホバー中だけ動かすので、待機時は指定を持たせない。
+   SVG の中身は既定で図形の左上を基準に変形するため、
+   transform-box で自分の輪郭を基準に直しておく。 */
+.pi-ring,.pi-side,.pi-arrow,.pi-box2{transform-box:fill-box;transform-origin:center}
+.pi-side{opacity:.6}
 @media (hover:hover){
-  /* 動かさず、色だけ変える。持ち上げると押せる要素に見えてしまう */
-  .pick:hover .pick-icon{background:rgba(255,255,255,.24)}
+  /* 色が少し変わり、わずかに大きくなる。そのうえで絵の中が
+     ゆっくり動き続ける。持ち上げる（上へ動かす）のはしない。
+     位置が動くと押せる要素に見えてしまうため、その場で膨らませる。 */
+  .pick:hover .pick-icon{background:rgba(255,255,255,.26);transform:scale(1.08)}
+  /* PLAYER：的の輪がゆっくり広がって濃くなる */
+  .pick:hover .pi-ring{animation:piRing 2.8s ease-in-out infinite alternate}
+  /* MANAGEMENT：両脇の2人が交互に立ち上がる。左右で位相をずらす */
+  .pick:hover .pi-side--l{animation:piSide 2.4s ease-in-out infinite alternate}
+  .pick:hover .pi-side--r{animation:piSide 2.4s ease-in-out infinite alternate-reverse}
+  /* CROSS-FUNCTIONAL：矢印が渡り、渡った先の面が明るくなる */
+  .pick:hover .pi-arrow{animation:piArrow 2.6s ease-in-out infinite}
+  .pick:hover .pi-box2{animation:piBox 2.6s ease-in-out infinite}
+}
+@keyframes piRing{
+  from{opacity:.4;transform:scale(.94)}
+  to{opacity:.9;transform:scale(1.06)}
+}
+@keyframes piSide{
+  from{opacity:.35;transform:scale(.94)}
+  to{opacity:1;transform:scale(1.04)}
+}
+@keyframes piArrow{
+  0%{opacity:.5;transform:translateX(-2px)}
+  50%{opacity:1;transform:translateX(2px)}
+  100%{opacity:.5;transform:translateX(-2px)}
+}
+@keyframes piBox{
+  0%,20%{opacity:.4}
+  60%{opacity:1}
+  100%{opacity:.4}
+}
+@media (prefers-reduced-motion:reduce){
+  .pick:hover .pi-ring,.pick:hover .pi-side,
+  .pick:hover .pi-arrow,.pick:hover .pi-box2{animation:none}
 }
 /* 進行を示す印は、レールをやめて番号のチップにした。横に長い罫線は
    「ただの線」に見えて意味が伝わらないうえ、3枚のカードの関係も表せない。
@@ -1339,7 +1383,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 
 <header class="site-header" id="hdr">
   <div class="header-inner">
-    <a class="logo" href="#"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+    <a class="logo"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
       <g class="lg-mark">
         <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
         <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
@@ -1356,11 +1400,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </g>
     </svg></a>
     <nav class="header-nav">
-      <a href="#merit">MERIT</a>
-      <a href="#career">CAREER</a>
-      <a href="#company">COMPANY</a>
-      <a href="#contents">CONTENTS</a>
-      <a href="#faq">FAQ</a>
+      <a data-sec="#merit">MERIT</a>
+      <a data-sec="#career">CAREER</a>
+      <a data-sec="#company">COMPANY</a>
+      <a data-sec="#contents">CONTENTS</a>
+      <a data-sec="#faq">FAQ</a>
     </nav>
     <div class="header-cta">
       <span class="cta">カジュアル面談</span>
@@ -1380,8 +1424,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="line"><span>自分のキャリアを広げる。</span></span>
       </h1>
       <div class="row" data-reveal data-delay="0.5">
-        <a class="tlink tlink--ondark" href="#"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        <a class="tlink tlink--ondark" href="#"><span class="label">エントリー</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="tlink tlink--ondark"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="tlink tlink--ondark"><span class="label">エントリー</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
       </div>
     </div>
 
@@ -1442,7 +1486,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <p class="body-tx" data-fade data-observe>日本の食・宿泊産業が元気であれば、<br>日本は世界で高い価値を発揮できる。<br>だから私たちは、その産業を支える<br>「人」の採用・就業を支援しています。</p>
         <p class="body-tx" data-fade data-observe>Cuolegaのセールスは、求職者一人の次の一歩や、<br>受け入れる企業の未来に関わる仕事です。</p>
       </div>
-      <a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>A</span><span aria-hidden="true">A</span></span><span class="btn-ch" style="--i:1"><span>b</span><span aria-hidden="true">b</span></span><span class="btn-ch" style="--i:2"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:3"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:4"><span>t</span><span aria-hidden="true">t</span></span><span class="btn-ch" style="--i:5"><span>&nbsp;</span><span aria-hidden="true">&nbsp;</span></span><span class="btn-ch" style="--i:6"><span>C</span><span aria-hidden="true">C</span></span><span class="btn-ch" style="--i:7"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:8"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:9"><span>l</span><span aria-hidden="true">l</span></span><span class="btn-ch" style="--i:10"><span>e</span><span aria-hidden="true">e</span></span><span class="btn-ch" style="--i:11"><span>g</span><span aria-hidden="true">g</span></span><span class="btn-ch" style="--i:12"><span>a</span><span aria-hidden="true">a</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
+      <a class="xlink"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>A</span><span aria-hidden="true">A</span></span><span class="btn-ch" style="--i:1"><span>b</span><span aria-hidden="true">b</span></span><span class="btn-ch" style="--i:2"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:3"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:4"><span>t</span><span aria-hidden="true">t</span></span><span class="btn-ch" style="--i:5"><span>&nbsp;</span><span aria-hidden="true">&nbsp;</span></span><span class="btn-ch" style="--i:6"><span>C</span><span aria-hidden="true">C</span></span><span class="btn-ch" style="--i:7"><span>u</span><span aria-hidden="true">u</span></span><span class="btn-ch" style="--i:8"><span>o</span><span aria-hidden="true">o</span></span><span class="btn-ch" style="--i:9"><span>l</span><span aria-hidden="true">l</span></span><span class="btn-ch" style="--i:10"><span>e</span><span aria-hidden="true">e</span></span><span class="btn-ch" style="--i:11"><span>g</span><span aria-hidden="true">g</span></span><span class="btn-ch" style="--i:12"><span>a</span><span aria-hidden="true">a</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a>
     </div>
       <div class="msg-media" data-zoom aria-hidden="true"><div class="ph"><i>VISUAL ASSETS</i></div></div>
     </div>
@@ -1605,19 +1649,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <span class="pick-tag">Player</span>
         <h4 class="pick-h">プレイヤーとして深める</h4>
         <ul class="pick-list"><li>担当領域を広げる（飲食／ホテル・旅館／グローバル）</li><li>難易度の高い案件・高年収帯を担当する</li><li>面談ロジックの設計や型化に関わる</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.4"/><path d="M11 26a9.5 9.5 0 0 1 19 0"/><circle cx="20.5" cy="17" r="15" opacity=".45"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.4"/><path d="M11 26a9.5 9.5 0 0 1 19 0"/><circle class="pi-ring" cx="20.5" cy="17" r="15" opacity=".45"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
       <article class="pick pick-2" data-no="02">
         <span class="pick-tag">Management</span>
         <h4 class="pick-h">チームを持つ</h4>
         <ul class="pick-list"><li>リーダー／チーフリーダーとしてメンバーを持つ</li><li>マネージャーとして部門の目標設計と人員配置を担う</li><li>部長・執行役員へ</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.2"/><path d="M12 25a8.5 8.5 0 0 1 17 0"/><circle cx="6" cy="12" r="3.2" opacity=".6"/><path d="M1 25a5 5 0 0 1 8-4" opacity=".6"/><circle cx="35" cy="12" r="3.2" opacity=".6"/><path d="M40 25a5 5 0 0 0-8-4" opacity=".6"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20.5" cy="9" r="4.2"/><path d="M12 25a8.5 8.5 0 0 1 17 0"/><g class="pi-side pi-side--l"><circle cx="6" cy="12" r="3.2"/><path d="M1 25a5 5 0 0 1 8-4"/></g><g class="pi-side pi-side--r"><circle cx="35" cy="12" r="3.2"/><path d="M40 25a5 5 0 0 0-8-4"/></g></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
       <article class="pick pick-3" data-no="03">
         <span class="pick-tag">Cross-functional</span>
         <h4 class="pick-h">職種を越える</h4>
         <ul class="pick-list"><li>フィールドセールス（企業担当）へ</li><li>インサイドセールス・アカウントプランナーへ</li><li>事業企画・新規事業・新拠点の立ち上げへ</li></ul>
-        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="8" width="15" height="15" rx="2.5"/><rect x="24.5" y="8" width="15" height="15" rx="2.5" opacity=".6"/><path d="M14 15.5h13M23.5 11.5l4 4-4 4"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
+        <div class="pick-foot"><span class="pick-icon" aria-hidden="true"><svg viewBox="0 0 41 31" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="8" width="15" height="15" rx="2.5"/><rect class="pi-box2" x="24.5" y="8" width="15" height="15" rx="2.5" opacity=".6"/><path class="pi-arrow" d="M14 15.5h13M23.5 11.5l4 4-4 4"/></svg></span><span class="gbtn"><span class="lb">詳しく見る</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></span></div>
       </article>
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>活躍しているメンバー</h3>
@@ -1630,7 +1674,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
         <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1640,7 +1684,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
         <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1650,7 +1694,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
         <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1660,7 +1704,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
         <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1670,7 +1714,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
         <article class="member"><div class="media" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
         <div class="m-body"><p class="m-title">キャリアの変化を表す見出しが入ります</p>
@@ -1680,7 +1724,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
           <div class="m-col"><p class="m-k">Before</p><p class="m-v">前職名が入ります</p></div>
           <div class="m-col m-col--now"><p class="m-k">Now</p><p class="m-v">現在の役割が入ります</p></div>
         </div>
-        <div class="m-more"><a class="gbtn gbtn--sm" href="#" target="_blank" rel="noopener"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
+        <div class="m-more"><a class="gbtn gbtn--sm"><span class="lb">記事を読む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span></a></div></div>
       </article>
     </div>
   </section>
@@ -1708,9 +1752,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     </div>
     <h3 class="h3 h3--gap" data-words data-observe>プロダクト</h3>
     <div class="prod-row" data-stagger data-observe>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
-      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="xlink" href="#" target="_blank" rel="noopener"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">FoodsLabo</div><p class="prod-sub">飲食業界特化 採用DXプラットフォーム</p><a class="xlink"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">HotelsLabo</div><p class="prod-sub">ホテル・旅館業界特化 採用DXプラットフォーム</p><a class="xlink"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
+      <div class="prod"><div class="prod-ph" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div><div class="prod-name">Cuoport Japan</div><p class="prod-sub">飲食・宿泊業界特化 グローバル採用</p><a class="xlink"><span class="btn-label"><span class="btn-ch" style="--i:0"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:1"><span>ー</span><span aria-hidden="true">ー</span></span><span class="btn-ch" style="--i:2"><span>ビ</span><span aria-hidden="true">ビ</span></span><span class="btn-ch" style="--i:3"><span>ス</span><span aria-hidden="true">ス</span></span><span class="btn-ch" style="--i:4"><span>サ</span><span aria-hidden="true">サ</span></span><span class="btn-ch" style="--i:5"><span>イ</span><span aria-hidden="true">イ</span></span><span class="btn-ch" style="--i:6"><span>ト</span><span aria-hidden="true">ト</span></span><span class="btn-ch" style="--i:7"><span>へ</span><span aria-hidden="true">へ</span></span></span><span class="btn-badge" role="img" aria-label="別タブで開きます" title="別タブで開きます"><span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></span></a></div>
     </div>
   </section>
 
@@ -1722,42 +1766,42 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
         <h2 class="h2" data-words data-observe>Cuolegaを知る</h2>
       </div>
       <div class="bb-track">
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MESSAGE</span><span class="sub">代表メッセージ</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">INTERVIEW</span><span class="sub">社員インタビュー</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">NOTE</span><span class="sub">note</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">COMPANY DECK</span><span class="sub">会社紹介資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">CULTURE DECK</span><span class="sub">カルチャー資料</span></div>
             <span class="bb-arrow" aria-hidden="true"><svg viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"><path d="M1 11L13 1M13 9.4V1H4.6"/></svg></span>
           </div>
         </a>
-        <a class="bb-panel" href="#" target="_blank" rel="noopener">
+        <a class="bb-panel">
           <div class="bb-photo" data-zoom><div class="ph"><i>VISUAL ASSETS</i></div></div>
           <div class="bb-cap">
             <div class="bb-cap-l"><span class="city">MOVIE</span><span class="sub">動画コンテンツ</span></div>
@@ -1924,7 +1968,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 <footer class="footer">
   <div class="foot-top">
     <div class="foot-brand">
-      <a class="logo" href="#"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
+      <a class="logo"><svg class="lg" viewBox="24.331 0 108.614 14.021" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cuolega">
       <g class="lg-mark">
         <path d="M14.6024 0H18.7207L15.6315 5.32666H11.5131L14.6024 0Z" fill="currentColor"/>
         <path class="lg-accent" d="M10.7641 6.6553H14.9228L10.7057 14.022H6.48872L10.7662 6.6553H10.7641Z"/>
@@ -1941,22 +1985,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       </g>
     </svg></a>
       <p class="foot-sub">セールス採用特設サイト</p>
-      <div class="foot-links"><a class="foot-corp" href="#" target="_blank" rel="noopener">コーポレートサイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="foot-corp" href="#" target="_blank" rel="noopener">新卒採用サイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
+      <div class="foot-links"><a class="foot-corp">コーポレートサイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="foot-corp">新卒採用サイト<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
     </div>
     <nav class="foot-nav">
-      <a href="#merit">MERIT</a>
-      <a href="#career">CAREER</a>
-      <a href="#company">COMPANY</a>
-      <a href="#contents">CONTENTS</a>
-      <a href="#faq">FAQ</a>
+      <a>MERIT</a>
+      <a>CAREER</a>
+      <a>COMPANY</a>
+      <a>CONTENTS</a>
+      <a>FAQ</a>
     </nav>
   </div>
   <div class="foot-bottom">
     <p class="f-copy">Copyright &copy; Cuolega, Inc. All rights reserved.</p>
     <div class="foot-policy">
-      <a href="#">個人情報保護方針</a>
-      <a href="#">コンプライアンス宣言</a>
-      <a href="#">免責事項</a>
+      <a>個人情報保護方針</a>
+      <a>コンプライアンス宣言</a>
+      <a>免責事項</a>
     </div>
   </div>
 </footer>
@@ -2132,8 +2176,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   sweep();
 })();
 (function(){ /* ナビの現在地 — いま画面の上寄りにあるセクションのリンクに下線を残す */
-  var links=[].slice.call(document.querySelectorAll('.header-nav a[href^="#"]'));
-  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  /* リンクは押せない形（href なし）にしてあるので、行き先は data-sec で持つ */
+  var links=[].slice.call(document.querySelectorAll('.header-nav a[data-sec]'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('data-sec'));});
   if(!links.length) return;
   var ticking=false;
   function sweep(){
