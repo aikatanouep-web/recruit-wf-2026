@@ -2150,8 +2150,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   var tt=document.getElementById('totop'), hdr=document.getElementById('hdr');
   if(!tt) return;
   tt.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});
-  /* 黒地のセクション。ここに重なっている間だけ、地色を反転させる */
-  var darks=[].slice.call(document.querySelectorAll('.hero,.bb-sec,.midcta'));
+  /* 黒地のセクション。ここに重なっている間だけ、地色を反転させる。
+     Merit・職種別の魅力・身につくものの帯・フッターも黒地なので含める。
+     （最終CTA は後から地色を上書きしていて明るい面なので入れない） */
+  var darks=[].slice.call(document.querySelectorAll(
+    '.hero,.mrt,.appeal,.skills-band,.bb-sec,.midcta,.footer'));
   var ticking=false;
   function sweep(){
     if(ticking) return; ticking=true;
