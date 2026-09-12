@@ -188,10 +188,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 .xlink .btn-badge{width:auto;height:auto;background:none;color:var(--ink);border-radius:0}
 /* この SVG は絵が枠の 75% ほどしか占めないので、20px の指定で
    見た目は 15px 前後になる。文字（14px）と同じか、わずかに大きい。
-   線の太さも文字の縦線に合わせる。既定の 2px は weight500 の和文より
-   太く、アイコンだけが濃く見えていた。 */
+   線の太さはピルの枠線と同じ 2px に揃える。中に入る部品が器より
+   太いと、アイコンだけが強く見える。2.2 / 2.4px も試したが太かった。
+   なお 0.2px 刻みは、Retina でも実機 0.4 ドットぶんしか変わらず、
+   線が太くなるのではなく輪郭が灰色になるだけなので効きが弱い。 */
 .xlink .btn-badge .ext{width:20px;height:20px;opacity:1}
-.xlink .btn-badge .ext svg{stroke-width:2.2}
+.xlink .btn-badge .ext svg{stroke-width:2}
 
 /* 大きめの導線ボタン。tech.garage.co.jp の ui-btn-d に合わせている。
    ・枠は2px・角丸100px、内側の余白は .75em 2em
