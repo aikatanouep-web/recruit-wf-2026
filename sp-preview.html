@@ -60,18 +60,24 @@ body{
 .stage{
   flex:1;min-height:0;
   display:flex;align-items:center;justify-content:center;
-  padding:20px;
+  padding:20px;overflow:hidden;
 }
+/* 縦は実機の寸法で固定する。ウィンドウの空きに合わせて伸ばすと、
+   見る人のブラウザの高さで縦横比が変わってしまう。FV は画面の高さ
+   いっぱい（100svh）で組んであるので、比率が違うと構図の判断ができない。
+   画面に入りきらないときは、寸法は保ったまま全体を縮小して収める。 */
 .device{
   position:relative;
   width:var(--w,390px);
-  height:100%;
-  max-width:100%;
+  height:var(--h,844px);
+  flex:none;
+  transform:scale(var(--k,1));
+  transform-origin:center center;
   border-radius:18px;
   overflow:hidden;
   background:#fff;
   box-shadow:0 24px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08);
-  transition:width .35s cubic-bezier(.16,1,.3,1);
+  transition:width .35s cubic-bezier(.16,1,.3,1),height .35s cubic-bezier(.16,1,.3,1);
 }
 .device iframe{
   display:block;width:100%;height:100%;border:0;
@@ -88,7 +94,8 @@ body{
   body{overflow:auto}
   .bar{position:sticky;top:0;z-index:2}
   .stage{padding:0}
-  .device{width:100%;height:auto;min-height:100vh;border-radius:0;box-shadow:none}
+  .device{width:100%;height:auto;min-height:100vh;border-radius:0;box-shadow:none;
+    transform:none}
   .device iframe{height:100vh}
   .sizes{display:none}
 }
@@ -100,35 +107,49 @@ body{
   <h1>Cuolega Sales — SP Preview</h1>
   <span class="note">中はスクロールできます</span>
   <div class="sizes" role="group" aria-label="画面幅">
-    <button type="button" data-w="375" aria-pressed="false">375</button>
-    <button type="button" data-w="390" aria-pressed="true">390</button>
-    <button type="button" data-w="430" aria-pressed="false">430</button>
+    <button type="button" data-w="375" data-h="667" data-name="iPhone SE" aria-pressed="false">375</button>
+    <button type="button" data-w="390" data-h="844" data-name="iPhone 14 / 15" aria-pressed="true">390</button>
+    <button type="button" data-w="430" data-h="932" data-name="iPhone 15 Plus" aria-pressed="false">430</button>
   </div>
 </div>
 
 <div class="stage">
-  <div class="device" id="device" style="--w:390px">
+  <div class="device" id="device" style="--w:390px;--h:844px">
     <iframe id="frame" src="sales.html" title="スマホ版プレビュー"></iframe>
   </div>
 </div>
 
-<p class="caption" id="cap">390 × 端末の高さ</p>
+<p class="caption" id="cap"></p>
 
 <script>
 (function(){
   var dev=document.getElementById('device'),
+      stage=document.querySelector('.stage'),
       cap=document.getElementById('cap'),
       btns=[].slice.call(document.querySelectorAll('.sizes button'));
-  function set(w){
-    dev.style.setProperty('--w', w+'px');
-    cap.textContent = w + ' × 端末の高さ';
-    btns.forEach(function(b){
-      b.setAttribute('aria-pressed', String(b.dataset.w === String(w)));
-    });
+  var cur=btns.filter(function(b){return b.getAttribute('aria-pressed')==='true';})[0]||btns[0];
+
+  /* 実機の寸法は保ったまま、画面に入らないぶんだけ全体を縮める。
+     窓の中のビューポートは縮小前の寸法なので、組みは実機のまま。 */
+  function fit(){
+    var h=parseInt(cur.dataset.h,10), w=parseInt(cur.dataset.w,10);
+    var availH=stage.clientHeight - 40, availW=stage.clientWidth - 40;
+    var k=Math.min(1, availH/h, availW/w);
+    dev.style.setProperty('--k', k.toFixed(4));
+    var pct=Math.round(k*100);
+    cap.textContent = cur.dataset.name + '　' + w + ' × ' + h
+      + (pct<100 ? '（実寸の ' + pct + '%）' : '（実寸）');
   }
-  btns.forEach(function(b){
-    b.addEventListener('click', function(){ set(+b.dataset.w); });
-  });
+  function set(btn){
+    cur=btn;
+    dev.style.setProperty('--w', btn.dataset.w+'px');
+    dev.style.setProperty('--h', btn.dataset.h+'px');
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b===btn)); });
+    fit();
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b); }); });
+  addEventListener('resize', fit);
+  fit();
 })();
 </script>
 
