@@ -1289,15 +1289,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      2行になり、画面の主役として弱い。
      ・コピーは左上に置く。ヘッダーのすぐ下から読み始められ、
        下の帯（写真）は文字に覆われずに残る
-     ・見出しは意味の切れ目で4行に改行し、32px まで上げる
+     ・見出しは特大（46px）にして画面の主役にする。1行に7字までしか
+       入らないので、意味の切れ目で5行に改行する（人のキャリアを／動かす
+       経験が、／自分の／キャリアを／広げる。）。行間は詰めて塊に見せる
      ・和文は palt で字面を詰め、大きくしても間延びさせない
      ・上側だけ膜を濃くして、写真の上でも文字を立たせる。下は SCROLL が
        読めるぶんだけ軽く落とす */
   .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 0}
-  .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.66) 34%,rgba(0,0,0,.2) 62%,
-    rgba(0,0,0,0) 76%,rgba(0,0,0,.36) 100%)}
+  .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.72) 40%,rgba(0,0,0,.38) 62%,
+    rgba(0,0,0,.06) 80%,rgba(0,0,0,.36) 100%)}
   .sp-br{display:inline}
-  .hero h1{font-size:32px;line-height:1.42;letter-spacing:.04em;font-feature-settings:"palt"}
+  .hero h1{font-size:46px;font-weight:700;line-height:1.2;letter-spacing:0;font-feature-settings:"palt"}
   /* 小ラベルの頭にアクセントの短い罫。文字だけで始めるより、読み始めの位置が決まる */
   .hero .fv-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;margin-bottom:16px}
   .hero .fv-eyebrow::before{content:"";width:22px;height:1px;flex:none;background:var(--accent)}
@@ -1512,7 +1514,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       <p class="fv-eyebrow" data-reveal>セールス採用特設ページ</p>
       <h1 class="line-reveal" data-observe>
         <span class="line"><span>人のキャリアを<br class="sp-br">動かす経験が、</span></span>
-        <span class="line"><span>自分のキャリアを<br class="sp-br">広げる。</span></span>
+        <span class="line"><span>自分の<br class="sp-br">キャリアを<br class="sp-br">広げる。</span></span>
       </h1>
       <div class="row" data-reveal data-delay="0.5">
         <a class="tlink tlink--ondark"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
