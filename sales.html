@@ -1263,14 +1263,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* ---------- モバイル ---------- */
 @media (max-width:768px){
   :root{--pad:20px}
-  .sec,#company{padding:80px var(--gutter)}
-  .msg-sec{padding:88px var(--gutter)}
+  /* セクション間の余白は 80 → 60px。縦に読み進めるスマホでは、PC と同じ比率で
+     空けると画面の半分近くが余白だけになる */
+  .sec,#company{padding:60px var(--gutter)}
+  .msg-sec{padding:64px var(--gutter)}
   .h2,.h3{font-size:21px;letter-spacing:1.6px}
   /* 狭い幅では、語の途中で1文字だけ次の行へ落ちる（「魅／力」）ことがある。
      対応ブラウザでは文節で折り返させる */
   .h2,.h3,.mrt-h,.pick-h,.hero h1{word-break:auto-phrase}
   .lead{font-size:15px}
-  .h3--gap{margin-top:80px}
+  .h3--gap{margin-top:60px}
   .h3 + *{margin-top:28px}
 
   /* 追従ヘッダー：章リンクは畳む。5本並べる幅がなく、
@@ -1327,9 +1329,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* --- Merit --- */
   /* 粘着で重ねるのをやめ、普通に縦へ並べる。画面の高さに対して
      カードが大きすぎて、粘着させると1枚が画面を覆い切ってしまう。 */
-  .mrt{padding:80px 0 0}
+  .mrt{padding:60px 0 0}
   .mrt-media{margin-top:40px}
-  .mrt-title{position:static;margin:72px 0 28px}
+  .mrt-title{position:static;margin:52px 0 24px}
   .mrt-word{font-size:24px;line-height:36px;letter-spacing:2px}
   .mrt-stack{display:flex;flex-direction:column;gap:16px}
   .mrt-card{position:static;flex-direction:column;width:auto;height:auto;
@@ -1345,9 +1347,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .fmb-k{justify-self:start}
 
   /* --- 魅力・この先の選択肢・キャリア --- */
-  .appeal{padding:72px var(--gutter) 96px}
+  .appeal{padding:56px var(--gutter) 64px}
   .appeal .h3 + .picks{margin-top:36px}
-  .appeal .picks + .h3--gap,.appeal .h3--gap{margin-top:80px}
+  .appeal .picks + .h3--gap,.appeal .h3--gap{margin-top:60px}
   .picks{grid-template-columns:minmax(0,1fr);gap:16px}
   /* C は番号チップがカードの上へはみ出すので、その分だけ広く取る */
   .picks--c{gap:36px}
@@ -1360,7 +1362,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .sec-media{margin-top:32px}
 
   /* --- 中間CTA・会社と事業 --- */
-  .midcta{padding:80px var(--gutter);gap:28px}
+  .midcta{padding:60px var(--gutter);gap:24px}
   .midcta h2{font-size:22px;line-height:1.6}
   .midcta p{font-size:13px;margin-top:14px}
   .co-grid{grid-template-columns:minmax(0,1fr);gap:32px;margin-top:28px}
@@ -1372,7 +1374,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      食い違って読み進められない。 */
   /* 高さは中身なりにする。既定は「660px＋横移動の距離」で、
      縦積みにすると横移動が 0 になり、章が660pxに潰れる。 */
-  .bb-sec{height:auto;padding:80px var(--gutter)}
+  .bb-sec{height:auto;padding:60px var(--gutter)}
   .bb-sticky{position:static;height:auto;overflow:visible}
   .bb-head{position:static;margin-bottom:28px}
   .bb-track{position:static;flex-direction:column;gap:28px;transform:none!important}
@@ -1407,7 +1409,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* --- 導線・フッター --- */
   .btn{font-size:16px;padding:12px 12px 12px 24px;gap:14px;border-width:2px}
   .btn-badge{width:46px;height:24px}
-  .endcta{padding:80px var(--gutter);gap:22px}
+  .endcta{padding:60px var(--gutter);gap:20px}
   .endcta h2{font-size:21px}
   /* 欧文の大見出しは 56px のままだと4行に折れて画面を占領する。
      3行に収まる大きさまで落とす。 */
