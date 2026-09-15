@@ -1289,7 +1289,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      2行になり、画面の主役として弱い。
      ・コピーは左上に置く。ヘッダーのすぐ下から読み始められ、
        下の帯（写真）は文字に覆われずに残る
-     ・見出しは特大（46px）にして画面の主役にする。1行に7字までしか
+     ・見出しは大きく（40px）して画面の主役にする。46px では大きすぎた。1行に7字前後しか
        入らないので、意味の切れ目で5行に改行する（人のキャリアを／動かす
        経験が、／自分の／キャリアを／広げる。）。行間は詰めて塊に見せる
      ・和文は palt で字面を詰め、大きくしても間延びさせない
@@ -1299,7 +1299,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.72) 40%,rgba(0,0,0,.38) 62%,
     rgba(0,0,0,.06) 80%,rgba(0,0,0,.36) 100%)}
   .sp-br{display:inline}
-  .hero h1{font-size:46px;font-weight:700;line-height:1.2;letter-spacing:0;font-feature-settings:"palt"}
+  .hero h1{font-size:40px;font-weight:700;line-height:1.24;letter-spacing:0;font-feature-settings:"palt"}
   /* 小ラベルの頭にアクセントの短い罫。文字だけで始めるより、読み始めの位置が決まる */
   .hero .fv-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;margin-bottom:16px}
   .hero .fv-eyebrow::before{content:"";width:22px;height:1px;flex:none;background:var(--accent)}
