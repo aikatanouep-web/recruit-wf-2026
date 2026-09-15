@@ -1297,16 +1297,20 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      ・和文は palt で字面を詰め、大きくしても間延びさせない
      ・上側だけ膜を濃くして、写真の上でも文字を立たせる。下は SCROLL が
        読めるぶんだけ軽く落とす */
-  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 0}
+  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 44px}
+  /* 見出しは左上、テキストリンクは画面の下に付ける。コピーの箱を FV の高さいっぱいに
+     伸ばし、リンクの段だけを margin-top:auto で下端へ押し下げる。
+     リンクが親指の届く位置に来て、見出しと写真の間も詰まらない */
+  .hero-copy{align-self:stretch;display:flex;flex-direction:column}
   .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.72) 40%,rgba(0,0,0,.38) 62%,
-    rgba(0,0,0,.06) 80%,rgba(0,0,0,.36) 100%)}
+    rgba(0,0,0,.1) 72%,rgba(0,0,0,.62) 100%)}
   .sp-br{display:inline}
   .hero h1{font-size:40px;font-weight:700;line-height:1.24;letter-spacing:0;font-feature-settings:"palt"}
   /* 小ラベルの頭にアクセントの短い罫。文字だけで始めるより、読み始めの位置が決まる */
   .hero .fv-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;margin-bottom:16px}
   .hero .fv-eyebrow::before{content:"";width:22px;height:1px;flex:none;background:var(--accent)}
   /* 導線は縦に積む。横並びだと2本とも 13px まで縮めないと入らない */
-  .hero .row{flex-direction:column;align-items:flex-start;gap:14px;margin-top:28px}
+  .hero .row{flex-direction:column;align-items:flex-start;gap:14px;margin-top:auto;padding-top:28px}
   .hero .row .tlink{font-size:14px}
   /* SCROLL はコピーと重ならないよう右下へ逃がす */
   .scroll-cue{left:auto;right:var(--gutter);bottom:26px;flex-direction:column-reverse;gap:10px}
