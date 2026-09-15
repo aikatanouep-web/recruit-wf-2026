@@ -1297,7 +1297,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      ・和文は palt で字面を詰め、大きくしても間延びさせない
      ・上側だけ膜を濃くして、写真の上でも文字を立たせる。下は SCROLL が
        読めるぶんだけ軽く落とす */
-  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 44px}
+  /* 下の余白は、読み込み直後に写真が内側から始まるぶん（高さの10%）＋28px。
+     リンクの段が一番下の写真の帯の中で下揃えになり、黒い縁にはみ出さない */
+  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) calc(10svh + 28px)}
   /* 見出しは左上、テキストリンクは画面の下に付ける。コピーの箱を FV の高さいっぱいに
      伸ばし、リンクの段だけを margin-top:auto で下端へ押し下げる。
      リンクが親指の届く位置に来て、見出しと写真の間も詰まらない */
