@@ -1223,6 +1223,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 /* スマホだけで使う部品。PC では出さない */
 .sp-br{display:none}
 .sp-nav{display:none}
+.sp-cta{display:none}
 
 /* ============================================================
    レスポンシブ
@@ -1297,21 +1298,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
      ・和文は palt で字面を詰め、大きくしても間延びさせない
      ・上側だけ膜を濃くして、写真の上でも文字を立たせる。下は SCROLL が
        読めるぶんだけ軽く落とす */
-  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 44px}
-  /* 見出しは左上、テキストリンクは画面の下に付ける。コピーの箱を FV の高さいっぱいに
-     伸ばし、リンクの段だけを margin-top:auto で下端へ押し下げる。
-     リンクが親指の届く位置に来て、見出しと写真の間も詰まらない */
-  .hero-copy{align-self:stretch;display:flex;flex-direction:column}
+  .hero{height:100svh;min-height:600px;align-items:flex-start;padding:112px var(--gutter) 0}
   .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.72) 40%,rgba(0,0,0,.38) 62%,
-    rgba(0,0,0,.1) 72%,rgba(0,0,0,.62) 100%)}
+    rgba(0,0,0,.06) 80%,rgba(0,0,0,.36) 100%)}
   .sp-br{display:inline}
   .hero h1{font-size:40px;font-weight:700;line-height:1.24;letter-spacing:0;font-feature-settings:"palt"}
   /* 小ラベルの頭にアクセントの短い罫。文字だけで始めるより、読み始めの位置が決まる */
   .hero .fv-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;margin-bottom:16px}
   .hero .fv-eyebrow::before{content:"";width:22px;height:1px;flex:none;background:var(--accent)}
   /* 導線は縦に積む。横並びだと2本とも 13px まで縮めないと入らない */
-  .hero .row{flex-direction:column;align-items:flex-start;gap:14px;margin-top:auto;padding-top:28px}
-  .hero .row .tlink{font-size:14px}
+  /* FV の中のリンクは出さない。同じ2本を、画面の下に固定した帯（.sp-cta）に置く */
+  .hero .row{display:none}
   /* SCROLL はコピーと重ならないよう右下へ逃がす */
   .scroll-cue{left:auto;right:var(--gutter);bottom:26px;flex-direction:column-reverse;gap:10px}
   .scroll-cue span:first-child{writing-mode:vertical-rl;letter-spacing:.3em}
@@ -1478,7 +1475,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .bb-sec .sp-dots span.is-on{background:var(--accent)}
 
   /* 親指の届く位置に寄せる。デスクトップの 40px は端から遠い */
-  .to-top{right:16px;bottom:16px;width:52px;height:52px}
+  /* 画面の下に固定する導線の帯。スクロールしても常に手元にある。
+     すりガラスの黒で、明るい章の上でも暗い章の上でも同じ見え方にする。
+     iPhone のホームバーに重ならないよう、下は safe-area 分を足す */
+  .sp-cta{position:fixed;left:0;right:0;bottom:0;z-index:95;display:flex;align-items:center;
+    justify-content:space-between;gap:12px;
+    padding:14px var(--gutter) calc(14px + env(safe-area-inset-bottom));
+    background:rgba(13,13,14,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 -1px 0 rgba(255,255,255,.08)}
+  .sp-cta .tlink{font-size:13px}
+  /* 帯の高さぶん、TOPに戻るを上へ、フッターの下を空ける */
+  .to-top{right:16px;bottom:calc(66px + env(safe-area-inset-bottom));width:52px;height:52px}
+  .footer{padding-bottom:calc(52px + env(safe-area-inset-bottom))}
   .to-top svg{width:18px;height:18px}
 }
 
@@ -2114,6 +2122,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   <span class="tt-fill" aria-hidden="true"></span>
   <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17V3M4.4 8.6L10 3l5.6 5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
+
+<!-- スマホだけ：画面の下（手元）に固定する導線。PC では出さない -->
+<div class="sp-cta">
+  <a class="tlink tlink--ondark"><span class="label">カジュアル面談を申し込む</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+  <a class="tlink tlink--ondark"><span class="label">エントリー</span><span class="circ" aria-hidden="true"><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 6 6" fill="none" aria-hidden="true"><path d="M0.499 5.104L5.104 0.5M5.104 4.529V0.5H1.075" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+</div>
 
 <script>
 (function(){ /* 見出しを語に割り、--i で順番を渡す（[data-words] の下ごしらえ） */
