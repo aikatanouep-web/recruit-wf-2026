@@ -1335,7 +1335,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   .mrt-txt{width:auto;padding:26px 22px}
   .mrt-h{font-size:20px;letter-spacing:1.4px}
   .mrt-txt .fmb{margin-top:26px}
-  .mrt-ph{flex:none;aspect-ratio:16/10}
+  /* 画像はカードの一番上に置く。高さを揃えたときの余りは、画像との間ではなく
+     本文の下に回るので目立たない */
+  .mrt-ph{flex:none;aspect-ratio:16/10;order:-1}
   /* ラベルと本文を上下に。104px の札を左に置くと本文が2〜3文字で折れる */
   .fmb-row{grid-template-columns:minmax(0,1fr);gap:8px 0}
   .fmb-k{justify-self:start}
@@ -1435,19 +1437,23 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* 番号チップはカードの上へはみ出すので、そのぶん上を空ける */
   .picks--c.sp-swipe{padding-top:26px}
   .bb-track.sp-swipe{transform:none!important}
-  /* 送りの操作。点の左右に「＜」「＞」を置く。点だけだと、横に送れる
-     ことに気づかない人がいる。端まで来た側は薄くして押せなくする。
-     カードの上に重ねないのは、左の矢印が本文の頭を隠してしまうため。 */
-  .sp-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:16px}
-  .sp-arw{appearance:none;display:grid;place-items:center;width:38px;height:38px;padding:0;
-    border:1px solid var(--line2);border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;
-    -webkit-tap-highlight-color:transparent;transition:opacity .3s ease,background-color .3s ease}
+  /* 送りの操作。「＜」「＞」はカードの左右の辺に、列の天地中央で置く。
+     丸の中心をカードの辺に合わせるので、左の丸がかかるのはカードの
+     内側の余白までで、本文の頭は隠れない。右の丸は次のカードの覗きの上に乗る。
+     位置（--ay / --sl / --sr）は JS が列を実測して入れる。
+     点は列の下に残し、何枚目かだけを示す。
+     端まで来た側の丸は消す。カードの上に薄い丸が残ると、ただの汚れに見える。 */
+  .sp-nav{position:relative;display:flex;align-items:center;justify-content:center;margin-top:16px}
+  .sp-arw{appearance:none;position:absolute;z-index:3;top:var(--ay,0);left:var(--sl,20px);
+    display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;
+    background:#fff;color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.18);cursor:pointer;
+    transform:translate(-50%,-50%);-webkit-tap-highlight-color:transparent;
+    transition:opacity .3s ease,transform .3s var(--ease-out-expo)}
+  .sp-arw--next{left:auto;right:var(--sr,20px);transform:translate(50%,-50%)}
   .sp-arw svg{width:14px;height:14px;display:block}
-  .sp-arw:active{background:rgba(13,13,14,.06)}
-  .sp-arw:disabled{opacity:.28;cursor:default}
-  .mrt .sp-arw,.appeal .sp-arw,.skills-band .sp-arw,.bb-sec .sp-arw{border-color:rgba(255,255,255,.34);color:#fff}
-  .mrt .sp-arw:active,.appeal .sp-arw:active,.skills-band .sp-arw:active,.bb-sec .sp-arw:active{
-    background:rgba(255,255,255,.1)}
+  .sp-arw:active{transform:translate(-50%,-50%) scale(.92)}
+  .sp-arw--next:active{transform:translate(50%,-50%) scale(.92)}
+  .sp-arw:disabled{opacity:0;pointer-events:none}
   .sp-dots{display:flex;justify-content:center;gap:6px}
   .sp-dots span{width:6px;height:6px;border-radius:3px;background:var(--line2);
     transition:width .35s var(--ease-out-expo),background-color .35s var(--ease-out-expo)}
@@ -2396,7 +2402,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
     var nav=document.createElement('div'); nav.className='sp-nav';
     var prev=document.createElement('button'), next=document.createElement('button');
     prev.type=next.type='button';
-    prev.className=next.className='sp-arw';
+    prev.className='sp-arw sp-arw--prev'; next.className='sp-arw sp-arw--next';
     prev.setAttribute('aria-label','前へ'); next.setAttribute('aria-label','次へ');
     prev.innerHTML=CHEV; next.innerHTML=CHEV.replace('M9 2.5L4.5 7 9 11.5','M5 2.5L9.5 7 5 11.5');
     var dots=document.createElement('div');
@@ -2425,9 +2431,22 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
       prev.disabled = row.scrollLeft <= 2;
       next.disabled = atEnd;
     }
+    /* 丸の位置を列の実寸から出す。点の段（nav）を基準に、
+       上下は列の天地中央、左右は1枚目のカードの左辺と、見えている右端に合わせる */
+    function place(){
+      if(getComputedStyle(nav).display==='none') return;
+      var rr=row.getBoundingClientRect(), nr=nav.getBoundingClientRect(), cs=getComputedStyle(row);
+      var pl=parseFloat(cs.paddingLeft)||0, pr=parseFloat(cs.paddingRight)||0, pt=parseFloat(cs.paddingTop)||0;
+      nav.style.setProperty('--ay', (rr.top + pt + (rr.height - pt)/2 - nr.top).toFixed(1)+'px');
+      nav.style.setProperty('--sl', (rr.left + pl - nr.left).toFixed(1)+'px');
+      nav.style.setProperty('--sr', (nr.right - (rr.right - pr)).toFixed(1)+'px');
+    }
     row.addEventListener('scroll',function(){ if(!ticking){ticking=true;requestAnimationFrame(update);} },{passive:true});
-    addEventListener('resize',update);
-    update();
+    addEventListener('resize',function(){ update(); place(); });
+    addEventListener('load',place);
+    /* 画像やフォントが後から読み込まれると列の高さが変わるので、追いかける */
+    if('ResizeObserver' in window) new ResizeObserver(place).observe(row);
+    update(); place();
   });
 })();
 </script>
