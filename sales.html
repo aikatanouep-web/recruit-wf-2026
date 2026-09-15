@@ -1330,6 +1330,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* 粘着で重ねるのをやめ、普通に縦へ並べる。画面の高さに対して
      カードが大きすぎて、粘着させると1枚が画面を覆い切ってしまう。 */
   .mrt{padding:60px 0 0}
+  /* PC 用の #merit{padding-bottom:140px} は ID 指定なので、上の .mrt では
+     下の余白だけ打ち消せずに残る（次の「働く魅力」まで 200px 近く空いていた）。
+     ここも ID で指定する。続く .appeal の上余白があるので 0 でよい */
+  #merit{padding-bottom:0}
+  /* 同じく PC 用の #career{padding:110px / 160px} も ID 指定で残っていた */
+  #career{padding-top:60px;padding-bottom:60px}
   .mrt-media{margin-top:40px}
   .mrt-title{position:static;margin:52px 0 24px}
   .mrt-word{font-size:24px;line-height:36px;letter-spacing:2px}
