@@ -1310,9 +1310,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* FV の中のリンクは出さない。同じ2本を、画面の下に固定した帯（.sp-cta）に置く */
   .hero .row{display:none}
   /* SCROLL はコピーと重ならないよう右下へ逃がす */
-  /* 下に固定した導線の帯（約50px）に隠れないよう、その上へ逃がす */
-  .scroll-cue{left:auto;right:var(--gutter);bottom:calc(72px + env(safe-area-inset-bottom));
-    flex-direction:column-reverse;gap:10px}
+  .scroll-cue{left:auto;right:var(--gutter);bottom:26px;flex-direction:column-reverse;gap:10px}
   .scroll-cue span:first-child{writing-mode:vertical-rl;letter-spacing:.3em}
   .slice.sl-a{clip-path:polygon(0 -30%,100% -30%,100% 30%,0 36%)}
   .slice.sl-b{clip-path:polygon(0 37.4%,100% 31.4%,100% 63.4%,0 69.4%)}
