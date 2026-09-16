@@ -1400,8 +1400,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
   /* --- FAQ --- */
   /* 質問だけを並べ、タップで答えを開く。18問を答えごと並べると、
      この章だけで画面5枚ぶん近くになる。 */
-  .faq-cat + .faq-cat{margin-top:40px}
-  .faq-cat-ttl{margin-bottom:8px}
+  /* カテゴリ見出しでも畳めるようにする。質問だけを並べても8カテゴリ分あるので、
+     最初の1つだけ開いた状態で始める。見出しの右の ＋ / − が開閉の印。 */
+  .faq-cat + .faq-cat{margin-top:0}
+  .faq-cat-ttl{margin:0;padding:18px 0;cursor:pointer;justify-content:flex-start;
+    border-bottom:1px solid var(--line);-webkit-tap-highlight-color:transparent}
+  .faq-cat-ttl::after{content:"";width:14px;height:14px;flex:none;margin-left:auto;color:#3a3a40;
+    background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,
+               linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat;
+    transition:background-size .3s var(--ease-out-expo)}
+  .faq-cat:not(.is-closed) > .faq-cat-ttl::after{background-size:14px 1.5px,1.5px 0}
+  .faq-cat.is-closed .faq-list{display:none}
+  .faq-cat:not(.is-closed) .faq-list{padding-bottom:12px}
   .faq-list{gap:0}
   /* 上揃えにする。天地中央のままだと、答えを開いた瞬間に番号と矢印が
      答えの真ん中まで下がり、どの質問の印なのか分からなくなる。
@@ -2399,6 +2409,20 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ja
 })();
 /* FAQ のアコーディオンと Contents の畳みは 2026-08-29 の Figma 差し替えで廃止（常時表示）。
    ただしスマホだけは、長さを抑えるためにタップで答えを開く（下の処理）。 */
+(function(){ /* スマホ：よくある質問はカテゴリごと畳む。開くのは最初の1つだけ */
+  var mq=matchMedia('(max-width:768px)');
+  [].forEach.call(document.querySelectorAll('.faq-cat'),function(cat,i){
+    var ttl=cat.querySelector('.faq-cat-ttl'); if(!ttl) return;
+    if(i>0) cat.classList.add('is-closed');
+    ttl.setAttribute('role','button');
+    ttl.setAttribute('aria-expanded',String(i===0));
+    ttl.addEventListener('click',function(){
+      if(!mq.matches) return;
+      var closed=cat.classList.toggle('is-closed');
+      ttl.setAttribute('aria-expanded',String(!closed));
+    });
+  });
+})();
 (function(){ /* スマホ：よくある質問は、質問だけを並べてタップで答えを開く */
   var mq=matchMedia('(max-width:768px)');
   [].forEach.call(document.querySelectorAll('.faq-qa'),function(q){
